@@ -1,0 +1,113 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.2cm, landscape]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+
+\begin{document}
+
+\begin{center}
+  \bfseries
+  UNIVERSIDADE DE SÃO PAULO \\
+  ESCOLA SUPERIOR DE AGRICULTURA ``LUIZ DE QUEIROZ`` \\
+  DEPARTAMENTO DE CIÊNCIAS EXATAS \\[0.2cm]
+
+  LCE0216 - Introdução à Bioestatística Florestal \\
+  Professora responsável: Clarice Garcia Borges Demétrio
+\end{center}
+
+<<include=FALSE>>=
+library(lubridate)
+library(xtable)
+
+begin <- as_date(dmy("26/02/2018"))
+final <- as_date(dmy("06/07/2018"))
+dates <- seq(begin, final, 1)
+dates <- dates[wday(dates) %in% c(3, 5)]
+
+contents <- c(
+    "Apresentação, motivação e início de estatística descritiva",
+    "Estatística descritiva: representação tabular e gráfica",
+    "Estatística descritiva: medidas de tendência central e dispersão",
+    "Estatística descritiva: medidas de tendência central e dispersão",
+    "Probabilidade: definições e teoremas",
+    "Probabilidade: definições e teoremas",
+    "Prof. Thadeu: Bioestatística florestal",
+    "Prof. Thadeu: Coleta de dados e tabulação",
+    "\\textcolor{red}{FERIADO: Semana santa}",
+    "\\textcolor{red}{FERIADO: Semana santa}",
+    "Probabilidade condicional e indepêndencia de eventos",
+    "Distribuições de probabilidade",
+    "Distribuições de probabilidade",
+    "\\textbf{PRIMEIRA PROVA (P1)}",
+    "Esperança matemática",
+    "Esperança matemática",
+    "Distribuições: Binomial, Poisson, Exponencial, Weibull e Normal",
+    "Distribuições: Binomial, Poisson, Exponencial, Weibull e Normal",
+    "\\textcolor{red}{FERIADO: Dia do trabalho}",
+    "Distribuições: Binomial, Poisson, Exponencial, Weibull e Normal",
+    "Noções de amostragem e distribuições amostrais",
+    "Distribuições: t-Student, F-Snedecor e Qui-quadrado",
+    "Inferência estatística: definição e motivação",
+    "Inferência estatística: definição e motivação",
+    "\\textbf{SEGUNDA PROVA (P2)}",
+    "Inferência estatística: estimação pontual",
+    "Inferência estatística: estimação intervalar",
+    "\\textcolor{red}{FERIADO: Corpus Christi}",
+    "Inferência estatística: testes de hipóteses",
+    "Inferência estatística: testes de hipóteses",
+    "Regressão e correlação linear simples",
+    "Regressão e correlação linear simples",
+    "Regressão e correlação linear simples",
+    "Análise de tabelas de contingência",
+    "Análise de tabelas de contingência",
+    "\\textbf{TERCEIRA PROVA (P3)}",
+    "\\textbf{PROVA SUBSTITUTIVA}",
+    "\\textbf{REVISÃO DE PROVAS}"
+)
+
+schedule <- data.frame("Datas" = format(dates, "%d/%m (%A)"),
+                       "Conteúdo" = contents)
+schedule <- schedule[order(wday(dates)), ]
+
+@
+
+\begin{table}[H]
+\centering \small
+\renewcommand{\arraystretch}{1.5}
+\caption{Cronograma de aulas do primeiro semestre de 2018.}
+\begin{multicols}{2}
+\begin{tabularx}{0.5\textwidth}{lllll}
+  \toprule
+<<echo=FALSE, results="asis">>=
+print.xtable(xtable(schedule[1:19, ]),
+             only.contents = TRUE,
+             booktabs = TRUE,
+             include.rownames = FALSE,
+             sanitize.text.function = identity)
+@
+\end{tabularx}
+\begin{tabularx}{0.5\textwidth}{lllll}
+  \toprule
+<<echo=FALSE, results="asis">>=
+print.xtable(xtable(schedule[20:38, ]),
+             only.contents = TRUE,
+             booktabs = TRUE,
+             include.rownames = FALSE,
+             sanitize.text.function = identity)
+@
+\end{tabularx}
+\end{multicols}
+\end{table}
+
+\end{document}
