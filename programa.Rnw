@@ -1,0 +1,105 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+
+\usepackage{natbib}
+\usepackage[resetlabels]{multibib}
+\newcites{Basic}{\large Bibliografica básica}
+\setlength{\bibsep}{3pt plus 0.3ex}
+
+\begin{document}
+
+\begin{center}
+  \bfseries
+  UNIVERSIDADE DE SÃO PAULO \\
+  ESCOLA SUPERIOR DE AGRICULTURA ``LUIZ DE QUEIROZ`` \\
+  DEPARTAMENTO DE CIÊNCIAS EXATAS \\[0.2cm]
+
+  LCE0216 - Introdução à Bioestatística Florestal \\
+  Professora responsável: Clarice Garcia Borges Demétrio
+\end{center}
+
+\noindent
+\textbf{\large Objetivos da disciplina:} Contribuir para a formação
+científica dos alunos de Engenharia Florestal por meio de fundamentos
+básicos que possam habilitá-los na análise qualitativa e quantitativa de
+dados, provenientes de levantamentos e experimentos relacionados às
+ciências florestais.\\
+
+\noindent
+\textbf{\large Programa resumido:} 1) Estatística descritiva:
+representação tabular e gráfica; medidas de tendência central e
+dispersão. 2) Probabilidade: definições e teoremas. 3) Distribuições de
+probabilidade. 4) Esperança matemática. 5) Principais distribuições:
+Binomial, Poisson, Exponencial, Weibull e Normal. 6) Noções de
+amostragem: distribuições amostrais; distribuições $t$ de Student, F de
+Snedecor e qui-quadrado. 7) Inferência estatística: estimação pontual e
+intervalar; e testes de hipóteses. 8) Regressão e correlação linear
+simples. 9) Tabelas de contingência: teste qui-quadrado; e análise de
+proporções.\\
+
+\noindent
+\textbf{\large Calendário de provas:}
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{cl}
+    \toprule
+    Provas & Datas \\
+    \midrule
+    $P_1$ & 12/04/2018 (quinta-feira) \\
+    $P_2$ & 22/05/2018 (terça-feira) \\
+    $P_3$ & 28/06/2018 (quinta-feira) \\
+    Repositiva & 03/07/2018 (terça-feira) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\noindent
+\textbf{\large Sistema de avaliação:} A avaliação do aprendizado será
+realizada por meio de três provas. A nota do aluno será calculada pela
+média ponderada das provas:
+
+$$
+\text{Nota} = \frac{2P_1 + 3P_2 + 3P_3}{8}
+$$
+
+\begin{enumerate}
+  \item A prova repositiva destina-se exclusivamente aos alunos que não
+    realizaram uma das três provas. Esta prova contém todo o conteúdo
+    lecionado.
+  \item Será considerado aprovado o aluno que obitiver média maior ou
+    igual a 5,0 e apresentar no mínimo 70\% de frequência.
+\end{enumerate}
+
+\noindent
+\textbf{\large Norma de recuperação:} Será feita sob a forma de uma
+prova com duas horas de duração, aplicada após o término das aulas, em
+época determinada pela USP. A média final será a média aritmética entre
+a nota desta prova e a média obtida no semestre.
+
+\small
+\nociteBasic{Andrade2013, Bussab2013, Zar2009}
+\nocite{Magalhaes2013, Milone2004, Pagano2010}
+
+\bibliographystyleBasic{agsm}
+\bibliographyBasic{references}
+
+\renewcommand{\refname}{\large Bibliografica complementar}
+\bibliographystyle{agsm}
+\bibliography{references}
+
+\end{document}
