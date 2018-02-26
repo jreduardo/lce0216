@@ -78,7 +78,7 @@ contents <- c(
 
 schedule <- data.frame("Datas" = format(dates, "%d/%m (%A)"),
                        "Conteúdo" = contents)
-schedule <- schedule[order(wday(dates)), ]
+# schedule <- schedule[order(wday(dates)), ]
 
 @
 
