@@ -1,0 +1,1053 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  1. Estatística Descritiva}
+\author[Demétrio C. G. B.]{Profa. Dra. Clarice Garcia Borges Demétrio}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 27 de fevereiro de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(knitr)
+opts_chunk$set(
+    size = "scriptsize",
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Introdução}
+
+\textbf{Estatística} é a ciência que fornece os princípios e os métodos
+para coleta, organização, resumo, análise e interpretação dos dados.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\hsize]{images/estatistica1}
+  \includegraphics[width=0.5\hsize]{images/estatistica2}
+\end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Introdução}
+
+\textbf{População} é um conjunto de indivíduos (ou unidades) com pelo
+menos uma característica em comum, sobre os quais desejamos obter
+informações.
+
+\vspace{0.5cm} \pause
+
+\textbf{Amostra} é um subconjunto de uma população. \pause
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\hsize]{images/descritiva0}
+\end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Dados e variáveis}
+
+\textbf{Variável} é uma condição ou característica das unidades da
+população. A variável pode assumir valores diferentes em diferentes
+unidades.
+
+\vspace{0.5cm} \pause
+
+\textbf{Dados} são os valores da variável em estudo, obtidos por meio de
+uma amostra.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis: Exemplos}
+
+Denotamos com letra maiúscula a variável de interesse. E.g.:
+
+\begin{itemize}[<+->]
+  \setlength\itemsep{0.6em}
+\item $X = $ número de árvores com cancro em uma amostra de 10
+  árvores.\\
+  $X \in \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\}$
+
+\item $M = $ taxa de mortalidade das árvores em uma floresta nativa.\\
+  $M \in [0,1]$
+
+\item $A = $ ângulo de dispersão das sementes de ipê-roxo a partir de
+  uma árvore matriz.\\
+  $A \in [0,2\pi]$
+
+\item $E = $ espécie arbórea numa floresta.
+  $E \in \{\text{Castanheira}, \text{Seringueira}, \text{Mogno}, \ldots
+  \}$
+
+\item $C = $ conceito atribuído a um produto.\\
+  $C \in \{\text{Bom}, \text{Médio}, \text{Ruim}\}$
+
+\end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Tipos de variáveis}
+
+  As variáveis são classificadas em dois tipos:
+  \vspace{0.5cm}
+  \begin{itemize}
+  \item \textbf{quantitativas} ou \textbf{numéricas};
+    \vspace{0.5cm}
+  \item \textbf{qualitativas} ou \textbf{categorizadas}.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis quantitativas}
+
+  \small As \textbf{variáveis quantitativas} se referem a quantidades ou
+  a medições. Desse modo, elas podem ser classificadas em:
+  \vspace{0.5cm} \pause
+
+  \begin{itemize}
+  \item \textbf{discretas}: quando assumem apenas valores inteiros.\\
+    Exemplo: número de árvores por hectare.
+
+    \vspace{0.5cm}\pause
+  \item \textbf{contínuas}: quando assumem valores em intervalos ou na
+    reta real. \\ Exemplo: diâmetro de árvores numa floresta plantada.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis qualitativas}
+
+  As \textbf{variáveis qualitativas} referem-se a qualidades. As
+  variáveis categorizadas podem ser classificadas como:
+  \vspace{0.5cm}\pause
+
+  \begin{itemize}
+  \item \textbf{nominais}: as categorias são independentes.\\
+    Exemplo: procedência de uma espécie.
+
+    \vspace{0.5cm}\pause
+  \item \textbf{ordinais}: as categorias são dependentes.\\ Exemplo:
+    grau de infestação de cupim em uma estante.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Resumo - Variáveis}
+
+Variáveis
+\vspace{0.5cm}
+\begin{enumerate}[i]
+\item Categorizadas (Qualitativas)
+  \vspace{0.5cm}
+  \begin{itemize}
+  \item Nominais
+    \vspace{0.1cm}
+  \item Ordinais
+  \end{itemize}
+  \vspace{0.5cm}
+\item Numéricas (Quantitativas)
+  \vspace{0.5cm}
+  \begin{itemize}
+  \item Discretas
+    \vspace{0.1cm}
+  \item Contínuas
+  \end{itemize}
+\end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis Muldimensionais}
+
+  Variáveis multidimensionais resultam da combinação de duas ou mais
+  variáveis. Exemplos:
+
+  \vspace{0.5cm}\pause
+
+  \begin{itemize}[<+->]
+    \setlength\itemsep{1em}
+  \item Localização de uma árvore em um fragmento florestal de
+    $500 \times 1000$ metros. A localização é dada por $S=(X, Y)$, em
+    que $X$ e $Y$ são variáveis quantitativas que representam as
+    coordenadas em um plano cartesiano.\\
+    $X \in [0; 500]$; $Y \in [0;1000]$
+
+  \item Atributos relacionados a cada uma das árvores em uma
+    amostra. $A=(D, H, S)$, em que\\
+    $D$ é o diâmetro da árvore (variável quantitativa contínua),\\
+    $H$ é a altura (variável quantitativa contínua) e\\
+    $S$ é a espécie (variável qualitativa nominal).
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Estatística e subdivisões}
+
+  A estatística se divide em duas grandes áreas:
+
+  \vspace{0.5cm}
+  \begin{enumerate}[i]
+  \item \textbf{a descritiva, a qual descreve os dados em forma de
+      tabelas, gráficos e medidas-resumo}, e , \vspace{0.5cm}
+  \item a inferencial, que objetiva obter conclusões sobre uma população
+    baseado em amostras.
+  \end{enumerate}
+  \vspace{0.5cm}
+  O enfoque nesta etapa será dado no item \textbf{(i)}.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular e Gráfica}
+
+  \textbf{1. Variáveis Quantitativas Discretas}\\
+  \vspace{0.5cm}
+
+  Como o número de valores repetidos em uma variável discreta pode ser
+  grande, uma representação tabular para este tipo de variável é
+  considerar os valores que a variável assume e o número de vezes que
+  cada valor aparece (\textbf{frequência}). Temos então, o que chamamos
+  de uma \textbf{tabela de frequências}.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular de Variáveis Discretas}
+
+  Esquematicamente:
+  \begin{table}
+    \caption{Título da Tabela}
+    \begin{tabular}{c c}
+      \hline
+      Valores da variável & Frequências \\
+      \hline
+      $x_1$    & $f_1$ \\
+      $x_2$    & $f_2$ \\
+      $\vdots$ & $\vdots$ \\
+      $x_k$    & $f_k$ \\
+      \hline
+               & $\sum_{i=1}^{k} f_i=n$ \\
+      \hline
+    \end{tabular}
+  \end{table}
+
+  \begin{itemize}
+  \item \textbf{Frequência relativa}: $f_i^{'}=\frac{f_i}{n}$
+  \item \textbf{Frequência acumulada}: $F_i$
+  \item \textbf{Frequência relativa acumulada}: $F_i^{'}$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular de Variáveis Discretas}
+
+  {\bf Exemplo:} Considere os dados a seguir referentes ao número de
+  brotos deixados em cepas de {\it Eucalyptus grandis} após o primeiro
+  corte. \vspace{-1cm}
+
+  \begin{center}
+    \[\scriptsize
+    \hspace{-0.2cm}
+    \begin{tabular}{cccccccccccccccccccc}
+      \hline \\[-0.25cm]
+      2 & 1 & 2 & 2 & 0 & 3 & 3 & 2 & 1 & 1 & 2 & 2 & 0 & 1 & 1 & 3 & 1 & 2 & 1 & 1 \\
+      2 & 0 & 0 & 3 & 2 & 1 & 2 & 2 & 3 & 0 & 2 & 3 & 3 & 0 & 3 & 2 & 2 & 0 & 1 & 1 \\ \hline
+    \end{tabular}
+    \]
+  \end{center}
+
+  \pause
+  \begin{center}
+    \begin{table}
+      \caption{Distribuição de frequências do número de brotos
+        deixados em cepas de {\it Eucalyptus grandis} após o
+        primeiro corte}
+      \begin{tabular}{ccccc} \hline
+        Número de & \\
+        brotos  &  $f_i$ & $f'_i$ & $F_i$ & $F'_i$ \\ \hline
+        0 & & & & \\
+        1 & & & & \\
+        2 & & & & \\
+        3 & & & & \\ \hline
+        Total  & & & &  \\ \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular - Variáveis Discretas}
+
+  \begin{center}
+    \begin{table}
+      \caption{Distribuição de frequências do número de brotos
+        deixados em cepas de {\it Eucalyptus grandis} após o
+        primeiro corte.}
+      \begin{tabular}{ccccc} \hline
+        Número de & \\
+        brotos  &  $f_i$ & $f'_i$ & $F_i$ & $F'_i$ \\ \hline
+        0 & 7 & 0,175 &  7 & 0,175\\
+        1 & 11 & 0,275 & 18 & 0,450 \\
+        2 & 14 & 0,350 & 32 & 0,800\\
+        3 &  8& 0,200 & 40 & 1,000\\ \hline
+        Total  & 40 & 1,000 & &  \\ \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação gráfica - Variáveis Discretas}
+
+  A representação gráfica de uma variável quantitativa discreta cujos
+  valores estão dispostos em uma tabela de frequências é um
+  \textbf{diagrama de barras}.  \vspace{0.5cm}\pause
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\hsize]{images/descritiva1}
+    \caption{Representação gráfica de variáveis quantitativas
+      discretas.}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Importância da representação gráfica}
+
+  O objetivo da representação gráfica é observar o
+  \textbf{comportamento} da variável de interesse. \\ \vspace{0.5cm}
+
+  Alguns comportamentos podem ser:
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\hsize]{images/assdireita}
+    \includegraphics[width=0.3\hsize]{images/simetrica}
+    \includegraphics[width=0.3\hsize]{images/assesquerda}
+    \caption{Da esquerda para a direita tem-se: assimétrica à direita,
+      simétrica, assimétrica à esquerda.}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular e Gráfica}
+
+  \textbf{2. Variáveis Quantitativas Contínuas}\\
+  \vspace{0.5cm}
+
+  \small Devido a natureza da variável, considera-se o intervalo de
+  variação dos dados (\textbf{amplitude}) de forma a dividí-los em
+  intervalos menores chamados \textbf{intervalos de classe}. Para a
+  construção de uma tabela em classes de frequências deve-se calcular:
+
+  \begin{block}{\bf Número de intervalos classes ($K$)}
+    A escolha do número de classes é arbitrária, existindo, no entanto,
+    duas regras que podem ser utilizadas:
+    \begin{itemize}
+    \item $K = \sqrt{n}$
+    \item Fórmula de Sturges:
+      $$K = 1 + \log_2 n = 1 + 3,32 \log_{10} n.$$
+      $n$ corresponde ao número de dados.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular e Gráfica}
+
+  \begin{block}{\bf Amplitude total ($A$)}
+    Limite inferior: $X_{\mbox{mínimo}}$\\
+    \vspace{.2cm}
+    Limite superior: $X_{\mbox{máximo}}$\\
+    \vspace{.2cm}
+    Amplitude total: $A = X_{\mbox{máximo}} - X_{\mbox{mínimo}}$
+  \end{block}
+
+  \vspace{.5cm}
+
+  \begin{block}{\bf Amplitude das classes ($h$)}
+    $$h = \frac{A}{K}.$$
+  \end{block}
+
+  \small Assim, uma representação tabular para este tipo de variável é
+  considerar os intervalos de classe e contar quantos valores pertencem
+  aos intervalos, obtendo as respectivas frequências.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular - Variáveis Contínuas}
+
+  Esquematicamente:
+  \begin{table}
+    \caption{Título da Tabela}
+    \begin{tabular}{l r}
+      \hline
+      Classes & Frequências \\
+      \hline
+      $x_1$$\vdash$$x_2$ & $f_1$ \\
+      $x_2$$\vdash$$x_3$ & $f_2$ \\
+      $\vdots$ & $\vdots$ \\
+      $x_{k-1}$$\vdash$$x_{k}$ & $f_k$ \\
+      \hline
+              & $\sum_{i=1}^{k} f_i=n$ \\
+      \hline
+    \end{tabular}
+  \end{table}
+
+  Analogamente ao caso discreto, pode-se definir a \textbf{frequência
+    relativa} como $f_{i}^{'}=\frac{f_i}{n} $, bem como as frequências
+  acumulada ($F_i$) e relativa acumulada ($F'_i$).
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular - Variáveis Contínuas}
+
+  {\bf Exemplo:} Construir a tabela de distribuição de frequências para
+  a variável diâmetro das árvores em uma floresta.
+
+  \begin{block}{Dados observados}
+    \centering \small
+    \begin{tabular}{cccccccccc}\\ \hline
+        10,2 & 10,3 & 11,6 & 12,0 & 12,6 & 12,6 & 13,0 & 13,2 & 13,5 & 14,0 \\
+        15,2 & 15,8 & 16,2 & 18,1 & 18,3 & 18,4 & 18,7 & 19,6 & 19,9 & 20,3 \\
+        20,3 & 21,9 & 22,4 & 23,5 & 24,6 & 24,9 & 31,7 & 33,1 & 40,0 & 40,7 \\
+        48,3 & 50,0 & 50,8 & 52,4 & 53,2 & 61,0 & 63,2 & 72,4 & 78,8 & 92,5 \\
+      \hline \\
+    \end{tabular}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular - Variáveis Contínuas}
+
+  \begin{center}
+    \begin{table}
+      \caption{Distribuição de frequências para diâmetro das árvores em
+        uma floresta}
+      \begin{tabular}{lcccc} \hline
+        Diâmetro & $f_i$ & $f'_i$ & $F_i$ & $F'_i$ \\ \hline
+        10,2 $\vdash$ 22,0 & 22 & 0,550 & 22 & 0,550\\
+        22,0 $\vdash$ 33,8 &  6 & 0,150 & 28 & 0,700\\
+        33,8 $\vdash$ 45,6 &  2 & 0,050 & 30 & 0,750 \\
+        45,6 $\vdash$ 57,4 &  5 & 0,125 & 35 & 0,875\\
+        57,4 $\vdash$ 69,2 &  2 & 0,050 & 37 & 0,925\\
+        69,2 $\vdash$ 81,0 &  2 & 0,050 & 39 & 0,975\\
+        81,0 $\vdash$ 92,8 &  1 & 0,025 & 40 & 1,000\\ \hline
+        Total & 40 & 1,00 &\\ \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica de Variáveis Quantitativas}
+
+  \textbf{2. Variáveis Quantitativas Contínuas}\\
+  \begin{itemize}
+  \item Gráfico de pontos
+  \item Diagrama de ramos e folhas
+  \item Histograma e polígono de frequência
+  \item Ogiva
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+	\frametitle{Representação Gráfica de Variáveis Quantitativas}
+	\textbf{2. Variáveis Quantitativas Contínuas}\\
+	\begin{block}{Gráfico de pontos}
+		\begin{itemize}
+			\item Para pequenos conjuntos de dados
+			\item Fornece uma boa ideia da dispersão dos dados e da existência de dados discrepantes
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica de Variáveis Quantitativas}
+
+  \begin{block}{Gráfico de pontos}
+    Considere os valores observados para a altura (m) dos alunos da
+    disciplina LCE0216 em 2017:
+    \begin{center}
+      \begin{tabular}{cccccccc} \hline
+        1,69& 1,78& 1,73& 1,56& 1,59& 1,75& 1,72& 1,70\\
+        1,65& 1,70& 1,64& 1,65& 1,67& 1,80& 1,90& 1,72\\
+        1,56& 1,93& 1,75& 1,74& 1,65& 1,80& 1,57& 1,71\\ \hline
+      \end{tabular}
+    \end{center}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica - Variáveis Contínuas}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\hsize]{images/pontos1}
+    \includegraphics[width=0.5\hsize]{images/pontos2}
+    \caption{Gráficos de pontos.}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica - Variáveis Contínuas}
+
+  \begin{block}{Diagrama de ramos e folhas}
+    \begin{itemize}
+    \item Pode ser utilizado para grandes conjuntos de dados;
+    \item Fornece uma boa ideia da distribuição;
+    \item Não se perde informação sobre os dados;
+    \item Permite a detecção de valores discrepantes.
+    \end{itemize}
+
+    \vspace{.2cm}\pause
+
+    Ideia básica para a construção: dividir cada observação em duas
+    partes, a primeira corresponde ao ramo, colocado à esquerda de uma
+    linha vertical e a segunda, a folha, colocado à direita.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Representação Gráfica - Variáveis Contínuas}
+  \small
+
+  \begin{block}{Diagrama de ramos e folhas}
+
+    Considere os valores observados para a altura (m) dos alunos da
+    disciplina LCE0216 em 2017:
+
+    \begin{center}
+      \begin{tabular}{cccccccc}
+        \hline
+        1,56& 1,56& 1,57& 1,59& 1,64& 1,65& 1,65& 1,65\\
+        1,67& 1,69& 1,70& 1,71& 1,72& 1,72& 1,73& 1,74\\
+        1,75& 1,75& 1,76& 1,78& 1,80& 1,80& 1,90& 1,93\\
+        \hline
+      \end{tabular}
+    \end{center}
+  \end{block}
+
+  \pause
+
+  \begin{figure}
+    \begin{verbatim}
+                     15 | 6679
+                     16 | 455579
+                     17 | 0122345568
+                     18 | 00
+                     19 | 03
+    \end{verbatim}
+    \caption{Diagrama de ramos e folhas para a variável altura dos
+      alunos da disciplina LCE0216 em 2017.}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica de Variáveis Quantitativas}
+
+  \begin{block}{Histograma e polígono de frequências}
+    \small São utilizados para representar as distribuições de
+    frequências, e fornecem uma boa ideia a respeito da distribuição da
+    variável.
+  \end{block}
+  \pause
+
+  \begin{block}{Histograma}
+    \small É uma sequência de retângulos postos lado a lado onde cada
+    retângulo tem como base a amplitude da classe e como altura a
+    frequência.
+  \end{block}
+  \pause
+
+  \begin{block}{Polígono de frequência}
+    \small É um gráfico que se obtém unindo por uma poligonal os pontos
+    correspondentes às frequências das diversas classes, centradas nos
+    respectivos pontos médios. Para se obter as interseções dos
+    polígonos com o eixo, cria-se, em cada extremo do diagrama uma
+    classe de frequência nula.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica de Variáveis Quantitativas}
+
+  \begin{block}{Histograma}
+    \begin{figure}[b]
+      \includegraphics[width=8cm]{images/histaltura}
+      \caption{Histograma para a variável altura.}
+    \end{figure}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica de Variáveis Quantitativas}
+
+  \begin{block}{Histograma e polígono de frequências}
+    \begin{figure}[b]
+      \includegraphics[width=8cm]{images/histpolialtura}
+      \caption{Histograma e polígono de frequência para a variável
+        altura.}
+    \end{figure}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica de Variáveis Quantitativas}
+
+  \begin{block}{Ogiva de Galton}
+    Gráfico representativo de uma distribuição acumulada de
+    frequências. Trata-se de uma poligonal ascendente formada ligando-se
+    os pontos de coordenadas $(LS_i; F_i)$ ou $(LS_i, F'_i)$, onde
+    $LS_i$ é o limite superior da classe $i$.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica de Variáveis Quantitativas}
+  \begin{block}{Ogiva}
+    \begin{figure}[b]
+      \includegraphics[width=8cm]{images/Ogiva}
+      \caption{Ogiva para a variável altura.}
+    \end{figure}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica - Variáveis Contínuas}
+
+  \begin{center}
+    Exemplo: Construção de um histograma.
+    \begin{table}
+      \caption{Distribuição de frequências para diâmetro das árvores em
+        uma floresta}
+      \begin{tabular}{lcccc} \hline
+        Diâmetro & $f_i$ & $f'_i$ & $F_i$ & $F'_i$ \\ \hline
+        10,2 $\vdash$ 22,0 & 22 & 0,550 & 22 & 0,550\\
+        22,0 $\vdash$ 33,8 &  6 & 0,150 & 28 & 0,700\\
+        33,8 $\vdash$ 45,6 &  2 & 0,050 & 30 & 0,750 \\
+        45,6 $\vdash$ 57,4 &  5 & 0,125 & 35 & 0,875\\
+        57,4 $\vdash$ 69,2 &  2 & 0,050 & 37 & 0,925\\
+        69,2 $\vdash$ 81,0 &  2 & 0,050 & 39 & 0,975\\
+        81,0 $\vdash$ 92,8 &  1 & 0,025 & 40 & 1,000\\ \hline
+        Total & 40 & 1,00 &\\ \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica - Variáveis Contínuas}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\hsize]{images/descritiva2}
+    \caption{Histograma.}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular e Gráfica}
+
+  \textbf{1. Variáveis Qualitativas Nominais}
+  (categorias das variáveis são independentes) \\
+  \vspace{0.5cm}
+
+  Uma representação tabular pode ser feita por meio da \textbf{contagem}
+  (\textbf{frequência}) de ocorrências das categorias. A representação
+  gráfica da tabela de frequências deve ser feita por meio de um
+  \textbf{diagrama de barras} ou em \textbf{gráfico de setores}.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular - Variáveis Qualitativas}
+
+  Considere que as espécies arbóreas de uma floresta nativa foram
+  classificadas de acordo com a síndrome de regeneração, cuja tabela de
+  frequências é apresentada a seguir.
+
+  \begin{center}
+    \begin{tabular}{lc}\hline
+      Síndrome de & Número de \\
+      regeneração & espécies \\ \hline
+      Heliófitas & 4 \\
+      Oportunistas de clareira & 11\\
+      Tolerantes & 15 \\ \hline
+      Total & 30 \\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Gráfica - Variáveis Qualitativas}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\hsize]{images/descritiva3}
+    \includegraphics[width=0.5\hsize]{images/descritiva4}
+    \caption{À esquerda, diagrama de barras. À direita, gráfico de
+      setores.}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Representação Tabular e Gráfica}
+  \textbf{2. Variáveis Qualitativas Ordinais}
+  (categorias das variáveis são dependentes) \\
+
+  \vspace{0.5cm}
+
+  Neste caso, a construção de tabelas e gráficos são feitas de forma
+  análoga ao caso das variáveis qualitativas nominais (\textbf{tabela de
+    frequência} e \textbf{diagramas de barra} ou \textbf{gráfico de
+    setores}).
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Software estatístico: R}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\hsize]{images/descritiva5}
+  \end{figure}
+
+  R é uma linguagem de programação e ambiente para computação
+  estatística e gráfica, disponível sob os termos da licença GNU de
+  software livre. R é a excelência em software para
+
+  \begin{itemize}
+  \item Manipulação de dados;
+  \item Análise estatística;
+  \item Visualização gráfica;
+  \item Pesquisa reproduzível;
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Software estatístico: R}
+  Instalação: \url{https://cran.r-project.org/}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\hsize]{images/descritiva6}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Ambiente de desenvolvimento RStudio}
+  Instalação: \url{https://www.rstudio.com/}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\hsize]{images/rstudio0}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Ambiente de desenvolvimento RStudio}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\hsize]{images/rstudio}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Software estatístico: R}
+
+  Inserindo os dados no software
+  \begin{block}{Digitando diretamente}
+
+<<eval=FALSE>>=
+
+altura <- c(10.3, 20.3, 33.4)  # Se for quantitativa
+cor <- c("amarela", "azul")    # Se for qualitativa
+
+@
+  \end{block}
+  \pause
+
+  \begin{block}{Importando um conjunto de dados}
+
+<<eval=FALSE>>=
+
+dados <- read.csv(file = "//...//ex1.csv",
+                  header = TRUE, dec = ".", sep = ",")
+
+@
+  \end{block}
+
+\end{frame}
+
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Software estatístico: R}
+
+  Exemplo: Classificação de espécies arbóreas de acordo com a síndrome
+  de regeneração
+
+  \begin{table}
+    \begin{tabular}{ccc}\hline
+      OP & H & OP\\
+      H & OP & T \\
+      T & T & T \\
+      OP & T & T \\
+      T & T & T \\
+      OP & OP & OP\\
+      T & H & OP\\
+      T & T & OP\\
+      T & T & OP\\
+      OP & T & H\\ \hline
+    \end{tabular}
+
+    \begin{itemize}
+	\item OP: Oportunista de clareira;
+	\item H: Heliófita;
+	\item T: Tolerantes.
+    \end{itemize}
+  \end{table}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]\frametitle{Software estatístico: R}
+
+\begin{block}{Códigos}
+
+<<>>=
+
+# Lendo os dados
+dados <- read.csv("dados/sindrome.csv", header = FALSE)
+str(dados)
+
+# Tabela de frequências
+freq <- table(dados)
+freq
+
+@
+
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Software estatístico: R}
+
+  \begin{block}{Códigos}
+
+<<eval=FALSE>>=
+
+# Configura janela gráfica
+par(mfrow = c(1, 2), mar = c(4, 4, 2, 2))
+
+# Gráfico de barras
+barplot(freq, col = "green",
+        ylab = "Número de espécies",
+        xlab = "Síndrome de regeneração")
+
+# Grafico de setores
+porcentagem <- round(100 * freq / sum(freq), 0)
+pie(freq, labels = porcentagem,
+    col = c("red", "green", "black"))
+legend("topright", c("H","OP","T"),
+       fill = c("red", "green", "black"))
+
+@
+
+\end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Software estatístico: R}
+
+    \begin{block}{Output}
+
+<<echo=FALSE, fig.height=4, fig.width=8.5, fig.cap=cap>>=
+
+cap <- "À esquerda, diagrama de barras. À direita, gráfico de setores para a variável síndrome de regeneração."
+
+# Confira janela gráfica
+par(mfrow = c(1, 2), mar = c(4, 4, 2, 2))
+
+# Gráfico de barras
+barplot(freq, col = "green",
+        ylab = "Número de espécies",
+        xlab = "Síndrome de regeneração")
+
+# Grafico de setores
+porcentagem <- round(100 * freq / sum(freq), 0)
+pie(freq, labels = porcentagem,
+    col = c("red", "green", "black"))
+legend("topleft", c("H","OP","T"),
+       fill = c("red", "green", "black"))
+
+@
+
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Software estatístico: R}
+
+  Exemplo: Valores observados para a altura (m) dos alunos da disciplina
+  LCE0216:
+
+  \begin{center}
+    \begin{tabular}{cccccccc}
+      \hline
+      1,56& 1,56& 1,57& 1,59& 1,64& 1,65& 1,65& 1,65\\
+      1,67& 1,69& 1,70& 1,71& 1,72& 1,72& 1,73& 1,74\\
+      1,75& 1,75& 1,76& 1,78& 1,80& 1,80& 1,90& 1,93\\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{block}{No R}
+
+<<>>=
+
+# Inserindos as alturas dos alunos de 2017
+altura <- c(1.69, 1.78, 1.73, 1.56, 1.59, 1.75, 1.72, 1.76, 1.65, 1.70,
+            1.64, 1.65, 1.67, 1.80, 1.90, 1.72, 1.56, 1.93, 1.75, 1.74,
+            1.65, 1.80, 1.57, 1.71)
+
+@
+
+\end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Software estatístico: R}
+
+  \begin{block}{Códigos}
+
+<<>>=
+
+# Representação em ramo e folhas
+stem(altura)
+
+@
+
+\end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Software estatístico: R}
+
+  \begin{block}{Códigos}
+
+<<>>=
+
+# Histogram
+hist(altura, xlab = "Altura (m)", ylab = "Frequência", main = "Histograma")
+
+@
+
+\end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Software estatístico: R}
+
+  \begin{block}{Códigos}
+
+<<>>=
+
+# Gráfico de frequência em pontos
+stripchart(altura, method = "stack", offset = 1,
+           xlab = "Altura (m)", pch = 1)
+
+@
+\end{block}
+\end{frame}
+
+\end{document}
