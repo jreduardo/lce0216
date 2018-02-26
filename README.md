@@ -23,6 +23,6 @@ primeiro semestre de 2018.
 [clarice]: http://www4.esalq.usp.br/pesquisa/node/25
 [eduardo]: http://www.leg.ufpr.br/~eduardojr/
 [lce]: http://www.lce.esalq.usp.br/
-[programa]: https://cdn.rawgit.com/jreduardo/lce0216/master/programa.pdf
-[cronograma]: https://cdn.rawgit.com/jreduardo/lce0216/master/cronograma.pdf
-[a01]: https://cdn.rawgit.com/jreduardo/lce0216/master/aulas/aula01-descritiva.pdf
+[programa]: https://jreduardo.github.io/programa.pdf
+[cronograma]: https://jreduardo.github.io/cronograma.pdf
+[a01]: https://jreduardo.github.io/aula01-descritiva.pdf
