@@ -7,20 +7,16 @@ Repositório para elaboração dos materiais utilizados na disciplina
 LCE0216 - Introdução à Bioestatística Florestal ofertada pelo
 [departamento de Ciências Exatas (LCE)][lce] da ESALQ-USP.
 
+
+## Materiais de aulas ##
+
 Veja o [programa da disciplina][programa] e o
 [cronograma de atividades][cronograma] elaborados para a oferta do
 primeiro semestre de 2018.
 
-
-## Materiais de aulas ##
-
 | Conteúdo                                         | Slides                |
 |:-------------------------------------------------|:----------------------|
 |Motivação e representação tabular e gráfica       |[descritiva1.pdf][a01] |
-
-
-
-
 
 <!--------------------------------------------- -->
 <!-- Links -->
