@@ -29,7 +29,10 @@
 \title[LCE0216]{LCE0216 \\[-0.1cm]
   Introdução à Bioestatística Florestal \\[0.2cm]
   1. Estatística Descritiva}
-\author[Demétrio C. G. B.]{Profa. Dra. Clarice Garcia Borges Demétrio}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitores: Eduardo E. R. Junior \& Giovana Fumes
+}
 \institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
   Universidade de São Paulo}
 \date{Piracicaba, 27 de fevereiro de 2018}
@@ -39,9 +42,18 @@
 
 <<setup, include=FALSE>>=
 
+library(lattice)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
 library(knitr)
+library(xtable)
 opts_chunk$set(
     size = "scriptsize",
+    tidy = FALSE,
     fig.width = 7,
     fig.height = 4,
     out.width = "1\\textwidth",
@@ -49,6 +61,8 @@ opts_chunk$set(
     fig.pos = "h",
     dev.args = list(family = "Palatino")
 )
+
+options(OutDec = ",")
 
 @
 
@@ -246,7 +260,7 @@ Variáveis
     baseado em amostras.
   \end{enumerate}
   \vspace{0.5cm}
-  O enfoque nesta etapa será dado no item \textbf{(i)}.
+  O enfoque nessa etapa será dado no item \textbf{(i)}.
 \end{frame}
 
 %-------------------------------------------
@@ -274,10 +288,10 @@ Variáveis
       \hline
       Valores da variável & Frequências \\
       \hline
-      $x_1$    & $f_1$ \\
-      $x_2$    & $f_2$ \\
+      $v_1$    & $f_1$ \\
+      $v_2$    & $f_2$ \\
       $\vdots$ & $\vdots$ \\
-      $x_k$    & $f_k$ \\
+      $v_k$    & $f_k$ \\
       \hline
                & $\sum_{i=1}^{k} f_i=n$ \\
       \hline
@@ -376,14 +390,38 @@ Variáveis
 
   Alguns comportamentos podem ser:
 
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.3\hsize]{images/assdireita}
-    \includegraphics[width=0.3\hsize]{images/simetrica}
-    \includegraphics[width=0.3\hsize]{images/assesquerda}
-    \caption{Da esquerda para a direita tem-se: assimétrica à direita,
-      simétrica, assimétrica à esquerda.}
-  \end{figure}
+<<echo=FALSE, fig.height=3.5, fig.width=8, fig.cap="Diferentes comportamentos da distribuição de uma variável.">>=
+
+x <- seq(0, 1, length.out = 100)
+pars <- list(
+    "Assimetria à direita" = list(shape1 = 2, shape2 = 5),
+    "Simetria" = list(shape1 = 4, shape2 = 4),
+    "Assimetria à esquerda" = list(shape1 = 5, shape2 = 2))
+
+da <- purrr::map_dfr(pars, function(p) {
+    p[["x"]] <- x
+    data.frame("x" = x, "fx" = do.call(dbeta, p))
+}, .id = "comp")
+
+da$comp <- forcats::fct_inorder(factor(da$comp))
+lattice::xyplot(fx ~ x | comp,
+                type = "l",
+                scales = list(draw = FALSE),
+                xlab = expression(x),
+                ylab = expression(f(x)),
+                data = da)
+
+@
+
+
+  % \begin{figure}[H]
+  %   \centering
+  %   \includegraphics[width=0.3\hsize]{images/assdireita}
+  %   \includegraphics[width=0.3\hsize]{images/simetrica}
+  %   \includegraphics[width=0.3\hsize]{images/assesquerda}
+  %   \caption{Da esquerda para a direita tem-se: assimétrica à direita,
+  %     simétrica, assimétrica à esquerda.}
+  % \end{figure}
 \end{frame}
 
 %-------------------------------------------
@@ -393,8 +431,8 @@ Variáveis
   \textbf{2. Variáveis Quantitativas Contínuas}\\
   \vspace{0.5cm}
 
-  \small Devido a natureza da variável, considera-se o intervalo de
-  variação dos dados (\textbf{amplitude}) de forma a dividí-los em
+  \small Devido à natureza da variável, considera-se o intervalo de
+  variação dos dados (\textbf{amplitude}) de forma a dividi-los em
   intervalos menores chamados \textbf{intervalos de classe}. Para a
   construção de uma tabela em classes de frequências deve-se calcular:
 
@@ -415,11 +453,12 @@ Variáveis
   \frametitle{Representação Tabular e Gráfica}
 
   \begin{block}{\bf Amplitude total ($A$)}
-    Limite inferior: $X_{\mbox{mínimo}}$\\
+    Limite inferior: $x_{\text{mínimo}} = x_{(1)}$\\
     \vspace{.2cm}
-    Limite superior: $X_{\mbox{máximo}}$\\
+    Limite superior: $x_{\text{máximo}} = x_{(n)}$\\
     \vspace{.2cm}
-    Amplitude total: $A = X_{\mbox{máximo}} - X_{\mbox{mínimo}}$
+    Amplitude total: $A = x_{\text{máximo}} - x_{\text{mínimo}} =
+    x_{(n)} - x_{(1)}$
   \end{block}
 
   \vspace{.5cm}
@@ -437,17 +476,17 @@ Variáveis
 \begin{frame}
   \frametitle{Representação Tabular - Variáveis Contínuas}
 
-  Esquematicamente:
+  Esquematicamente, sendo $l$ os limites para definição das classes:
   \begin{table}
     \caption{Título da Tabela}
     \begin{tabular}{l r}
       \hline
       Classes & Frequências \\
       \hline
-      $x_1$$\vdash$$x_2$ & $f_1$ \\
-      $x_2$$\vdash$$x_3$ & $f_2$ \\
+      $l_1 \vdash l_2$ & $f_1$ \\
+      $l_2 \vdash l_3$ & $f_2$ \\
       $\vdots$ & $\vdots$ \\
-      $x_{k-1}$$\vdash$$x_{k}$ & $f_k$ \\
+      $l_{k-1} \vdash l_{k}$ & $f_k$ \\
       \hline
               & $\sum_{i=1}^{k} f_i=n$ \\
       \hline
@@ -476,6 +515,15 @@ Variáveis
       \hline \\
     \end{tabular}
   \end{block}
+
+  \pause
+  Obtendo as quantidades para construção da tabela:\\[0.3cm]
+
+  $A = x_{(n)} - x_{(1)} = 92,5 - 10,2 = 82,3$\\
+  $K = \sqrt{n} = \sqrt{40} = 6,32 \Rightarrow 7 $ classes\\
+  $K = 1 + \log_2 n = 1 + \log_2 40 = 6,32 \Rightarrow 7 $ classes\\
+  $h = A / K = 82,3 / 7 \approx 11,8$.\\
+
 \end{frame}
 
 %-------------------------------------------
@@ -547,12 +595,25 @@ Variáveis
 \begin{frame}
   \frametitle{Representação Gráfica - Variáveis Contínuas}
 
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\hsize]{images/pontos1}
-    \includegraphics[width=0.5\hsize]{images/pontos2}
-    \caption{Gráficos de pontos.}
-  \end{figure}
+<<echo=FALSE, fig.width=8, fig.cap="Exemplos de gráficos de pontos.">>=
+
+altura <- c(1.69, 1.78, 1.73, 1.56, 1.59, 1.75, 1.72, 1.76, 1.65, 1.70,
+            1.64, 1.65, 1.67, 1.80, 1.90, 1.72, 1.56, 1.93, 1.75, 1.74,
+            1.65, 1.80, 1.57, 1.71)
+
+par(mfrow = c(1, 2), mar = c(4, 3.8, 0, 0))
+plot(altura,
+     xlab = "Índice",
+     ylab = "Altura (m)")
+
+stripchart(altura,
+           method="stack",
+           offset = 1,
+           pch = 1,
+           xlab = "Altura (m)")
+
+@
+
 \end{frame}
 
 %-------------------------------------------
@@ -585,29 +646,32 @@ Variáveis
     Considere os valores observados para a altura (m) dos alunos da
     disciplina LCE0216 em 2017:
 
-    \begin{center}
-      \begin{tabular}{cccccccc}
-        \hline
-        1,56& 1,56& 1,57& 1,59& 1,64& 1,65& 1,65& 1,65\\
-        1,67& 1,69& 1,70& 1,71& 1,72& 1,72& 1,73& 1,74\\
-        1,75& 1,75& 1,76& 1,78& 1,80& 1,80& 1,90& 1,93\\
-        \hline
-      \end{tabular}
-    \end{center}
+<<echo=FALSE, results="asis">>=
+
+altura <- c(1.56, 1.56, 1.57, 1.59, 1.64, 1.65, 1.65, 1.65, 1.67, 1.69,
+            1.70, 1.71, 1.72, 1.72, 1.73, 1.74, 1.75, 1.75, 1.76, 1.78,
+            1.80, 1.80, 1.90, 1.93)
+
+print(xtable(matrix(altura, nrow = 3, byrow = TRUE)),
+      hline.after = c(0, 3),
+      include.colnames = FALSE,
+      include.rownames = FALSE)
+
+@
   \end{block}
 
   \pause
 
+
   \begin{figure}
-    \begin{verbatim}
-                     15 | 6679
-                     16 | 455579
-                     17 | 0122345568
-                     18 | 00
-                     19 | 03
-    \end{verbatim}
-    \caption{Diagrama de ramos e folhas para a variável altura dos
-      alunos da disciplina LCE0216 em 2017.}
+<<echo=FALSE>>=
+
+stem(altura)
+
+@
+\vspace{-0.3cm}
+\caption{Diagrama de ramos e folhas para a variável altura dos
+  alunos da disciplina LCE0216 em 2017.}
   \end{figure}
 \end{frame}
 
@@ -632,7 +696,7 @@ Variáveis
   \begin{block}{Polígono de frequência}
     \small É um gráfico que se obtém unindo por uma poligonal os pontos
     correspondentes às frequências das diversas classes, centradas nos
-    respectivos pontos médios. Para se obter as interseções dos
+    respectivos pontos médios. Para se obterem as interseções dos
     polígonos com o eixo, cria-se, em cada extremo do diagrama uma
     classe de frequência nula.
   \end{block}
@@ -643,10 +707,25 @@ Variáveis
   \frametitle{Representação Gráfica de Variáveis Quantitativas}
 
   \begin{block}{Histograma}
-    \begin{figure}[b]
-      \includegraphics[width=8cm]{images/histaltura}
-      \caption{Histograma para a variável altura.}
-    \end{figure}
+
+<<echo=FALSE, out.width="0.8\\hsize", fig.height=4, fig.width=5.5, fig.cap="Histograma para a variável altura.">>=
+
+A <- diff(range(altura))
+K <- ceiling(sqrt(length(altura)))
+h <- A / K
+breaks <- seq(min(altura), by = h, length.out = K + 1)
+xrange <- range(altura) + c(-1, 1) * h/2
+
+ht <- hist(altura,
+           right = FALSE,
+           breaks = breaks,
+           xlim = xrange,
+           xlab = "Altura (m)",
+           ylab = "Frequência absoluta",
+           main = "Histograma")
+
+@
+
   \end{block}
 \end{frame}
 
@@ -655,11 +734,22 @@ Variáveis
   \frametitle{Representação Gráfica de Variáveis Quantitativas}
 
   \begin{block}{Histograma e polígono de frequências}
-    \begin{figure}[b]
-      \includegraphics[width=8cm]{images/histpolialtura}
-      \caption{Histograma e polígono de frequência para a variável
-        altura.}
-    \end{figure}
+
+<<echo=FALSE, out.width="0.8\\hsize", fig.height=4, fig.width=5.5, fig.cap="Histograma e polígono de frequência para a variável altura.">>=
+
+plot(ht,
+     border = "gray40",
+     col = rgb(0.9, 0.9, 0.9, 0.9),
+     lty = 3,
+     xlim = xrange,
+     xlab = "Altura (m)",
+     ylab = "Frequência absoluta",
+     main = "Polígono de frequências")
+points(c(xrange[1], ht$mids, xrange[2]),
+       c(0, ht$counts, 0), type = "l")
+
+@
+
   \end{block}
 \end{frame}
 
@@ -670,19 +760,33 @@ Variáveis
   \begin{block}{Ogiva de Galton}
     Gráfico representativo de uma distribuição acumulada de
     frequências. Trata-se de uma poligonal ascendente formada ligando-se
-    os pontos de coordenadas $(LS_i; F_i)$ ou $(LS_i, F'_i)$, onde
-    $LS_i$ é o limite superior da classe $i$.
+    os pontos de coordenadas $(LS_i; F_i)$ ou $(LS_i, F'_i)$, sendo
+    $LS_i$ o limite superior da classe $i$.
   \end{block}
 \end{frame}
 
 %-------------------------------------------
 \begin{frame}
   \frametitle{Representação Gráfica de Variáveis Quantitativas}
+
   \begin{block}{Ogiva}
-    \begin{figure}[b]
-      \includegraphics[width=8cm]{images/Ogiva}
-      \caption{Ogiva para a variável altura.}
-    \end{figure}
+
+<<echo=FALSE, out.width="0.8\\hsize", fig.height=4, fig.width=5.5, fig.cap="Ogiva a variável altura.">>=
+
+ht2 <- ht
+ht2$counts <- cumsum(ht$counts)
+
+plot(ht2,
+     border = "gray40",
+     col = rgb(0.9, 0.9, 0.9, 0.9),
+     lty = 3,
+     xlim = xrange,
+     xlab = "Altura (m)",
+     ylab = "Frequência absoluta",
+     main = "Ogiva de Galton")
+points(ht2$breaks, c(0, ht2$counts), type = "b")
+
+@
   \end{block}
 \end{frame}
 
@@ -744,13 +848,13 @@ Variáveis
   frequências é apresentada a seguir.
 
   \begin{center}
-    \begin{tabular}{lc}\hline
-      Síndrome de & Número de \\
-      regeneração & espécies \\ \hline
-      Heliófitas & 4 \\
-      Oportunistas de clareira & 11\\
-      Tolerantes & 15 \\ \hline
-      Total & 30 \\ \hline
+    \begin{tabular}{lcc}\hline
+      Síndrome de & Número de & Percentual\\
+      regeneração & espécies  & (\%)\\ \hline
+      Heliófitas  & 4  & 13\%\\
+      Oportunistas de clareira & 11 & 37\%\\
+      Tolerantes & 15 & 50\%\\ \hline
+      Total & 30 & 100\%\\ \hline
     \end{tabular}
   \end{center}
 \end{frame}
