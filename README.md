@@ -27,4 +27,4 @@ primeiro semestre de 2018.
 [programa]: https://jreduardo.github.io/lce0216/programa.pdf
 [cronograma]: https://jreduardo.github.io/lce0216/cronograma.pdf
 [a01]: https://jreduardo.github.io/lce0216/aula01-descritiva.pdf
-[a01]: https://jreduardo.github.io/lce0216/aula02-descritiva.pdf
+[a02]: https://jreduardo.github.io/lce0216/aula02-descritiva.pdf
