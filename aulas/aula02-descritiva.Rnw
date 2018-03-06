@@ -1,0 +1,1633 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  1. Estatística Descritiva}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitores: Eduardo E. R. Junior \& Giovana Fumes
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 06 de março de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de posição (ou tendência) central}
+
+  Medidas de posição (ou tendência) indicam posições de interesse sobre
+  a distribuição dos dados.
+  \vspace{0.5cm}
+
+  As principais medidas de posição central são a \textbf{ média},
+  a \textbf{mediana} e a \textbf{moda}.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+
+  \textbf{Média aritmética} \\
+
+  Se temos os valores $x_1,x_2,\cdots,x_n$, a média aritmética é dada por
+  \begin{equation*}
+    \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i =
+    \frac{x_1 + x_2 + \cdots + x_n}{n}.
+  \end{equation*}
+  \vspace{0.5cm}\pause
+
+  \textbf{Exemplo}: Considere os valores 2, 7, 5, 4, 9, 11. Então
+  \begin{equation*}
+    \bar{x} = \frac{2+7+5+4+9+11}{6} = 6,33.
+  \end{equation*}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+  {\bf Exemplo:}\\[0.2cm]
+
+  Com o objetivo de avaliar a produção anual de resina de árvores de
+  {\it Pinus elliottii}, em kg, foram observadas dez árvores, cujos
+  correspondentes valores são apresentados a seguir:
+
+  \begin{center}
+    \begin{tabular}{ccccc} \hline
+      1,9 &  2,1 &  3,4 & 2,3 & 2,3 \\
+      5,5 & 2,6 & 1,5 & 1,8 & 2,0\\ \hline
+    \end{tabular}
+  \end{center}
+
+Calcule a média da produção anual de resina.
+\vspace{-0.2cm}\pause
+
+\begin{eqnarray*}
+  \bar{x} &=& \frac{1,9 + 2,1 + \ldots + 2,0}{10} \\
+          &=& \frac{25,4}{10} \\
+          &=& 2,54 \text{kg}.\\
+\end{eqnarray*}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Média Aritmética Ponderada}
+
+  A média ponderada dos números $x_1, x_2, \ldots, x_n$, com pesos
+  $p_1, p_2, \ldots, p_n$, representada por $\bar{x}_p$, é definida por
+
+  $$
+  \bar{x}_p = \frac{p_1x_1 + p_2x_2 + \ldots + p_nx_n}{p_1 +
+    p_2 + \ldots + p_n} = \frac{\sum_{i=1}^n p_ix_i}{\sum_{i=1}^n p_i}.
+  $$
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Média Aritmética Ponderada}
+
+  {\bf Exemplo:} Precipitação média em uma bacia hidrográfica.
+
+  \begin{multicols}{2}
+
+    \begin{center}
+        \small
+      \begin{tabular}{cc} \hline
+        Precipitação & Área do polígono  \\
+        % ({\it mm}) & (km$^2$) \\
+        $X_i$ ({\it mm}) & $p_i$ (km$^2$) \\ \hline
+        90 & 6 \\
+        110 & 7 \\
+        120 & 5\\
+        100 & 12 \\
+        112 & 11 \\
+        95 & 8 \\
+        108 & 1,5 \\ \hline
+        Total & 50,5 \\ \hline
+      \end{tabular}
+    \end{center}
+
+    \begin{figure}[H]
+      \includegraphics[width=5.5cm]{images/baciahidro}
+    \end{figure}
+  \end{multicols}
+    \pause
+
+  $$
+  \bar{x}_p = \frac{90 \times 6 + 110 \times 7 + \ldots +
+    108 \times 1,5}{50,5} = 104,24.
+  $$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+
+  Se os dados estão organizados em \textbf{tabelas de frequências}, caso
+  das variáveis quantitativas discretas, a média aritmética pode ser
+  calculada por:
+
+  \begin{equation*}
+    \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i f_i.
+  \end{equation*}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+  \small
+
+  \textbf{Exemplo:} Em um estudo realizado para avaliar o número
+  de brotos deixados em cepas de {\it Eucalyptus grandis} após o
+  primeiro corte, foram utilizadas 40 plantas.
+
+  \vspace{-0.2cm}
+  \begin{table}
+    \small
+    \caption{Cálculo auxiliar da média de dados em tabelas de
+      frequência.}
+    \begin{tabular}{c c c}
+      \hline
+      $x_i$ & $f_i$ &	$x_i f_i$ \\
+      \hline
+      0 & 7  &  0 \\
+      1 & 11 & 11 \\
+      2 & 14 & 28 \\
+      3 & 8  & 24 \\
+      \hline
+      Total&	40 &  	63 \\
+      \hline
+    \end{tabular}
+  \end{table}
+
+  Média: $\bar{x} = \frac{63}{40}=1,575$.\\
+
+  A média será 1,575 brotos/planta.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+
+  Se a variável é quantitativa contínua e está agrupada em intervalos de
+  classe, a média aritmética é dada por:
+
+  \begin{equation*}
+    \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x^{*}_{i}f_i,
+  \end{equation*}
+
+  em que $x^{*}_{i}$ é o ponto médio do intervalo de classe.
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+  \small
+
+  \textbf{Exemplo:} Vamos retomar ao exemplo do diâmetro das árvores em
+  uma floresta.
+  \vspace{0.2cm}
+
+  Seja $x^{*}_i$: ponto médio do intervalo de classe e $f_i$: a
+  frequência do intervalo de classe.
+  \vspace{-0.3cm}
+
+  \begin{table}
+    \caption{\footnotesize Tabela auxiliar para o cálculo da média de
+      dados em tabelas de frequência com intervalos de classe.}
+    \begin{tabular}{l c c c }
+      \hline
+      Classes &  $x^{*}_i$ & $f_i$ & $x^{*}_i f_i$\\
+      \hline
+      $10,2$$\vdash$$22,0$ &  16,1 & 22 & 354,20\\
+      $22,0$$\vdash$$33,8$ &  27,9 & 6  &  167,40\\
+      $33,8$$\vdash$$45,6$ &  39,7 & 2  & 79,40\\
+      $45,6$$\vdash$$57,4$ &  51,5 & 5  & 257,50\\
+      $57,4$$\vdash$$69,2$ &  63,3 & 2  & 126,60\\
+      $69,2$$\vdash$$81,0$ &  75,1 & 2  & 150,20\\
+      $81,0$$\vdash$$92,8$ &  86,9 & 1  & 86,90\\
+      \hline
+      Total &   &  40   &   1222,20 \\
+      \hline
+      Média &         \multicolumn{3}{c}{$1222,20/40=30,56$}\\
+      \hline
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+  \small
+
+  \textbf{Observação:} A média é sensível a observações discrepantes,
+  isto é, se existirem valores fora do intervalo de maior concentração
+  dos dados, esses valores influenciam fortemente a média. Neste caso, a
+  média pode não ser um bom representante da tendência central dos
+  dados.
+
+  \vspace{0.5cm}
+
+  Uma outra medida de tendência central, que é pouco influenciada por
+  observações discrepantes, é a \textbf{mediana}.
+
+\end{frame}
+
+% -------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Média}
+
+  \textbf{Mediana}  \\
+  Se temos os valores $x_1,x_2,\cdots,x_n$, a mediana é calculada da
+  forma:
+
+  \begin{enumerate}[i]
+  \item Ordene os dados em ordem crescente, ou seja,
+    $x_{(1)}, x_{(2)}, \cdots, x_{(n)}$ e
+
+  \item Calcule
+    \begin{equation*}
+      \text{Md} =
+        \begin{dcases}
+          \frac{x_{\left(\frac{n}{2}\right)} +
+                x_{\left(\frac{n}{2}+1\right)}}{2}, &
+            \text{se}\, n\, \text{é par}; \\
+          x_{\left(\frac{n+1}{2}\right)}, &
+            \text{se}\, n\, \text{é ímpar}.
+        \end{dcases}
+    \end{equation*}
+  \end{enumerate}
+
+  \textbf{Observação:} Note como a mediana é pouco afetada por valores
+  extremos ou discrepantes.
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Mediana}
+
+  Considere os valores 7, 9, 2, 5, 4.
+  \vspace{1cm}
+  \pause
+
+  Ordenando os valores têm-se:
+
+  $$x_{(1)}=2, x_{(2)}=4, x_{(3)}=5, x_{(4)}=7, x_{(5)}=9.$$
+  \vspace{0.4cm}
+  \pause
+
+  Como $n=5$ (ímpar), a mediana será dada por
+  \pause
+
+  $$
+  \text{Md}= x_{\left(\frac{n+1}{2}\right)} =
+  x_{\left(\frac{5+1}{2}\right)} = x_{(3)} = 5.
+  $$
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Mediana}
+
+  {\bf Exemplo}: Para os valores observados de produção anual de resina
+  de árvores de {\it Pinus elliottii}, tem-se o seguinte rol:
+
+  \begin{center}
+    \small
+    \begin{tabular}{cccccccccc} \hline
+      1,5 & 1,8 & 1,9 & 2,0 & 2,1 & 2,3 & 2,3 & 2,6 & 3,4 & 5,5 \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.5cm}
+  Como $n$ é par,
+  \pause
+
+  \begin{itemize}
+  \item[]<2->
+    \vspace{-0.1cm}
+    \begin{eqnarray*}
+      \text{Md}&=& \frac{x_{(5)} + x_{(6)}}{2} =
+                   \frac{2,1 + 2,3}{2} = \frac{4,4}{2} \\
+               &=&  2,2\,\text{kg}.\\
+    \end{eqnarray*}
+  \end{itemize}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Mediana}
+  \small
+
+  Para dados discretos dispostos em tabela de frequência,
+  a classe mediana é obtida fazendo o cálculo da \textbf{frequência
+    acumulada}, que é a soma (ou valor total) de todas as frequências
+  até o ponto desejado, e verificando o local no qual a
+  se encontra o rol mediano.\\[0.5cm]
+  \pause
+
+  {\bf Exemplo:} Número de brotos deixados em cepas de {\it Eucalyptus
+    grandis} após o primeiro corte.
+
+  \vspace{-0.5cm}
+  \begin{center}
+    \begin{table}
+      \caption{\footnotesize Distribuição de frequências para a variável
+        número de brotos deixados em cepas de {\it Eucalyptus grandis}
+        após o primeiro corte.}
+      \begin{tabular}{ccc} \hline
+        Número de & \\
+        brotos  &  $f_i$ & $F_i$  \\ \hline
+        0 & 7 &   7 \\
+        1 & 11 & 18 \\
+        \color{teal}2 & 14 & \color{teal}32 \\
+        3 &  8&  40 \\ \hline
+        Total  & 40 & \\ \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Mediana}
+
+  Se os dados são de uma variável contínua e estiverem agrupados em
+  intervalos de classe, a mediana é dada por:
+
+  \begin{equation*}
+    \text{Md} = LI_{Md} + \frac{\frac{n}{2} -
+      F_{\frac{n}{2}-1}}{f_{\frac{n}{2}}} h,
+  \end{equation*}
+  em que:
+
+  \begin{itemize}
+  \item $LI_{Md}$ é limite inferior da classe mediana,\\
+  \item $n$ é o tamanho da amostra,\\
+  \item $F_{\frac{n}{2}-1}$ é frequência acumulada anterior à classe
+    mediana,\\
+  \item $f_{\frac{n}{2}}$ é a frequência da classe mediana,\\
+  \item $h$ é a amplitude do intervalo.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Mediana}
+
+  Exemplo: Diâmetro das árvores em uma floresta.
+  \vspace{-0.4cm}
+
+  \begin{table}
+    \caption{\footnotesize Distribuição de frequências para diâmetro
+      das árvores em uma floresta.}
+    \begin{tabular}{lcccc} \hline
+      Diâmetro & $f_i$ &  $F_i$  \\ \hline
+      10,2 $\vdash$ 22,0 & 22 &  22\\
+      22,0 $\vdash$ 33,8 &  6 &  28 \\
+      33,8 $\vdash$ 45,6 &  2 &  30 \\
+      45,6 $\vdash$ 57,4 &  5 &  35 \\
+      57,4 $\vdash$ 69,2 &  2 &  37 \\
+      69,2 $\vdash$ 81,0 &  2 &  39 \\
+      81,0 $\vdash$ 92,8 &  1 &  40 \\ \hline
+      Total & 40 &  &\\ \hline
+    \end{tabular}
+  \end{table}
+  \pause
+
+  \begin{equation*}
+    \mbox{Md} = LI_{Md} + \frac{\frac{n}{2} -
+      F_{\frac{n}{2}-1}}{f_{\frac{n}{2}}} h = 10,2 +
+    \frac{\frac{40}{2}-0}{22}11,8 = 20,93
+  \end{equation*}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Mediana}
+
+  Uma outra forma para se calcular a mediana por meio de dados agrupados
+  é exemplificada a seguir.
+
+  \begin{multicols}{2}
+    \footnotesize
+    \vspace{-.1cm}
+    \begin{table}
+      \caption{\footnotesize Distribuição de frequências dos diâmetros
+        (cm) das árvores em uma floresta nativa.}
+      \vspace{-0.5cm}
+        \begin{tabular}{lcccc} \hline
+          $X_i$              & $x^{*}_i$ & $f_i$& $F_i$ & $F'_i$  \\ \hline
+          \color{teal}10,0 $\vdash$ \color{teal}20,0 & \color{teal}15,0  &  \color{teal}39 & \color{teal}39 & \color{teal}0,39\\
+          \color{teal}20,0 $\vdash$ \color{teal}30,0 & \color{teal}25,0  &  \color{teal}22 & \color{teal}61 & \color{teal}0,61\\
+          30,0 $\vdash$ 40,0 & 35,0  &  10 & 71 & 0,71\\
+          40,0 $\vdash$ 50,0 & 45,0  &  10 & 81 & 0,81\\
+          50,0 $\vdash$ 60,0 & 55,0  &   8 & 89 & 0,89\\
+          60,0 $\vdash$ 70,0 & 65,0  &   4 & 93 & 0,93\\
+          70,0 $\vdash$ 80,0 & 75,0  &   3 & 96 & 0,96\\
+          80,0 $\vdash$ 160,0 &  120   &   4 & 100 & 1,00\\  \hline
+          Total             &        & 100 &     &\\ \hline
+        \end{tabular}
+      \end{table}
+      \newpage
+
+      $$\hspace{0.65cm} \left\{
+        \begin{array}{lll}
+          30,0 - 20,0 & \longleftrightarrow & 0,61 - 0,39\\
+          \,\mbox{Md} - 20,0 & \longleftrightarrow & 0,61 - 0,50\\
+        \end{array}
+      \right.$$
+      \vspace{-0.4cm}
+      $$\hspace{0.2cm} \left\{
+        \begin{array}{lll}
+          10,0 & \longleftrightarrow & 0,22\\
+          \,\mbox{Md} - 20,0 & \longleftrightarrow & 0,11\\
+        \end{array}
+      \right.$$
+      \vspace{-0.5cm}\pause
+
+      \begin{align*}
+        \hspace{0.65cm}
+        & (\text{Md} - 20,0) \times 0,22 =
+          10 \times 0,11\\
+        & \,\text{Md} = \frac{10 \times 0,11}{0,22} + 20 \\
+        & \,\text{Md} = 25,0\, \text{cm}.
+      \end{align*}
+      \end{multicols}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Quartis e Percentis}
+
+  \begin{itemize}
+  \item {\bf Quartil}: generalização da mediana.\\[0.2cm]
+    \begin{center}
+      Quartil $\Rightarrow$ 4 partes
+    \end{center}
+    \begin{figure}[b]
+      \includegraphics[width=7.5cm]{images/quartis} %
+    \end{figure}
+  \pause
+  \item<2-> {\bf Percentil de ordem $100p$.}
+    $$P_{100p} =
+    \begin{dcases}
+      \frac{x_{(np)} + x_{(np+1)}}{2}, &
+          \text{se}\, np\, \text{for inteiro};\\
+	x_{(\text{int}(np)+1)}, &
+          \text{se}\, np\, \text{não for inteiro}.\\
+    \end{dcases}
+    $$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Quartis e Percentis}
+
+  {\bf Exemplo}: Para os valores observados de produção anual de resina
+  de árvores de {\it Pinus elliottii}, tem-se:
+  \vspace{0.3cm}
+
+  \hspace*{1cm}
+  \begin{minipage}[c]{1\textwidth}
+    \begin{multicols}{2}
+      \begin{center}
+        \begin{tabular}{ccccc} \hline
+          1,5 & 1,8 & 1,9 & 2,0 & 2,1 \\
+          2,3 & 2,3 & 2,6 & 3,4 & 5,5 \\ \hline
+        \end{tabular}
+      \end{center}
+
+      $n=10$\\
+      Obter $P_{75} = Q_3$ e $P_{20}$
+    \end{multicols}
+  \end{minipage}
+  \vspace{0.2cm}\pause
+
+  \begin{itemize}
+  \item <2->
+    $P_{75} \quad \Rightarrow \quad np = 10 \times 0,75 = 7,5$
+    \begin{align*}
+      P_{75} = Q_3 &= x_{\text{int}(7,5)+1}\\
+                   &= x_{(7+1)} = x_{(8)}\\
+                   &=2,6\, \text{Kg}
+    \end{align*}
+    \vspace{-0.1cm}
+
+  \item <3->
+    $P_{20} \quad \Rightarrow \quad np = 10 \times 0,20 = 2$
+    \begin{align*}
+      P_{20} &= x_{(2)} + x_{(3)}\\
+             &= 1,8 + 1,9\\
+             &= 1,85\, \text{Kg}
+    \end{align*}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Quartis e Percentis}
+
+  \begin{itemize}
+  \item Dados agrupados em tabelas frequências
+  \end{itemize}
+  % Para o exemplo realizado com insetos
+
+  \begin{multicols}{2}
+    \begin{table}
+    \caption{\footnotesize Distribuição de frequências para
+      o conjunto de dados de número de brotos deixados em
+      cepas de {\it Eucalyptus grandis} após o primeiro corte.}
+    \vspace{-0.5cm}
+      \begin{tabular}{ccccc} \hline
+        $X_i$ & $f_i$  & $f'_i$ & $F_i$ & $F'_i$\\ \hline
+        0 & 7 & 0,175  & 7 & 0,175 \\
+        1 & 11 & 0,275 & 18 & 0,450\\
+        2 & 14 & 0,350 & 32 & 0,800\\
+        3 & 8 & 0,200  & 40 &1,000\\ \hline
+        Total & 40 &1,00 & &\\ \hline
+      \end{tabular}
+    \end{table}
+
+    Obter $P_{25} \;=\; Q_1$, $P_{50}$ e $P_{97,5}$. \pause
+    \newpage
+
+    \begin{center}
+      \begin{itemize}
+        \setlength\itemsep{2em}
+      \item<2->
+        Observar $F'_i\geq 0,25$
+        \vspace{-1.1cm}
+      \item[]<3->
+        $$P_{25}  =  Q_1 = 1$$
+      \item<2->
+        Observar $F'_i\geq 0,50$
+        \vspace{-1.1cm}
+      \item[]<4->
+        $$P_{50}  = 2$$
+      \item<2->
+        Observar $F'_i\geq 0,975$
+        \vspace{-1.1cm}
+      \item[]<5->
+        $$P_{97,5}  = 3$$
+      \end{itemize}
+    \end{center}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Quartis e percentis}
+
+  Se os dados são de uma variável contínua e estiverem agrupados em
+  intervalos de classe, o primeiro quartil pode ser calculado por:
+
+  \begin{equation*}
+    Q_1=LI_{Q_1}+ \frac{\frac{n}{4}-F_{_{\frac{n}{4}-1}}}{f_{Q_1}}h,
+  \end{equation*}
+
+  \small
+  em que:
+  \begin{itemize}
+  \item $LI_{Q_1}$ é o limite inferior da classe $Q_1$,\\
+  \item $n$ é o tamanho da amostra,\\
+  \item $F_{\frac{n}{4}-1}$ é a frequência acumulada anterior à classe que contém $Q_1$,\\
+  \item $f_{Q_1}$ é a frequência da classe $Q_1$ e\\
+  \item $h$ é a amplitude do intervalo.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Quartis e Percentis}
+
+  Exemplo: Obter $P_{25}=Q_1$ para os dados referentes aos diâmetros das
+  árvores, dispostos na seguinte tabela:
+  \vspace{-0.3cm}
+
+  \begin{table}
+    \centering \small
+    \caption{\footnotesize Distribuição de frequências para
+      diâmetro das árvores.}
+    \begin{tabular}{lcccc} \hline
+      Diâmetro & $f_i$ & $f'_i$ & $F_i$ & $F'_i$ \\ \hline
+      10,2 $\vdash$ 22,0 & 22 & 0,550 & 22 & 0,550\\
+      22,0 $\vdash$ 33,8 &  6 & 0,150 & 28 & 0,700\\
+      33,8 $\vdash$ 45,6 &  2 & 0,050 & 30 & 0,750 \\
+      45,6 $\vdash$ 57,4 &  5 & 0,125 & 35 & 0,875\\
+      57,4 $\vdash$ 69,2 &  2 & 0,050 & 37 & 0,925\\
+      69,2 $\vdash$ 81,0 &  2 & 0,050 & 39 & 0,975\\
+      81,0 $\vdash$ 92,8 &  1 & 0,025 & 40 & 1,000\\
+      \hline
+      Total & 40 & 1,00 &\\ \hline
+    \end{tabular}
+  \end{table}
+
+  \pause
+  \begin{equation*}
+    Q_1=LI_{Q_1}+ \frac{\frac{n}{4}-F_{_{\frac{n}{4}-1}}}{f_{Q_1}} h =
+    10,2+ \frac{\frac{40}{4}-0}{22} 11,8=15,56.
+  \end{equation*}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Quartis e Percentis}
+
+  \begin{itemize}
+  \item Outra forma para o cálculo de quartis e percentis para dados
+    agrupados em tabelas de classes de frequências.
+  \end{itemize}
+
+  Para o exemplo referente ao diâmetro das árvores, tem-se:
+  \begin{multicols}{2}
+    \begin{table}
+      \footnotesize
+      \caption{\footnotesize Distribuição de frequências dos diâmetros
+        (cm) das árvores em uma floresta nativa.}
+      \vspace{-0.5cm}
+      \begin{tabular}{lcccc} \hline
+        $X_i$              & $x^{*}_i$ & $f_i$& $F_i$ & $F'_i$  \\ \hline
+        10,0 $\vdash$ 20,0 & 15,0  &  39 & 39 & 0,39\\
+        20,0 $\vdash$ 30,0 & 25,0  &  22 & 61 & 0,61\\
+        30,0 $\vdash$ 40,0 & 35,0  &  10 & 71 & 0,71\\
+        40,0 $\vdash$ 50,0 & 45,0  &  10 & 81 & 0,81\\
+        50,0 $\vdash$ 60,0 & 55,0  &   8 & 89 & 0,89\\
+        60,0 $\vdash$ 70,0 & 65,0  &   4 & 93 & 0,93\\
+        70,0 $\vdash$ 80,0 & 75,0  &   3 & 96 & 0,96\\
+        80,0 $\vdash$ 160,0 &  120   &   4 & 100 & 1,00\\  \hline
+        Total             &        & 100 &     &\\ \hline
+      \end{tabular}
+    \end{table}
+    \newpage
+
+    \hspace*{0.7cm} Obter $P_{20}$ e $P_{75} = Q_3$.\\[0.2cm]
+
+    \begin{figure}[b]
+    \hspace*{0.5cm}
+      \includegraphics[width=0.4\textwidth]{images/floresta1}
+    \end{figure}
+
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Quartis e Percentis}
+
+  \begin{itemize}
+  \item[]<1-> $P_{20} \; \Rightarrow \;$ classe: $10,0 \vdash 20,0$
+
+  \item[]<2->
+    $$\left\{
+      \begin{array}{lll}
+        20,0 - 10,0 & \longleftrightarrow & 0,39 \\
+        P_{20} - 10,0 & \longleftrightarrow & 0,20 \\
+      \end{array} \right.
+    $$
+
+    \begin{center}
+      $P_{20} = 10 + \frac{20,0 - 10,0}{0,39}\times0,20$\\
+      $P_{20} = 15,1 \mbox{cm}.$
+    \end{center}
+  \item[]
+  \item[]<1-> $P_{75} \; \Rightarrow \;$ classe: $40,0 \vdash 50,0$
+
+  \item[]<3->
+    $$\left\{
+      \begin{array}{lll}
+        50,0 - 40,0 & \longleftrightarrow & 0,10 \\
+        P_{75} - 40,0 & \longleftrightarrow & 0,04 \\
+      \end{array} \right.
+    $$
+
+    \begin{center}
+      $P_{75} = 40 + \frac{50,0 - 40,0}{0,10}\times0,04$\\
+      $P_{20} = 44,0 \mbox{cm}.$
+    \end{center}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Moda}
+
+  A \textbf{moda} é o valor mais frequente da amostra, caso discreto, ou
+  o valor com a mairo densidade de dados, caso contínuo.
+  \vspace{0.3cm}
+
+  \textbf{Observação:} Também pode ser obtida para variáveis
+  qualitativas.
+  \vspace{0.3cm}
+
+  {\bf Exemplo}: Para os dados observados de síndrone de regeneração de
+  espécies arbóreas em uma floresta nativa, tem-se:
+
+  \begin{center}
+    \small
+    \begin{tabular}{lcc}\hline
+      Síndrome de & Número de & Percentual\\
+      regeneração & espécies  & (\%)\\ \hline
+      Heliófitas  & 4  & 13\%\\
+      Oportunistas de clareira & 11 & 37\%\\
+      Tolerantes & 15 & 50\%\\ \hline
+    \end{tabular}
+  \end{center}
+  \pause
+  $$\mbox{Mo} = \text{Tolerantes}$$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas resumo - Moda}
+  \small
+
+  \textbf{Exemplo:} Número de brotos deixados em cepas de {\it
+    Eucalyptus grandis} após o primeiro corte.
+
+    \begin{table}
+      \caption{Distribuição de frequências para a variável número de brotos deixados em cepas de {\it Eucalyptus grandis} após o primeiro corte.}
+      \begin{tabular}{cc} \hline
+        Número de & \\
+        brotos  &  $f_i$   \\ \hline
+        0 & 7  \\
+        1 & 11 \\
+        \color{teal}2 & \color{teal}14  \\
+        3 &  8 \\ \hline
+        Total  & 40  \\ \hline
+      \end{tabular}
+    \end{table}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Moda}
+
+  Se os dados são provenientes de uma variável quantitativa contínua e
+  estão agrupados em intervalos de classe, a moda por calculada de
+  diferentes formas:
+  \vspace{0.5cm}
+
+    \begin{itemize}
+      \setlength\itemsep{1.5em}
+    \item<2-> Moda bruta: ponto médio da classe com maior frequência
+    \item<3-> Moda: método de Czuber $\Rightarrow$ semelhança de triângulos
+    \item<4-> Fórmula:
+      $\mbox{Mo}=LI_{Mo}+ \frac{\Delta_1}{\Delta_1+\Delta_2} h$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Moda}
+  Para o exemplo referente ao diâmetro das árvores, tem-se:
+
+  \begin{multicols}{2}
+    \begin{table}
+      \small
+      \caption{\footnotesize Distribuição de frequências dos diâmetros
+        (cm) das árvores em uma floresta nativa.}
+      \vspace{-0.5cm}
+      \begin{tabular}{lcccc} \hline
+        $X_i$              & $x^{*}_i$ & $f_i$& $F_i$ & $F'_i$  \\ \hline
+        \color{teal}10,0 $\vdash$ \color{teal}20,0 & \color{teal}15,0  &  \color{teal}39 & \color{teal}39 & \color{teal}0,39\\
+        20,0 $\vdash$ 30,0 & 25,0  &  22 & 61 & 0,61\\
+        30,0 $\vdash$ 40,0 & 35,0  &  10 & 71 & 0,71\\
+        40,0 $\vdash$ 50,0 & 45,0  &  10 & 81 & 0,81\\
+        50,0 $\vdash$ 60,0 & 55,0  &   8 & 89 & 0,89\\
+        60,0 $\vdash$ 70,0 & 65,0  &   4 & 93 & 0,93\\
+        70,0 $\vdash$ 80,0 & 75,0  &   3 & 96 & 0,96\\
+        80,0 $\vdash$ 160,0 &  120   &   4 & 100 & 1,00\\  \hline
+        Total             &        & 100 &     &\\ \hline
+      \end{tabular}
+    \end{table}
+
+    \newpage \pause
+    \begin{itemize}
+    \item[]<2-> Moda bruta:\\[-0.5cm]
+      \begin{eqnarray*}
+        \mbox{Mo} &=& \frac{ 10,0 + 20,0}{2}\\
+                  &=& 15,0\mbox{ cm}\\
+      \end{eqnarray*}
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+
+<<echo=FALSE>>=
+
+li <- seq(10, 80, 10)
+ls <- seq(20, 90, 10)
+ls[8] <- 160
+fa <- c(39, 22, 10, 10, 8, 4, 3, 4)
+
+ht <- list(breaks = c(10, ls),
+           counts = fa,
+           mids = (ls + li)/2,
+           name = "x",
+           equidist = FALSE)
+class(ht) <- "histogram"
+
+
+suppressWarnings(
+    plot(ht, freq = TRUE, axes = FALSE,
+         xlab = "Diâmetro (m)",
+         ylab = "Frequência absoluta",
+         main = ""))
+axis(1, sort(c(li, ls)))
+axis(1, at = 17, line = -0.8,
+     col = "lightseagreen", col.axis = "lightseagreen")
+axis(2)
+segments(c(10, 10), c(0, 39),
+         c(20, 20), c(39, 22),
+         lty = 2)
+segments(17, -1.5, 17, 39,
+         col = "lightseagreen")
+
+@
+
+\pause
+\begin{minipage}[c]{0.48\textwidth}
+  \footnotesize
+  $$\left\{
+    \begin{array}{lll}
+      39-0 &\longleftrightarrow & 39-22\\
+      \mbox{Mo}-10,0 &\longleftrightarrow & 20- \mbox{Mo}\\
+    \end{array}\right.$$
+\end{minipage}
+\begin{minipage}[c]{0.48\textwidth}
+  \footnotesize
+  \begin{align*}
+  \text{Mo} &= \frac{(39-0)\times 20 + (39-22)\times
+              10}{(39-0) + (39-22)}\\
+  \text{Mo} &= 17,0 \mbox{cm}
+\end{align*}
+\end{minipage}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Moda}
+  \footnotesize
+  \vspace{0.5cm}
+
+  Supondo o seguinte histograma para uma variável $X$ qualquer.
+
+  \begin{columns}
+    \begin{column}{0.55\textwidth}
+
+<<echo=FALSE, fig.height=5, fig.width=4>>=
+
+li <- seq(70, 100, 10)
+ls <- seq(80, 110, 10)
+fa <- c(30, 40, 20, 10)
+
+ht <- list(breaks = c(li[1], ls),
+           counts = fa,
+           mids = (ls + li)/2,
+           name = "x",
+           equidist = TRUE)
+class(ht) <- "histogram"
+
+plot(ht, freq = TRUE, axes = FALSE,
+     xlab = "x",
+     ylab = "Frequência absoluta",
+     main = "")
+axis(1, sort(c(li, ls)))
+axis(1, at = 83.33, line = -0.8,
+     col = "lightseagreen", col.axis = "lightseagreen")
+axis(2)
+segments(c(80, 80), c(30, 40),
+         c(90, 90), c(40, 20),
+         lty = 2)
+segments(83.33, -1.5, 83.33, 40,
+         col = "lightseagreen")
+
+@
+\end{column}
+
+\hspace{-1cm}
+\begin{column}{0.65\textwidth}
+
+  \begin{itemize}
+  \item[]<2-> Classe correspondente à moda: $80 \vdash 90$
+  \item[]<3-> Moda bruta: $\mbox{Mo} = 85$
+  \item[]<4->
+    $$
+    \left\{
+      \begin{array}{lll}
+        40-30 &\longleftrightarrow & 40-20\\
+        \mbox{Mo} - 80 &\longleftrightarrow & 90-\mbox{Mo}\\
+      \end{array}\right.
+    $$
+
+  $$(40-30)(90-\mbox{Mo}) = (40-20)(\mbox{Mo} - 80)$$
+
+  $$\mbox{Mo} = \frac{(40-30)\times90 + (40-20)\times80}{(40-30)+(40-20)}$$
+  $$          = 83,33$$
+\end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Moda}
+
+  Fórmula:
+  \begin{equation*}
+    \mbox{Mo}=LI_{_{Mo}}+ \frac{\Delta_1}{\Delta_1+\Delta_2} h,
+  \end{equation*}
+  \vspace{0.5cm}
+
+  em que:
+
+  \begin{itemize}
+  \item $LI_{_{Mo}}$ é o limite inferior da classe modal,\\
+  \item $\Delta_1$ é a diferença de frequência entre a classe
+    modal e a anterior,\\
+  \item $\Delta_2$ é a diferença de frequência entre a classe
+    modal e a seguinte,\\
+  \item $h$ é aamplitude do intervalo de classe.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medida de posição central - Moda}
+
+  \begin{table}
+    \caption{Distribuição de frequências para diâmetro das árvores
+      em uma floresta}
+    \begin{tabular}{lc} \hline
+      Diâmetro & $f_i$    \\ \hline
+      \color{teal}10,2 $\vdash$ 22,0 &\color{teal} 22 \\
+      22,0 $\vdash$ 33,8 &  6  \\
+      33,8 $\vdash$ 45,6 &  2 \\
+      45,6 $\vdash$ 57,4 &  5  \\
+      57,4 $\vdash$ 69,2 &  2  \\
+      69,2 $\vdash$ 81,0 &  2  \\
+      81,0 $\vdash$ 92,8 &  1  \\ \hline
+      Total & 40   \\ \hline
+    \end{tabular}
+  \end{table}
+  \vspace{0.5cm}
+  \pause
+  Logo, a moda será dada por: \small
+  \begin{equation*}
+    \mbox{Mo}=LI_{_{Mo}}+ \frac{\Delta_1}{\Delta_1+\Delta_2} h =
+    10,2+\frac{(22,0-0)}{(22,0-0)+(22,0-6)}11,8=17,03.
+  \end{equation*}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão}
+
+  \begin{center}
+    \textbf{2. Medidas de dispersão}\\
+  \end{center}
+
+  As medidas de dispersão são utilizadas para determinar a variabilidade
+  dos dados em relação as medidas de posição.\\
+
+  \vspace{0.5cm}\pause
+
+  Principais medidas de dispersão:
+  \begin{itemize}
+  \item Amplitude;
+  \item Distância interquartílica;
+  \item Desvio médio;
+  \item Variância;
+  \item Desvio padrão;
+  \item Coeficiente de variação.
+  \end{itemize}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão}
+
+  Para esta sessão vamos considerar o seguinte exemplo:
+  \vspace{0.5cm}
+
+  Foram observadas cinco amostras de duas máquinas, quanto à gramatura
+  do papel produzido, conforme a tabela a seguir:
+
+  \begin{center}
+    \begin{tabular}{ccc} \hline
+      & \multicolumn{2}{c}{Máquina}\\
+      Amostra & A & B \\ \hline
+      1 & 152 & 205 \\
+      2 & 248 & 203 \\
+      3 & 260 & 195 \\
+      4 & 200 & 197 \\
+      5 & 140 & 200 \\ \hline
+      média & 200 & 200\\  \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{center}
+    Qual das máquinas a empresa deve adquirir? Por quê?
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Amplitude}
+
+  \begin{block}{A amplitude é dada por:}
+    $$A_x = \mbox{max}(x) - \mbox{min}(x)$$
+  \end{block}
+
+  \begin{itemize}
+  \item[]<2-> {\bf Exemplo:} Considerando-se o exemplo da gramatura do
+    papel, temos:
+  \item[]<2->
+    \begin{center}
+      \begin{tabular}{cl} \hline
+        Máquina &   Amplitude\\ \hline
+        A & $260-140 =  120$ \\
+        B & $205-195 =  10$ \\ \hline
+      \end{tabular}
+    \end{center}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão: Amplitude Interquartílica}
+  \begin{block}{A amplitude interquartílica é dada por:}
+    $$\mbox{AIQ} = Q_3 - Q_1$$
+  \end{block}
+
+  \begin{itemize}
+  \item[]<2-> {\bf Exemplo:} Considerando-se o exemplo da gramatura do
+    papel, temos:
+  \item[]<2->
+    Rol:
+    \begin{center}
+      \begin{tabular}{cc|ccccc} \hline
+        Máquina & A & 140 & 152 & 200 & 248 & 260 \\
+                & B & 195 & 197 & 200 & 203 & 205\\ \hline
+      \end{tabular}
+    \item[]<3->
+      \begin{tabular}{cccc} \hline
+        Máquina & $Q_1$ & $Q_3$ & AIQ\\ \hline
+        A &   152 & 248 &  {\bf 96} \\
+        B &   197 & 203 & {\bf 6} \\ \hline
+      \end{tabular}
+    \end{center}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Desvio Médio}
+
+  \begin{itemize}
+    \setlength\itemsep{1.8em}
+  \item<1-> Desvio de uma observação em relação a uma constante:
+    $$d_i = x_i - k$$
+  \item<2-> Desvio de uma observação em relação à média aritmética:
+    $$e_i = x_i - \bar{x}
+      \quad \Longrightarrow \quad
+      \sum_{i=1}^n e_i =\,\text{?}$$
+  \item<4-> {\bf Desvio Médio}
+    $$Dm_x = \frac{1}{n}\sum_{i=1}^n|e_i| =
+    \frac{1}{n}\sum_{i=1}^n|x_i-\bar{x}|$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}\frametitle{Medidas de dispersão - Desvio Médio}
+
+  {\bf Exemplo}: Considerando-se o exemplo da gramatura do papel,
+  temos:
+
+  \begin{center}
+    \begin{tabular}{ccccccc} \hline
+      Maquina & \multicolumn{5}{c}{Desvios} & $\sum_{i=1}^5 |e_i|/5$\\ \hline
+      A &   -48 & 48 & 60 & 0 & -60& \textcolor[rgb]{1.00,1.00,1.00}{216/5 = {\bf 43,2}}\\
+      B &  5 & 3 & -5 & -3 & 0 & \textcolor[rgb]{1.00,1.00,1.00}{16/5 = {\bf 3,2}}\\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]
+  \frametitle{Medidas de dispersão - Desvio Médio}
+
+  {\bf Exemplo:} Considerando-se o exemplo da gramatura do papel, temos:
+
+  \begin{center}
+    \begin{tabular}{ccccccc} \hline
+      Maquina & \multicolumn{5}{c}{Desvios} & $\sum_{i=1}^5 |e_i|/5$\\ \hline
+      A &   -48 & 48 & 60 & 0 & -60 & 216/5 = {\bf 43,2}\\
+      B &  5 & 3 & -5 & -3 & 0 & 16/5 = {\bf 3,2}\\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Variância}
+  \begin{block}{Variância}
+    é a média dos quadrados dos desvios em relação à média aritmética.
+    $$\sigma^2_X = \frac{1}{n}\sum_{i=1}^n e_i^2 =
+    \frac{1}{n}\sum_{i=1}^n(x_i- \mu)^2$$
+  \end{block}
+
+  \vspace{.5cm}
+
+  Estimador da variância populacional:
+  \textcolor{teal}{
+    $$S^2_X = \frac{1}{n-1}\sum_{i=1}^n e_i^2 =
+    \frac{1}{n-1}\sum_{i=1}^n(x_i- \bar{x})^2$$}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Variância}
+
+  {\bf Exemplo}:
+  \begin{itemize}
+  \item<1-> {\bf Máquina A}:
+  \item[]<2->$$S_{X_1}^2 = \frac{\sum_{i=1}^5(x_i-\bar{x})^2}{5-1}$$
+    {\footnotesize
+      $$ = \frac{(152-200)^2 + (248-200)^2 + (260-200)^2 +
+        (200-200)^2 + (140-200)^2}{4} $$
+      $$= 2952 g^2$$
+    }
+  \item<1-> {\bf Máquina B}:
+  \item[]<3->$$S_{X_2}^2 = \frac{\sum_{i=1}^5(x_i-\bar{x})^2}{5-1}$$
+    {\footnotesize
+      $$=\frac{(205-200)^2 + (203-200)^2 + (195-200)^2 +
+        (197-200)^2 + (200-200)^2}{4} $$
+      $$= 17 g^2$$
+    }
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Variância}
+  \begin{block}{{\bf Dados agrupados em tabelas de frequências}}
+    $$S^2_X = \frac{1}{n-1}\sum_{i=1}^{k}f_ie_i^2 =
+    \frac{1}{n-1}\sum_{i=1}^kf_i(x_i-\bar{x})^2$$
+
+    \noindent
+    em que $k$ corresponde ao número de diferentes valores para a
+    variável e $n = \sum_{i=1}^k f_i$
+  \end{block}
+  \vspace{0.5cm}
+
+  Ou ainda,
+
+  $$S^2_X = \frac{1}{n-1}\Bigg[\sum_{i=1}^k f_ix_i^2 -
+  \frac{(\sum_{i=1}^k f_ix_i)^2}{n}\Bigg]$$
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Variância}
+
+  {\bf Exemplo}: Em trinta vasos, foi observado, em cada vaso, o número
+  de estacas enraizadas num total de quatro estacas, cujos dados são
+  apresentado na tabela a seguir:
+
+  \begin{multicols}{2}
+    \begin{center}{\footnotesize
+        \begin{tabular}{cc} \hline
+          $X_i$ & $f_i$ \\ \hline
+          0 & 7 \\
+          1 & 12 \\
+          2 & 8 \\
+          3 & 2 \\
+          4 & 1 \\ \hline
+          Total & 30 \\ \hline
+        \end{tabular}}
+    \end{center}
+    \newpage
+
+    \begin{figure}[b]
+      \includegraphics[width=3.8cm]{images/estaca}
+    \end{figure}
+  \end{multicols}
+
+  \begin{itemize}
+  \item<2-> Média
+  \item[]<3-> $$\bar{x} = \frac{0\times7 + 1\times 12 + \ldots + 4*1}{30} $$
+    $$= 1,27 \mbox{ estacas}$$
+  \end{itemize}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]
+  \frametitle{Medidas de dispersão - Variância}
+
+  {\bf Exemplo}: Em trinta vasos, foi observado, em cada vaso, o número
+  de estacas enraizadas num total de quatro estacas, cujos dados são
+  apresentado na tabela a seguir:
+
+  \begin{multicols}{2}
+    \begin{center}{\footnotesize
+        \begin{tabular}{cc} \hline
+          $X_i$ & $f_i$ \\ \hline
+          0 & 7 \\
+          1 & 12 \\
+          2 & 8 \\
+          3 & 2 \\
+          4 & 1 \\ \hline
+          Total & 30 \\ \hline
+        \end{tabular}}
+    \end{center}
+    \newpage
+
+    \begin{figure}[b]
+      \includegraphics[width=3.8cm]{images/estaca} %
+    \end{figure}
+  \end{multicols}
+
+  \begin{itemize}
+  \item<2-> Variância
+  \item[]<3-> {\footnotesize
+      $$S^2_X = \frac{7(0-1,27)^2 + 12(1-1,27)^2 + \ldots +
+        1(4-1,27)^2}{30-1} $$}
+    $$= 1,03 \mbox{ estacas}^2$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Variância}
+
+  \begin{block}{{\bf Dados agrupados em tabelas de classes frequências}}
+    $$S^2_X = \frac{1}{n-1}\sum_{i=1}^{k}f_ie_i^2 =
+    \frac{1}{n-1}\sum_{i=1}^kf_i(x_i^{*}-\bar{x})^2$$
+
+    \noindent em que $k$ corresponde ao número de diferentes valores
+    para a variável e $n = \sum_{i=1}^k f_i$
+  \end{block}
+
+  Ou ainda,
+
+  $$S^2_X = \frac{1}{n-1}\Bigg[\sum_{i=1}^k f_ix^{*^2}_i -
+  \frac{\big(\sum_{i=1}^k f_ix^{*}_i\big)^2}{n}\Bigg]$$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Variância}
+  \small
+
+  {\bf Exemplo}: Foram avaliados 196 árvores com relação ao diâmetro, em
+  cm (floresta plantada), cujos dados são apresentados na tabela a
+  seguir.
+
+  \begin{multicols}{2}
+    \begin{center}{\footnotesize
+        \begin{tabular}{ccc} \hline
+          Diâmetro (cm)     &   $x^{*}_i$  &  $f_i$ \\ \hline
+          4,0 $\vdash$ 6,0  &   5,0   &  17 \\
+          6,0 $\vdash$ 8,0  &   7,0   &  21 \\
+          8,0 $\vdash$ 10,0 &   9,0   &  35 \\
+          10,0 $\vdash$ 12,0 &   11,0   &  40 \\
+          12,0 $\vdash$ 14,0 &   13,0   &  38 \\
+          14,0 $\vdash$ 16,0 &   15,0   &  24 \\
+          16,0 $\vdash$ 18,0 &   17,0   &  13 \\
+          18,0 $\vdash$ 20,0 &   19,0   &  8 \\ \hline
+          Total               &          &  196 \\ \hline
+        \end{tabular}}
+    \end{center}
+
+    \newpage
+    \begin{figure}[b]
+      \includegraphics[width=2.6cm]{images/diametro} %
+    \end{figure}
+  \end{multicols}
+  \vspace{-0.2cm}
+
+  \begin{itemize}
+  \item<2-> Média \\[-0.2cm] \pause
+    \footnotesize $$\bar{x} = \frac{5,0\times17 + 7,0\times21 + \ldots +
+      19,0\times8}{196}$$
+    $$= 11,30 \mbox{ cm}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]
+  \frametitle{Medidas de dispersão - Variância}
+  \small
+
+  {\bf Exemplo}: Foram avaliados 196 árvores com relação ao diâmetro, em
+  cm (floresta plantada), cujos dados são apresentados na tabela a
+  seguir.
+
+  \begin{multicols}{2}
+    \begin{center}{\footnotesize
+        \begin{tabular}{ccc} \hline
+          Diâmetro (cm)     &   $x^{*}_i$  &  $f_i$ \\ \hline
+          4,0 $\vdash$ 6,0  &   5,0   &  17 \\
+          6,0 $\vdash$ 8,0  &   7,0   &  21 \\
+          8,0 $\vdash$ 10,0 &   9,0   &  35 \\
+          10,0 $\vdash$ 12,0 &   11,0   &  40 \\
+          12,0 $\vdash$ 14,0 &   13,0   &  38 \\
+          14,0 $\vdash$ 16,0 &   15,0   &  24 \\
+          16,0 $\vdash$ 18,0 &   17,0   &  13 \\
+          18,0 $\vdash$ 20,0 &   19,0   &  8 \\ \hline
+          Total               &          &  196 \\ \hline
+        \end{tabular}}
+    \end{center}
+
+    \newpage
+    \begin{figure}[b]
+      \includegraphics[width=2.6cm]{images/diametro} %
+    \end{figure}
+  \end{multicols}
+  \vspace{-0.2cm}
+
+  \begin{itemize}
+  \item<2-> Variância \\[-0.2cm] \pause
+    \footnotesize $$\frac{\sum_{k=1}^8 17\times(5,0 - 11,30)^2 +
+      21\times(7,0 - 11,30)^2 + \ldots + 8\times(19,0-11,30)^2}{196-1}$$
+    $$ =2586,84/195 = 13,27 \mbox{ cm}^2$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Desvio Padrão}
+  \begin{block}{O {\bf desvio padrão}}
+    corresponde à raiz quadrada da variância,
+    $$S_X = \sqrt{S^2_X}$$
+  \end{block}
+
+  \begin{center}
+    O desvio padrão tem a mesma unidade dos dados originais
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Desvio Padrão}
+  {\bf Exemplo}: Considerando os dados de diâmetro das árvores:
+
+  \begin{itemize}
+  \item[]<2-> $$S_X = \sqrt{13,27} = 3,64 \mbox{ cm}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Coeficiente de Variação}
+
+  \begin{block}{O {\bf coeficiente de variação} é dado por}
+    $$CV_X = 100 \frac{S_X}{\bar{x}}$$
+    \small O CV é adimensional, pode-se comparar a dispersão de
+    variáveis com diferentes unidades de medida.
+  \end{block}
+
+  \begin{block}{Orientação}
+    \begin{center}
+      \begin{table}
+        \begin{tabular}{rcl}
+          CV $\leq$ 10\% &$\Rightarrow$& baixo\\
+          10\% $<$ CV $\leq$ 20\% &$\Rightarrow$ & médio\\
+          20\% $<$ CV $\leq$ 30\% &$\Rightarrow$ & alto\\
+          CV $>$ 30\% &$\Rightarrow$& muito alto\\
+        \end{tabular}
+      \end{table}
+    \end{center}
+
+    \small Não tome as sugestões como regra, o CV não é invariável a
+    transformações.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Coeficiente de Variação}
+  {\bf Exemplo}: Considerando os dados de diâmetro das árvores:
+
+  \begin{itemize}
+  \item[]<2-> $$CV_X = 100\frac{3,64}{11,30} = 32,21\%$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Gráfico de Caixas}
+
+  O gráfico de caixas ou \textbf{box-plot} resume a distribuição dos
+  dados em uma representação bastante informativa. Têm-se como
+  principais aspectos observados no box-plot:
+
+  \begin{itemize}
+    \item Simetria ou assimetria da distribuição;
+    \item Amplitude de variação;
+    \item Observações atípicas.
+  \end{itemize}
+  \vspace{0.5cm}\pause
+
+  \begin{figure}[b]
+    \includegraphics[width=9cm]{images/boxplot}
+    \caption{Exemplo de um box-plot ou gráfico de caixas.}
+  \end{figure}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \begin{block}{{\bf Construção de um gráfico de caixas}}
+    \begin{enumerate}
+    \item Calcular o primeiro quartil ($Q_1$), a mediana (Md) e o
+      terceiro quartil ($Q_3$);
+    \item Calcular a AIQ = $Q_3 - Q_1$;
+    \item Verificar a existência de observações atípicas, ou seja,
+      valores menores do que $Q_1-1,5\mbox{AIQ}$ ou maiores do que
+      $Q_3+1,5\mbox{AIQ}$;
+    \item Calcular os limites inferior e superior dos dados sem
+      considerar as observações atípicas;
+    \item Construir o gráfico seguindo o esquema a seguir:
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Medidas de dispersão - Gráfico de Caixas}
+
+  {\bf Exemplo}: Para os valores observados de produção anual de resina
+  de árvores de {\it Pinus elliottii}, em kg, tem-se:
+
+  \begin{center}
+    \begin{tabular}{ccccc} \hline
+      1,5 & 1,8 & 1,9 & 2,0 & 2,1 \\
+      2,3 & 2,3 & 2,6 & 3,4 & 5,5 \\ \hline
+    \end{tabular}
+  \end{center}
+
+<<echo=FALSE, fig.height=3, fig.width=7>>=
+
+resina <- c(1.5, 1.8, 1.9, 2, 2.1, 2.3, 2.3, 2.6, 3.4, 5.5)
+boxplot(resina, pch = 8, horizontal = TRUE)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]
+  \frametitle{Medidas de posição e dispersão - Software R}
+
+<<echo=TRUE>>=
+
+# Armazenando os dados
+resina <- c(1.5, 1.8, 1.9, 2, 2.1, 2.3, 2.3, 2.6, 3.4, 5.5)
+
+# Calculando algumas estatísticas
+c("Média" = mean(resina),
+  "Mediana" = median(resina),
+  "Variância" = var(resina),
+  "Desvio padrão" = sd(resina))
+
+# Alguns quantis
+quantile(resina, probs = c(0.1, 0.25, 0.5, 0.8))
+
+# Um resumo genérico
+summary(resina)
+
+@
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Medidas de posição e dispersão - Software R}
+
+  Programando o cálculo de algumas estatísticas
+
+<<echo=TRUE>>=
+
+# Mínimo e máximo
+range(resina)
+
+# Amplitude
+diff(range(resina))
+
+# Amplitude interquartílica
+diff(quantile(resina, c(0.25, 0.75), names = FALSE))
+
+# Coeficiente de variação
+sd(resina) / mean(resina)
+
+@
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Medidas de posição e dispersão - Software R}
+
+  Suíte gráfica
+
+<<eval=FALSE>>=
+
+# Dados versus índice
+plot(resina)
+
+# Histograma
+hist(resina)
+
+# Boxplot
+boxplot(resina)
+
+# Para curiosos
+demo(graphics)
+
+@
+
+\end{frame}
+
+\end{document}
