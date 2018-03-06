@@ -17,6 +17,7 @@ primeiro semestre de 2018.
 | Conteúdo                                         | Slides                |
 |:-------------------------------------------------|:----------------------|
 |Motivação e representação tabular e gráfica       |[descritiva1.pdf][a01] |
+|Estatística descritiva: medidas de posição e dispersão |[descritiva2.pdf][a02] |
 
 <!--------------------------------------------- -->
 <!-- Links -->
@@ -26,3 +27,4 @@ primeiro semestre de 2018.
 [programa]: https://jreduardo.github.io/lce0216/programa.pdf
 [cronograma]: https://jreduardo.github.io/lce0216/cronograma.pdf
 [a01]: https://jreduardo.github.io/lce0216/aula01-descritiva.pdf
+[a01]: https://jreduardo.github.io/lce0216/aula02-descritiva.pdf
