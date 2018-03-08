@@ -25,6 +25,7 @@
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{multicol}
+\usepackage{colortbl}
 
 %-------------------------------------------
 
@@ -211,8 +212,8 @@ Calcule a média da produção anual de resina.
   \vspace{-0.2cm}
   \begin{table}
     \small
-    \caption{Cálculo auxiliar da média de dados em tabelas de
-      frequência.}
+    \caption{Cálculo auxiliar da média de dados em tabela de
+      frequências.}
     \begin{tabular}{c c c}
       \hline
       $x_i$ & $f_i$ &	$x_i f_i$ \\
@@ -262,7 +263,7 @@ Calcule a média da produção anual de resina.
 
   \begin{table}
     \caption{\footnotesize Tabela auxiliar para o cálculo da média de
-      dados em tabelas de frequência com intervalos de classe.}
+      dados em tabela de frequências com intervalos de classe.}
     \begin{tabular}{l c c c }
       \hline
       Classes &  $x^{*}_i$ & $f_i$ & $x^{*}_i f_i$\\
@@ -372,6 +373,12 @@ Calcule a média da produção anual de resina.
 
   \vspace{0.5cm}
   Como $n$ é par,
+  \begin{center}
+    \begin{tabular}{cccccccccc}
+      1,5 & 1,8 & 1,9 & 2,0 & \color{teal}{\bf 2,1} &
+      \color{teal}{\bf 2,3} & 2,3 & 2,6 & 3,4 & 5,5 \\
+    \end{tabular}
+  \end{center}
   \pause
 
   \begin{itemize}
@@ -391,7 +398,7 @@ Calcule a média da produção anual de resina.
   \frametitle{Medida de posição central - Mediana}
   \small
 
-  Para dados discretos dispostos em tabela de frequência,
+  Para dados discretos dispostos em tabela de frequências,
   a classe mediana é obtida fazendo o cálculo da \textbf{frequência
     acumulada}, que é a soma (ou valor total) de todas as frequências
   até o ponto desejado, e verificando o local no qual a
@@ -412,12 +419,16 @@ Calcule a média da produção anual de resina.
         brotos  &  $f_i$ & $F_i$  \\ \hline
         0 & 7 &   7 \\
         1 & 11 & 18 \\
-        \color{teal}2 & 14 & \color{teal}32 \\
+        \rowcolor{teal!10}
+        \color{teal}\bf 2 & 14 & \color{teal}\bf 32 \\
         3 &  8&  40 \\ \hline
         Total  & 40 & \\ \hline
       \end{tabular}
     \end{table}
   \end{center}
+  \pause
+
+  $$\text{Md} = 2$$
 
 \end{frame}
 
@@ -426,7 +437,7 @@ Calcule a média da produção anual de resina.
   \frametitle{Medida de posição central - Mediana}
 
   Se os dados são de uma variável contínua e estiverem agrupados em
-  intervalos de classe, a mediana é dada por:
+  classes, a mediana é dada por:
 
   \begin{equation*}
     \text{Md} = LI_{Md} + \frac{\frac{n}{2} -
@@ -442,6 +453,62 @@ Calcule a média da produção anual de resina.
   \item $f_{\frac{n}{2}}$ é a frequência da classe mediana,\\
   \item $h$ é a amplitude do intervalo.
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Medida de posição central - Mediana}
+
+  \begin{equation*}
+    \text{Md} = LI_{Md} + \frac{\frac{n}{2} -
+      F_{\frac{n}{2}-1}}{f_{\frac{n}{2}}} h,
+  \end{equation*}
+  \vspace{-1cm}
+
+<<echo=FALSE, out.width="1\\hsize", fig.height=5, fig.width=7>>=
+
+li <- seq(70, 100, 10)
+ls <- seq(80, 110, 10)
+fa <- c(30, 40, 20, 10)
+
+ht <- list(breaks = c(li[1], ls),
+           counts = cumsum(fa),
+           mids = (ls + li)/2,
+           name = "x",
+           equidist = TRUE)
+class(ht) <- "histogram"
+
+
+expr <- expression("Md"=LI[Md] +
+                       frac(frac(n, 2) - F[frac(n, 2) - 1],
+                            f[frac(n, 2)])*h)
+plot(ht,
+     freq = TRUE,
+     axes = FALSE,
+     xlab = "x",
+     ylab = "Frequência acumulada",
+     main = "")
+
+labelsx <- parse(text = c('LI[Md]', '"Md"', 'LI[Md]+h'))
+axis(1, c(70, 110), c("", ""))
+axis(1, at = c(80, 90), labels = labelsx[c(1, 3)])
+axis(1, at = 85, labels = labelsx[2], line = -0.8,
+     col = "lightseagreen", col.axis = "lightseagreen")
+
+labelsy <- parse(text = c('F[frac(n, 2)]', 'frac(n, 2)',
+                          'F[frac(n, 2)-1]'))
+axis(2, c(0, 100), c("", ""))
+axis(2, at = c(30, 70), labels = labelsy[c(1, 3)], las = 1)
+axis(2, at = 50, labels = labelsy[2], line = -0.3, las = 1,
+     col = "lightseagreen", col.axis = "lightseagreen")
+
+segments(80, 30, 90, 70, lty = 2)
+segments(c(85, 80), c(-1.5, 50),
+         c(85, 85), c(50, 50),
+         col = "lightseagreen")
+
+@
+
 \end{frame}
 
 %-------------------------------------------
@@ -507,7 +574,7 @@ Calcule a média da produção anual de resina.
       $$\hspace{0.65cm} \left\{
         \begin{array}{lll}
           30,0 - 20,0 & \longleftrightarrow & 0,61 - 0,39\\
-          \,\mbox{Md} - 20,0 & \longleftrightarrow & 0,61 - 0,50\\
+          \,\mbox{Md} - 20,0 & \longleftrightarrow & 0,50 - 0,39\\
         \end{array}
       \right.$$
       \vspace{-0.4cm}
@@ -592,8 +659,8 @@ Calcule a média da produção anual de resina.
   \item <3->
     $P_{20} \quad \Rightarrow \quad np = 10 \times 0,20 = 2$
     \begin{align*}
-      P_{20} &= x_{(2)} + x_{(3)}\\
-             &= 1,8 + 1,9\\
+      P_{20} &= (x_{(2)} + x_{(3)})/2\\
+             &= (1,8 + 1,9)/2\\
              &= 1,85\, \text{Kg}
     \end{align*}
   \end{itemize}
@@ -604,7 +671,7 @@ Calcule a média da produção anual de resina.
   \frametitle{Quartis e Percentis}
 
   \begin{itemize}
-  \item Dados agrupados em tabelas frequências
+  \item Dados agrupados em tabelas de frequências
   \end{itemize}
   % Para o exemplo realizado com insetos
 
@@ -827,11 +894,15 @@ Calcule a média da produção anual de resina.
         brotos  &  $f_i$   \\ \hline
         0 & 7  \\
         1 & 11 \\
-        \color{teal}2 & \color{teal}14  \\
+        \rowcolor{teal!10}
+        \color{teal}\bf 2 & \color{teal}\bf 14  \\
         3 &  8 \\ \hline
         Total  & 40  \\ \hline
       \end{tabular}
     \end{table}
+
+    $$\text{Mo} = 2$$
+
 \end{frame}
 
 %-------------------------------------------
@@ -865,7 +936,8 @@ Calcule a média da produção anual de resina.
       \vspace{-0.5cm}
       \begin{tabular}{lcccc} \hline
         $X_i$              & $x^{*}_i$ & $f_i$& $F_i$ & $F'_i$  \\ \hline
-        \color{teal}10,0 $\vdash$ \color{teal}20,0 & \color{teal}15,0  &  \color{teal}39 & \color{teal}39 & \color{teal}0,39\\
+        \rowcolor{teal!10}
+        \color{teal}\bf 10,0 $\vdash$ \color{teal}\bf 20,0 & \color{teal}\bf 15,0  &  \color{teal}\bf 39 & \color{teal}\bf 39 & \color{teal}\bf 0,39\\
         20,0 $\vdash$ 30,0 & 25,0  &  22 & 61 & 0,61\\
         30,0 $\vdash$ 40,0 & 35,0  &  10 & 71 & 0,71\\
         40,0 $\vdash$ 50,0 & 45,0  &  10 & 81 & 0,81\\
@@ -1039,7 +1111,8 @@ segments(83.33, -1.5, 83.33, 40,
       em uma floresta}
     \begin{tabular}{lc} \hline
       Diâmetro & $f_i$    \\ \hline
-      \color{teal}10,2 $\vdash$ 22,0 &\color{teal} 22 \\
+      \rowcolor{teal!10}
+      \color{teal}\bf 10,2 $\vdash$ 22,0 &\color{teal}\bf 22 \\
       22,0 $\vdash$ 33,8 &  6  \\
       33,8 $\vdash$ 45,6 &  2 \\
       45,6 $\vdash$ 57,4 &  5  \\
