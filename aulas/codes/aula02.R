@@ -1,37 +1,81 @@
+#=======================================================================
+# Aula 02: Estatística descritiva
+#=======================================================================
 
-li <- seq(10, 80, 10)
-ls <- seq(20, 90, 10)
-ls[8] <- 160
-fa <- c(39, 22, 10, 10, 8, 4, 3, 4)
+#-------------------------------------------
+# Funções para cálculo de algumas estatísticas
 
+# Exemplo das resinas
+resina <- c(1.5, 1.8, 1.9, 2, 2.1, 2.3, 2.3, 2.6, 3.4, 5.5)
+resina <- sample(resina)
 
-ht <- list(breaks = c(10, ls),
-           counts = fa,
-           mids = (ls + li)/2,
-           name = "x",
-           equidist = FALSE)
-class(ht) <- "histogram"
+# Calculando algumas estatísticas
+c("Média" = mean(resina),
+  "Mediana" = median(resina),
+  "Variância" = var(resina),
+  "Desvio padrão" = sd(resina),
+  "Nº obs" = length(resina))
 
-plot(ht, freq = TRUE, axes = FALSE,
-     xlab = "Diâmetro (m)",
-     ylab = "Frequência absoluta",
-     main = "Histograma")
-axis(1, sort(c(li, ls)))
-axis(2)
-segments(c(10, 10), c(0, 39),
-         c(20, 20), c(39, 22),
-         lty = )
+# dúvida?
+?mean
+?median
+?var
+?sd
+?length
 
-"lightseagreen"
+# Alguns quantis
+quantile(resina, probs = c(0.1, 0.25, 0.5, 0.8))
+quantile(resina, probs = (1:100)/100)
 
-hist(rnorm(10000, sd = 10), breaks = 40,
-     col = stringr::str_subset(colors(), "green")[21])
+# Um resumo genérico
+summary(resina)
 
+#-------------------------------------------
+# Programando o cálculo de algumas estatísticas
 
+# Média
+sum(resina)/length(resina)
 
+# Variância
+sum((resina - mean(resina))^2)/(length(resina) - 1)
+(sum(resina^2) - sum(resina)^2/length(resina))/(length(resina) - 1)
 
-graphics:::plot.histogram
+# Desvio padrão
+variancia <- sum((resina - mean(resina))^2)/(length(resina) - 1)
+sqrt(variancia)
 
-obj <- hist(sqrt(islands), breaks = c(4*0:5, 10*3:5, 70, 100, 140),
-            col = "blue1")
-str(obj)
+# Mediana
+sum(sort(resina)[5:6])/2
+
+# Mínimo e máximo
+range(resina)
+
+# Amplitude
+diff(range(resina))
+
+# Amplitude interquartílica
+diff(quantile(resina, c(0.25, 0.75), names = FALSE))
+
+# Coeficiente de variação
+sd(resina) / mean(resina)
+100 * sd(resina) / mean(resina)
+
+#-------------------------------------------
+# Alguns gráficos
+
+# Dados versus índice
+?plot
+plot(resina)
+plot(resina, cex = 2)
+plot(resina, cex = 2, type = "b")
+plot(resina, cex = 2, type = "b", col = "blue")
+plot(resina, cex = 2, type = "b", col = "blue", pch = 15)
+
+# Boxplot
+?boxplot
+boxplot(resina)
+boxplot(resina, horizontal = TRUE)
+boxplot(resina, horizontal = TRUE, col = "blue")
+boxplot(resina, horizontal = TRUE, col = "blue")
+boxplot(resina, horizontal = TRUE, col = "blue", boxwex = 0.2)
+boxplot(resina, horizontal = TRUE, col = "blue", boxwex = 0.2, pch = 15)
