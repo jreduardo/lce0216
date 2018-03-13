@@ -101,7 +101,7 @@ names(dap) <- c("diametro", "altura")
 dap <- na.exclude(dap)
 
 set.seed(1020)
-amostra <- round(sample(dap$diametro, 30), 2)
+amostra <- round(sample(dap$diametro, 30), 1)
 
 xt <- xtable(matrix(amostra, nrow = 3))
 print.xtable(xt,
@@ -158,9 +158,9 @@ substrato.
 
 \noindent
 \textbf{3.} No \texttt{R}, leia o conjunto de dados \texttt{dap}
-(disponível em \url{goo.gl/WPJA9G}) e faça análises descritivas para as
-variáveis diâmetro à altura do peito (\texttt{diametro}) e altura das
-árvores (\texttt{altura}). Os dados referem-se à amostra completa do
-exercício 1.
+(disponível em \url{https://jreduardo.github.io/lce0216/dap.csv}) e faça
+análises descritivas para as variáveis diâmetro à altura do peito
+(\texttt{diametro}) e altura das árvores (\texttt{altura}). Os dados
+referem-se à amostra completa do exercício 1.
 
 \end{document}

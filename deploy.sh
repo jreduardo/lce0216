@@ -5,6 +5,7 @@ git config --global user.name "Travis boot to deploy pdf files"
 
 git clone -b gh-pages https://${GIT_KEY}@github.com/jreduardo/lce0216 dir-output
 cp *.pdf aulas/*.pdf aulas/codes/*.R dir-output/
+cp exercicios/*.pdf exercicios/dados/* dir-output/
 
 cd dir-output/
 git add --all *
