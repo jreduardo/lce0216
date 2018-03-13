@@ -1,0 +1,166 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático - estatística descritiva\\
+    13 de março de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+
+\begin{document}
+% \setlength\parindent{0pt}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    fig.align = "center",
+    fig.pos = "h",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.} Os dados abaixo referem-se ao diâmetro à altura do peito
+de uma amostra 20 árvores em uma floresta.
+
+<<echo=FALSE, results="asis">>=
+
+url <- "http://www.leg.ufpr.br/~walmes/data/dap.txt"
+dap <- read.table(url, header = TRUE, sep = "\t")
+names(dap) <- c("diametro", "altura")
+dap <- na.exclude(dap)
+
+set.seed(1020)
+amostra <- round(sample(dap$diametro, 30), 2)
+
+xt <- xtable(matrix(amostra, nrow = 3))
+print.xtable(xt,
+             hline.after = c(0, 3),
+             # only.contents = TRUE,
+             include.colnames = FALSE,
+             include.rownames = FALSE)
+
+@
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Calcule a média, variância, mediana, 1º e 3º quartil e amplitude
+  dos diâmetros observados;
+\item Apresente os dados em uma tabela de frequências;
+\item Faça uma representação gráfica do conjunto de dados.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} Em um estudo sobre substratos alternativos para o cultivo de
+determinada árvore frutífera, avaliou-se o efeito de cinco diferentes
+componentes para um substrato na massa fresca dos frutos. Na Figura
+abaixo, são representados em gráficos de caixas, os valores observados
+de massa fresca de frutos para os cinco diferentes componentes.
+
+<<fig.width=9, fig.height=5>>=
+#-------------------------------------------
+set.seed(1623)
+comps <- c("Casca de Eucaliptos",
+           "Casca de Pinus",
+           "Coxim",
+           "Fibra de Coco",
+           "Xaxim")
+resp <- c(rnorm(30, 10, 5),
+          c(rnorm(5, 3), rnorm(25, 8)),
+          rnorm(30, 15, 4),
+          rgamma(30, 2, 0.3),
+          rnorm(30, 8, 2))
+da2 <- data.frame(trat = rep(comps, each = 30), reps = resp)
+
+boxplot(resp ~ trat,
+        col = "gray80",
+        boxwex = 0.5,
+        xlab = "Componentes de substratos",
+        ylab = "Massa fresca dos frutos em kg",
+        data = da2)
+
+@
+
+\noindent
+Comente sobre a distribuição da massa fresca dos frutos para cada
+substrato.
+\vspace{1.5cm}
+
+\noindent
+\textbf{3.} No \texttt{R}, leia o conjunto de dados \texttt{dap}
+(disponível em \url{goo.gl/WPJA9G}) e faça análises descritivas para as
+variáveis diâmetro à altura do peito (\texttt{diametro}) e altura das
+árvores (\texttt{altura}). Os dados referem-se à amostra completa do
+exercício 1.
+
+\end{document}
