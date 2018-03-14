@@ -1,0 +1,1284 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  1. Estatística Descritiva}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitores: Eduardo E. R. Junior \& Giovana Fumes
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 06 de março de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade}
+
+  \begin{block}{Probabilidade}
+    Medida de incerteza em termos de escala numérica.
+  \end{block}
+
+  \begin{itemize}
+  \item Início: estratégias de apostas em jogos de azar;
+  \item Desenvolvimento: século XX (teoria matemática);
+  \item Embasamento teórico para as técnicas estatísticas a serem
+    apresentadas.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Experimento Aleatório}
+
+  \begin{block}{Experimento Aleatório}
+    São experimentos que, quando repetidos em condições similares, dão
+    resultados, geralmente, diferentes.
+  \end{block}
+
+  \begin{itemize} \small
+  \item[]<2->
+  \item Anotar as espécies de aves que são capturadas numa
+    rede-neblina armada no sub-bosque de uma floresta nativa
+    \begin{figure}[b]
+      \includegraphics[width=5cm]{images/aves_floresta2.jpg}
+    \end{figure}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Experimento aleatório}
+  \begin{itemize}
+  \item Lançar uma moeda e observar a face voltada para cima;
+    \begin{figure}[b]
+      \includegraphics[width=5cm]{images/cara_ou_coroa.jpg}
+    \end{figure}\vspace{0.5cm}
+  \item Lançar duas moedas e observar as faces voltadas para cima;
+    \begin{figure}[b]
+      \includegraphics[width=10cm]{images/cara_ou_coroa2.jpg}
+    \end{figure}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Experimento aleatório}
+  \begin{multicols}{2}
+    \begin{itemize}
+    \item Colocar 20 sementes em um germinador e contar, após determinado tempo, o número de sementes germinadas;
+      \begin{figure}[b]
+        \includegraphics[height=3.4cm]{images/sementes.jpg}
+      \end{figure}
+    \end{itemize}
+    \newpage
+    \begin{itemize}
+    \item Observar o número de árvores bifurcadas em uma amostra de
+      tamanho $n$;\vspace{-0.22cm}
+      \begin{figure}[b]
+        \includegraphics[height=3.4cm]{images/arvore_bifurcada.jpg}
+      \end{figure}
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Experimento aleatório}
+  \begin{multicols}{2}
+    \begin{itemize}
+    \item Coletar uma amostra de 100 tilápias de um lago e observar o
+      número de fêmeas;
+      \begin{figure}[b]
+        \includegraphics[width=5cm]{images/tilapias.jpg}
+      \end{figure}
+    \end{itemize}
+    \newpage
+    \begin{itemize}
+    \item Medir a produtividade de uma área de floresta de {\it Pinus}
+      que recebeu adubação;
+      \begin{figure}[b]
+        \includegraphics[width=5cm]{images/producao_pinus.jpg}
+      \end{figure}
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Experimento aleatório}
+  \begin{itemize}
+  \item Medir a altura de uma árvore;
+    \begin{figure}[b]
+      \includegraphics[width=5cm]{images/arvores.jpg}
+    \end{figure}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Espaço amostral}
+  \begin{block}{Espaço Amostral}
+    É o conjunto de todos os resultados possíveis do experimento. Cada
+    um de seus elementos chama-se ponto amostral.\\
+    {\bf Notação}: $\Omega$.
+  \end{block}
+  \vspace{0.5cm}\pause
+
+  Os espaços amostrais podem ser {\bf discretos} ou {\bf contínuos}.
+  \vspace{0.3cm}
+  \begin{itemize}
+  \item<3-> Um espaço amostral é discreto quando podemos enumerar
+    todos os resultados do experimento;
+  \vspace{0.1cm}
+  \item<4-> Um espaço amostral é contínuo quando não podemos enumerar
+    todos os resultados
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Espaço Amostral}
+  \begin{itemize}
+  \item Lançar uma moeda e observar a face voltada para cima;
+    \begin{figure}[b]
+      \includegraphics[width=5cm]{images/cara_ou_coroa.jpg} %
+    \end{figure}
+    $$\Omega = \{\mbox{cara}, \mbox{coroa}\}$$
+    \vspace{0.1cm}
+  \item Lançar duas moedas e observar as faces voltadas para cima;
+    \begin{figure}[b]
+      \includegraphics[width=7cm]{images/cara_ou_coroa2.jpg} %
+    \end{figure}
+    $$\Omega = \{\mbox{(cara, cara), (cara, coroa),
+      (coroa, cara), (coroa, coroa)}\}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Espaço Amostral}
+  \begin{multicols}{2}
+    \begin{itemize}
+    \item Colocar 20 sementes em um germinador e contar, após
+      determinado tempo, o número de sementes germinadas;
+      \begin{figure}[b]
+        \includegraphics[height=3cm]{images/sementes.jpg} %
+      \end{figure}
+      $$\Omega = \{0, 1, 2, 3, \ldots, 20\}$$
+    \end{itemize}
+    \newpage
+    \begin{itemize}
+    \item Observar o número de árvores bifurcadas em uma amostra de
+      tamanho $n$;\\ \textcolor{white}{.}
+      \begin{figure}[b]
+        \includegraphics[height=3cm]{images/arvore_bifurcada.jpg}
+      \end{figure}\vspace{-0.033cm}
+      $$\Omega = \{0, 1, 2, 3, \ldots, n\}$$
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Espaço Amostral}
+  \begin{multicols}{2}
+    \begin{itemize}
+    \item Coletar uma amostra de 100 tilápias de um lago e observar o
+      número de fêmeas;
+      \begin{figure}[b]
+        \includegraphics[width=5cm]{images/tilapias.jpg} %
+      \end{figure}
+      $$\Omega = \{0, 1, 2, 3, \ldots, 100\}$$
+    \end{itemize}
+    \newpage
+    \begin{itemize}
+    \item Medir a produtividade de uma área de floresta de {\it Pinus}
+      que recebeu adubação;\vspace{0.2cm}
+      \begin{figure}[b]
+        \includegraphics[width=5cm]{images/producao_pinus.jpg} %
+      \end{figure}\vspace{-0.24cm}
+      $$\Omega = (15, 45)\mbox{m}^3\mbox{ha}^{-1}$$
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Espaço Amostral}
+  \begin{itemize}
+  \item Medir a altura de uma árvore;
+    \begin{figure}[b]
+      \includegraphics[width=5cm]{images/arvores.jpg} %
+    \end{figure}
+    $$\Omega = (0,6) \mbox{metros}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{block}{Evento}
+    Os eventos são subconjuntos do espaço amostral $\Omega$, ou seja,
+    são conjuntos dos resultados de um experimento.\\
+    {\bf Notação}: $A, \; B, \; C, \ldots$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  {\bf Exemplos}:
+  \begin{itemize}
+  \item Observar o número de sementes germinadas maior do que ou igual a
+    15
+  \item[]<2-> $$A = \{15, 16, 17, 18, 19, 20\}$$
+  \item Observar a porcentagem de germinação maior do que 80\%
+  \item[]<3-> $$B = (80, 100]\%$$
+  \item Observar árvores com altura superior a 3 metros
+  \item[]<4-> $$C = (3, 6)\mbox{metros}$$
+  \item Observar árvores com altura entre 3 e 6 metros
+  \item[]<5-> $$D = (3, 6)\mbox{metros}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{itemize}
+  \item<1-> {\bf \textcolor[rgb]{1.00,0.00,0.00}{Evento certo}}:
+    $A = \Omega$.
+  \item[]<2-> Colocar 20 sementes no germinador e observar 20 sementes
+    ou menos germinadas.
+  \item[]
+  \item<1-> {\bf \textcolor[rgb]{1.00,0.00,0.00}{Evento impossível}}:
+    $A = \emptyset$.
+  \item[]<3-> Colocar 20 sementes no germinador e observar mais do que
+    20 sementes germinadas.
+  \item[]
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{itemize}
+  \item<1-> {\bf \textcolor[rgb]{1.00,0.00,0.00}{Evento complementar}}:
+    O complementar de um evento $A$ é o conjunto de pontos amostrais que
+    não pertencem a $A$. Notação: $\bar{A}$ ou $A^c$.
+    \begin{figure}[b]
+      \includegraphics[width=5cm]{images/a_compl.jpg} %
+    \end{figure}
+  \item[]<2-> $A$ = Observar o número de sementes germinadas maior do
+    que ou igual a 15.\\
+    $A^c$ = Observar o número de sementes germinadas menor do que 15.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{block}{União}
+    A {\bf união} de dois eventos $A$ e $B$ é o conjunto de todos os
+    elementos amostrais que estão em $A$, em $B$ ou em ambos.\\
+    {\bf Notação}: $A\cup B$.
+  \end{block}
+
+  \begin{figure}[b]
+    \includegraphics[width=5cm]{images/a_uniao_b.jpg} %
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{block}{Interseção}
+    A {\bf interseção} de dois eventos $A$ e $B$ é o conjunto de todos os elementos amostrais que estão em $A$ e estão em $B$.\\
+    {\bf Notação}: $A\cap B$.
+  \end{block}
+
+  \begin{figure}[b]
+    \includegraphics[width=5cm]{images/a_inter_b.jpg} %
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{block}{Eventos mutuamente exclusivos}
+    Dois eventos são mutuamente exclusivos se eles não têm elementos
+    amostrais em comum, ou seja, se $A \cap B = \emptyset$, ou ainda, se
+    eles não podem ocorrer simultaneamente.
+  \end{block}
+
+  \begin{figure}[b]
+    \includegraphics[width=5cm]{images/a_b_excl.jpg} %
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \small
+
+  {\bf Exemplo}: Considere o experimento lançamento de dois dados e a
+  observação dos números obtidos. Considere ainda os seguintes eventos:
+  \begin{itemize}
+  \item[] $A$: Soma dos valores igual a 7;
+  \item[] $B$: Resultado do primeiro dado igual a 6;
+  \item[] $C$: Os resultados nos dois dados são iguais;
+  \item[] $D$: Soma nos dois dados é 2;
+  \end{itemize}
+
+  \begin{minipage}[b]{0.30\linewidth}
+    \begin{figure}[b]
+      \includegraphics[width=\textwidth]{images/dados.jpg} %
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}[b]{0.55\linewidth}
+    \hspace{3cm}
+      Espaço amostral.
+    \vspace{-0.8cm}
+    \begin{itemize}\footnotesize
+    \item[]<2-> $$
+      \begin{array}{c}\Omega = \Big\{ (1,1), (1,2), (1,3), (1,4), (1,5), (1,6),\\
+        \qquad \quad            (2,1), (2,2), (2,3), (2,4), (2,5), (2,6),\\
+        \qquad \quad            (3,1), (3,2), (3,3), (3,4), (3,5), (3,6),\\
+        \qquad \quad            (4,1), (4,2), (4,3), (4,4), (4,5), (4,6),\\
+        \qquad \quad            (5,1), (5,2), (5,3), (5,4), (5,5), (5,6),\\
+        \qquad \quad \;         (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)\Big\}
+      \end{array}$$
+    \end{itemize}
+  \end{minipage}
+
+  \begin{itemize}
+  \item[]<3-> Relacionar os elementos dos eventos $A$, $B$ e $C$.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{itemize}
+  \item $A$: Soma dos valores igual a 7
+  \item[]<2->
+    $$
+    \begin{array}{c}\Omega =         \Big\{ (1,1), (1,2), (1,3), (1,4), (1,5), \textcolor[rgb]{1.00,0.00,0.00}{(1,6)},\\
+      \qquad \quad            (2,1), (2,2), (2,3), (2,4), \textcolor[rgb]{1.00,0.00,0.00}{(2,5)}, (2,6),\\
+      \qquad \quad            (3,1), (3,2), (3,3), \textcolor[rgb]{1.00,0.00,0.00}{(3,4)}, (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), \textcolor[rgb]{1.00,0.00,0.00}{(4,3)}, (4,4), (4,5), (4,6),\\
+      \qquad \quad            (5,1), \textcolor[rgb]{1.00,0.00,0.00}{(5,2)}, (5,3), (5,4), (5,5), (5,6),\\
+      \qquad \quad \;         \textcolor[rgb]{1.00,0.00,0.00}{(6,1)}, (6,2), (6,3), (6,4), (6,5), (6,6)\Big\}
+    \end{array}$$
+  \item[]<2-> $$A = \{(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{itemize}
+  \item $B$: Resultado do primeiro dado igual a 6
+  \item[]<2->
+    $$
+    \begin{array}{c}\Omega = \Big\{ (1,1), (1,2), (1,3), (1,4), (1,5), (1,6),\\
+      \qquad \quad            (2,1), (2,2), (2,3), (2,4), (2,5), (2,6),\\
+      \qquad \quad            (3,1), (3,2), (3,3), (3,4), (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), (4,3), (4,4), (4,5), (4,6),\\
+      \qquad \quad            (5,1), (5,2), (5,3), (5,4), (5,5), (5,6),\\
+      \qquad \quad \;         \textcolor[rgb]{1.00,0.00,0.00}{(6,1)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,2)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,3)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,4)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,5)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,6)}\Big\}
+    \end{array}
+    $$
+  \item[]<2-> $$B = \{(6,1), (6,2), (6,3), (6,4), (6,5), (6,6)\}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{itemize}
+  \item $C$: Os resultados nos dois dados são iguais
+  \item[]<2->
+    $$
+    \begin{array}{c}\Omega = \Big\{ \textcolor[rgb]{1.00,0.00,0.00}{(1,1)}, (1,2), (1,3), (1,4), (1,5), (1,6),\\
+      \qquad \quad            (2,1), \textcolor[rgb]{1.00,0.00,0.00}{(2,2)}, (2,3), (2,4), (2,5), (2,6),\\
+      \qquad \quad            (3,1), (3,2), \textcolor[rgb]{1.00,0.00,0.00}{(3,3)}, (3,4), (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), (4,3), \textcolor[rgb]{1.00,0.00,0.00}{(4,4)}, (4,5), (4,6),\\
+      \qquad \quad            (5,1), (5,2), (5,3), (5,4), \textcolor[rgb]{1.00,0.00,0.00}{(5,5)}, (5,6),\\
+      \qquad \quad \;         (6,1), (6,2), (6,3), (6,4), (6,5), \textcolor[rgb]{1.00,0.00,0.00}{(6,6)}\Big\}
+    \end{array}
+    $$
+  \item[]<2-> $$C = \{(1,1), (2,2), (3,3), (4,4), (5,5), (6,6)\}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{itemize}
+  \item $D$: Soma nos dois dados é 2
+  \item[]<2->
+    $$
+    \begin{array}{c}\Omega = \Big\{ \textcolor[rgb]{1.00,0.00,0.00}{(1,1)}, (1,2), (1,3), (1,4), (1,5), (1,6),\\
+      \qquad \quad            (2,1), (2,2), (2,3), (2,4), (2,5), (2,6),\\
+      \qquad \quad            (3,1), (3,2), (3,3), (3,4), (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), (4,3), (4,4), (4,5), (4,6),\\
+      \qquad \quad            (5,1), (5,2), (5,3), (5,4), (5,5), (5,6),\\
+      \qquad \quad \;         (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)\Big\}
+    \end{array}
+    $$
+  \item[]<2-> $$D = \{(1,1)\}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Eventos}
+  \begin{itemize}
+  \item[] $A = \{(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\}$
+  \item[] $B = \{(6,1), (6,2), (6,3), (6,4), (6,5), (6,6)\}$
+  \item[] $C = \{(1,1), (2,2), (3,3), (4,4), (5,5), (6,6)\}$
+  \item[] $D = \{(1,1)\}$
+  \end{itemize}
+  \begin{itemize}
+  \item Quais eventos são mutuamente exclusivos?
+  \item[]<2-> $A$ e $C$, $A$ e $D$ e $B$ e $D$.
+    \vspace{0.2cm}
+  \item Relacionar os elementos dos eventos:
+    \begin{itemize}
+    \item $A\cap B$
+    \item[]<3-> $A\cap B = \{(6,1)\}$
+    \item $A\cap C$
+    \item[]<4-> $A\cap C = \emptyset$
+    \item $B\cup D$
+    \item[]<5->
+      $B\cup D = \{(1,1), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)\}$
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \begin{block}{Definição Clássica}
+    Seja $A\subset\Omega$, então
+    $$P(A) = \frac{n_A}{n_{\Omega}} =
+    \frac{\mbox{número de resultados favoráreis}}{
+      \mbox{número de resultados possíveis}}$$
+  \end{block}
+  \begin{itemize}
+  \item Os resultados são equiprováveis;
+  \item[]
+  \item O espaço amostral é discreto e finito
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+
+  {\bf Exemplo}: No lançamento de dois dados honestos (resultados
+  equiprováveis), calcular a probabilidade dos seguintes eventos:
+
+  \begin{itemize}
+  \item[] $A$: Soma dos valores igual a 7;
+  \item[] $B$: Resultado do primeiro dado igual a 6;
+  \item[] $C$: Os resultados nos dois dados são iguais;
+  \item[] $D$: Soma nos dois dados é 2;
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \begin{itemize}
+  \item $A$: Soma dos valores igual a 7
+    $$
+    \begin{array}{c}\Omega =         \Big\{ (1,1), (1,2), (1,3), (1,4), (1,5), \textcolor[rgb]{1.00,0.00,0.00}{(1,6)},\\
+      \qquad \quad            (2,1), (2,2), (2,3), (2,4), \textcolor[rgb]{1.00,0.00,0.00}{(2,5)}, (2,6),\\
+      \qquad \quad            (3,1), (3,2), (3,3), \textcolor[rgb]{1.00,0.00,0.00}{(3,4)}, (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), \textcolor[rgb]{1.00,0.00,0.00}{(4,3)}, (4,4), (4,5), (4,6),\\
+      \qquad \quad            (5,1), \textcolor[rgb]{1.00,0.00,0.00}{(5,2)}, (5,3), (5,4), (5,5), (5,6),\\
+      \qquad \quad \;         \textcolor[rgb]{1.00,0.00,0.00}{(6,1)}, (6,2), (6,3), (6,4), (6,5), (6,6)\Big\}
+    \end{array}$$
+  \item[]<2-> $$P(A) = \frac{6}{36} = 0,17$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}\frametitle{Definições}
+  \begin{itemize}
+  \item $B$: Resultado do primeiro dado igual a 6
+    $$
+    \begin{array}{c}\Omega = \Big\{ (1,1), (1,2), (1,3), (1,4), (1,5), (1,6),\\
+      \qquad \quad            (2,1), (2,2), (2,3), (2,4), (2,5), (2,6),\\
+      \qquad \quad            (3,1), (3,2), (3,3), (3,4), (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), (4,3), (4,4), (4,5), (4,6),\\
+      \qquad \quad            (5,1), (5,2), (5,3), (5,4), (5,5), (5,6),\\
+      \qquad \quad \;         \textcolor[rgb]{1.00,0.00,0.00}{(6,1)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,2)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,3)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,4)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,5)}, \textcolor[rgb]{1.00,0.00,0.00}{(6,6)}\Big\}
+    \end{array}$$
+  \item[]<2-> $$P(B) = \frac{6}{36}= 0,17$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \begin{itemize}
+  \item $C$: Os resultados nos dois dados são iguais
+    $$
+    \begin{array}{c}\Omega = \Big\{ \textcolor[rgb]{1.00,0.00,0.00}{(1,1)}, (1,2), (1,3), (1,4), (1,5), (1,6),\\
+      \qquad \quad            (2,1), \textcolor[rgb]{1.00,0.00,0.00}{(2,2)}, (2,3), (2,4), (2,5), (2,6),\\
+      \qquad \quad            (3,1), (3,2), \textcolor[rgb]{1.00,0.00,0.00}{(3,3)}, (3,4), (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), (4,3), \textcolor[rgb]{1.00,0.00,0.00}{(4,4)}, (4,5), (4,6),\\
+      \qquad \quad            (5,1), (5,2), (5,3), (5,4), \textcolor[rgb]{1.00,0.00,0.00}{(5,5)}, (5,6),\\
+      \qquad \quad \;         (6,1), (6,2), (6,3), (6,4), (6,5), \textcolor[rgb]{1.00,0.00,0.00}{(6,6)}\Big\}
+    \end{array}$$
+  \item[]<2-> $$P(C) = \frac{6}{36} = 0,17$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \begin{itemize}
+  \item $D$: Soma nos dois dados é 2
+    $$
+    \begin{array}{c}\Omega = \Big\{ \textcolor[rgb]{1.00,0.00,0.00}{(1,1)}, (1,2), (1,3), (1,4), (1,5), (1,6),\\
+      \qquad \quad            (2,1), (2,2), (2,3), (2,4), (2,5), (2,6),\\
+      \qquad \quad            (3,1), (3,2), (3,3), (3,4), (3,5), (3,6),\\
+      \qquad \quad            (4,1), (4,2), (4,3), (4,4), (4,5), (4,6),\\
+      \qquad \quad            (5,1), (5,2), (5,3), (5,4), (5,5), (5,6),\\
+      \qquad \quad \;         (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)\Big\}
+    \end{array}$$
+  \item[]<2-> $$P(D) = \frac{1}{36} = 0,03$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \begin{block}{ Definição Frequentista}
+    Outro método de definir probabilidade é o da frequência
+    relativa. Pode-se definir $P(A)$ como o limite da frequência
+    relativa da ocorrência de $A$ em $n$ repetições independentes do
+    experimento, com $n$ tendendo ao infinito, ou seja,
+    {\footnotesize
+      $$P(A) = \lim_{n\rightarrow \infty} \frac{1}{n}
+      (\mbox{número de ocorrências de $A$ em $n$ repetições do
+        experimento})$$
+    }
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \small
+  {\bf Exemplo}: Suponha que queremos estudar as proporções de
+  indivíduos de genótipos AA, Aa e aa, resultantes do experimento
+  cruzamento de dois indivíduos heterozigotos. Um primeiro procedimento
+  seria realizar esse experimento um certo número de vezes ($n$) e
+  observar as frequências de cada um dos genótipos, tal como:\\[0.2cm]
+
+  \hspace*{-0.8cm}
+  \begin{minipage}[t]{1.08\textwidth}
+  {\footnotesize
+    \begin{multicols}{2}
+      \begin{itemize}
+      \item<2-> Para $n=10$
+        \begin{tabular}{ccc} \hline
+          & Número & Frequência \\
+          Genótipo  & de casos & relativa \\ \hline
+          AA & 1 & 0,10 \\
+          Aa & 7 & 0,70 \\
+          aa & 2 & 0,20 \\ \hline
+          Total & 10 & 1,00 \\ \hline
+        \end{tabular}
+
+      \item<4-> Para $n=1000$
+        \begin{tabular}{ccc} \hline
+          & Número & Frequência \\
+          Genótipo  & de casos & relativa \\ \hline
+          AA & 263 & 0,263 \\
+          Aa & 495 & 0,495 \\
+          aa & 242 & 0,242 \\ \hline
+          Total & 1000 & 1,00 \\ \hline
+        \end{tabular}
+      \end{itemize}
+
+      \newpage
+      \begin{itemize}
+      \item<3-> Para $n=100$
+        \begin{tabular}{ccc} \hline
+          & Número & Frequência \\
+          Genótipo  & de casos & relativa \\ \hline
+          AA & 29 & 0,29 \\
+          Aa & 48 & 0,48 \\
+          aa & 23 & 0,23 \\ \hline
+          Total & 100 & 1,00 \\ \hline
+        \end{tabular}
+
+      \item<5->Para $n\rightarrow \infty$
+        \begin{tabular}{cc} \hline
+          Genótipo  & Probabilidade \\ \hline
+          AA &  0,25 \\
+          Aa &  0,50 \\
+          aa &  0,25 \\ \hline
+          Total &  1,00 \\ \hline
+        \end{tabular}
+      \end{itemize}
+    \end{multicols}
+  }
+  \end{minipage}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \small
+
+  {\bf Exemplo}: Suponha que o quadro seguinte represente uma possível
+  divisão dos alunos do primeiro ano, da ESALQ, no ano de 1998. Supondo
+  que um aluno não pode estar matriculado em mais de um curso ao mesmo
+  tempo.
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item<2-> Considere o experimento escolha ao acaso de um aluno do
+    primeiro ano e verifique qual curso está cursando e a qual sexo
+    pertence
+  \item<3-> Considere, ainda, os seguintes eventos:
+    \begin{multicols}{2} \footnotesize
+      $H$: ser do sexo masculino; \\
+      $M$: ser do sexo feminino; \\
+      $A$: estar cursando Engenharia Agronômica; \\
+      $F$: estar cursando Engenharia Florestal; e \\
+      $E$: estar cursando Economia Agroindustrial.
+    \end{multicols}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+  Calcule as seguintes probabilidades:
+  \begin{multicols}{2}
+    \begin{itemize}
+    \item $P(H)$
+    \item[]<2-> $ = \frac{205}{265} = 0,7736$
+    \item $P(M)$
+    \item[]<3-> $ = \frac{60}{265} = 0,2264$
+    \item $P(\Omega)$
+    \item[]<7-> $ = \frac{265}{265} = 1,0000$
+    \end{itemize}
+    \newpage
+    \begin{itemize}
+    \item $P(A)$
+    \item[]<4-> $ = \frac{200}{265} = 0,7547$
+    \item $P(F)$
+    \item[]<5-> $ = \frac{40}{265} = 0,1510$
+    \item $P(E)$
+    \item[]<6-> $ = \frac{25}{265} = 0,0943$
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}\frametitle{Definições}
+  \begin{center}
+    \scriptsize
+      \begin{tabular}{ccccc}\hline
+        & \multicolumn{3}{c}{Curso} & \\
+        Sexo & Engenharia & Engenharia & Economia & Total\\
+        & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+        Masculino (H) & 160 & 30 & 15 & 205 \\
+        Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+        Total         & 200 & 40 & 25 & 265 \\ \hline
+      \end{tabular}
+  \end{center}
+  Calcule as seguintes probabilidades:
+  \begin{multicols}{2} \footnotesize
+    \begin{itemize}
+    \item $P(A\cup F)$
+    \item[]<2-> $ = P(A) + P(F) = 0,7547 + 0,1510 = 0,9057$
+    \item $P(H \cup M)$
+    \item[]<3-> $ = P(H) +  P(M)= 0,7736 + 0,2264 = 1$
+    \item $P(H \cap M)$
+    \item[]<4-> $ = 0$
+    \end{itemize}
+    \newpage
+    \begin{itemize}
+    \item $P(M \cap E)$
+    \item[]<5-> $ = \frac{10}{265} = 0,0377$
+    \item $P(H\cup A)$
+    \item[]<6->
+      $ = P(H) + P(A) - P(H\cap A) = 0,7736 + 0,7547 -\frac{160}{265} =
+      0,9245$
+    \item $P(A^c)$
+    \item[]<7-> $ = P(F) + P(E) = 0,1510 + 0,0943 = 1 - 0,7547 = 0,2453$
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Propriedades}
+  \begin{block}{Propriedades}
+    Se $A$ e $B$ são dois eventos do espaço amostral $\Omega$, então
+    valem as seguintes regras básicas:
+
+    \begin{itemize}
+    \item $0 \leq P(A) \leq 1$
+    \item $P(\emptyset) = 0$ e $P(\Omega) = 1$
+    \item $P(A\cup B) = P(A) + P(B) - P(A\cap B)$
+    \item $P(A^c) = 1 - P(A)$
+    \end{itemize}
+  \end{block}
+
+  \begin{itemize}
+  \item[]<2-> Se $A$ e $B$ são eventos mutuamente exclusivos, então:
+  \item[]<2-> $P(A\cap B) = $ \uncover<3->{$0$}
+  \item[]<2-> $P(A\cup B) = $ \uncover<3->{$P(A) + P(B)$}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item<2-> Dado que o aluno escolhido ao acaso esteja cursando
+    Engenharia Florestal (F), qual é a probabilidade de ele ser do sexo
+    masculino (H)?
+  \item[]<3-> $$P(H\mid F) = \frac{30}{40} = 0,7500$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item<2-> Dado que o aluno escolhido ao acaso é do seja feminino (M),
+    qual é a probabilidade de ele estar cursando Engenharia Agronômica?
+  \item[]<3-> $$P(A\mid M) = \frac{40}{60} = 0,6667$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item<2-> Qual é a probabilidade de um aluno escolhido ao acaso
+    estar cursando Engenharia Florestal (F) dado que ele é do sexo
+    feminino (M)?
+  \item[]<3-> $$P(F\mid M) = \frac{10}{60} = 0,1667$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item<2-> Dado que o aluno escolhido ao acaso esteja cursando
+    Engenharia Florestal (F), qual é a probabilidade de ele ser do sexo
+    masculino (H)?
+  \item[]<3-> $$P(H\mid F) = \frac{30}{40} = 0,7500$$
+  \item[]<4->$$=\frac{\frac{30}{265}}{\frac{40}{265}} = \frac{P(H\cap
+      F)}{P(F)}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item<2-> Dado que o aluno escolhido ao acaso é do seja feminino (M),
+    qual é a probabilidade de ele estar cursando Engenharia Agronômica
+    (A)?
+  \item[]<3-> $$P(A\mid M) = \frac{40}{60} = 0,6667$$
+  \item[]<4->
+    $$=\frac{\frac{40}{265}}{\frac{60}{265}} = \frac{P(A\cap M)}{P(M)}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{ccccc}\hline
+      & \multicolumn{3}{c}{Curso} & \\
+      Sexo & Engenharia & Engenharia & Economia & Total\\
+      & Agrônomica (A) & Florestal (F) & Agroindustrial (E) &      \\ \hline
+      Masculino (H) & 160 & 30 & 15 & 205 \\
+      Feminino (M)  &  40 & 10 & 10 &  60 \\ \hline
+      Total         & 200 & 40 & 25 & 265 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item<2-> Qual é a probabilidade de um aluno escolhido ao acaso estar
+    cursando Engenharia Florestal (F) dado que ele é do sexo feminino
+    (M)?
+  \item[]<3-> $$P(F\mid M) = \frac{10}{60} = 0,1667$$
+  \item[]<4->$$=\frac{\frac{10}{265}}{\frac{60}{265}} = \frac{P(F\cap
+      M)}{P(M)}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+  \begin{block}{Definição}
+    Dados dois eventos quaisquer, $A$ e $B$, sendo $P(B) > 0$, definimos
+    a probabilidade condicional de $A$ dado $B$, como sendo:
+    $$P(A\mid B) = \frac{P(A\cap B)}{P(B)}$$
+  \end{block}
+
+  \begin{itemize}
+  \item[]<2-> {\bf Observação:}
+    $$P(B\mid A) = \frac{P(B\cap A)}{P(A)} = \frac{P(A\cap B)}{P(A)}$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+  \begin{block}{Regra do Produto}
+    $$P(A\cap B) = P(B) \times P(A\mid B)$$
+    $$           = P(A) \times P(B\mid A)$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  {\bf Exemplo}: Uma urna contém três bolas brancas e duas bolas pretas
+  de onde foram feitas duas extrações de 1 bola ao acaso e {\bf sem
+    reposição}.
+
+  Considere os seguintes eventos:
+  \begin{itemize}
+  \item $B_1$: sair bola branca na primeira extração
+  \item $B_2$: sair bola branca na segunda extração
+  \item $P_1$: sair bola preta na primeira extração
+  \item $P_2$: sair bola preta na segunda extração
+  \end{itemize}
+
+  \begin{itemize}
+  \item[]<2-> Os eventos $B_1$ e $B_2$ são independentes?
+  \item[]<3-> Os eventos $P_1$ e $P_2$ são independentes?
+  \item[]<4-> Os eventos $P_1$ e $B_2$ são independentes?
+  \end{itemize}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  {\bf Exemplo}: Uma urna contém três bolas brancas e duas bolas pretas
+  de onde foram feitas duas extrações de 1 bola ao acaso e {\bf sem
+    reposição}.
+
+  Considere os seguintes eventos:
+  \begin{itemize}
+  \item $B_1$: sair bola branca na primeira extração
+  \item $B_2$: sair bola branca na segunda extração
+  \item $P_1$: sair bola preta na primeira extração
+  \item $P_2$: sair bola preta na segunda extração
+  \end{itemize}
+  \vspace{0.3cm}
+
+  Pede-se:
+  \begin{enumerate}[(a)]
+    \setlength\itemsep{0.7em}
+  \item Calcular a probabilidade de sair bola branca na primeira
+    extração e preta na segunda extração;
+  \item Construir o espaço amostral e indicar as probabilidades
+    associadas a cada um dos pontos amostrais.
+  \end{enumerate}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{enumerate}[(a)]
+  \item Calcular a probabilidade de sair bola branca na primeira
+    extração e preta na segunda extração;
+    $$P(B_1\cap P_2) = P(B_1)\times P(P_2|B_1)$$
+
+    $P(B_1) = \frac{3}{5}$
+
+    $P(P_2\mid B_1) = \frac{2}{4}$
+
+    $$P(B_1\cap P_2) = \frac{3}{5}\times\frac{2}{4} = \frac{6}{20} = 0,30$$
+
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  {\bf Exercício}: Consideremos o mesmo caso anterior, porém {\bf com
+    reposição} da primeira bola extraída antes da extração da segunda
+  bola.
+
+  \begin{itemize}
+    \setlength\itemsep{0.8em}
+  \item Os eventos $B_1$ e $B_2$ são independentes?
+  \item Os eventos $P_1$ e $P_2$ são independentes?
+  \item Construa o espaço amostral e indicar as probabilidades
+    associadas a cada um dos pontos amostrais.
+  \end{itemize}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  {\bf Exercício}: Consideremos o mesmo caso anterior, porém {\bf com
+    reposição} da primeira bola extraída antes da extração da segunda
+  bola.\\[0.cm]
+
+  Calcule as seguintes probabilidades:
+  \begin{itemize}
+    %\setlength\itemsep{0.8em}
+  \item $P(B_2)$
+  \item $P(P_2)$
+  \item $P(B_2\mid B_1)$
+  \item $P(B_2\mid P1)$
+  \item $P(P_2\mid B_1)$
+  \item $P(P_2\mid P_1)$
+  \end{itemize}
+  Construa o espaço amostral e indicar as probabilidades
+  associadas a cada um dos pontos amostrais.
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  Note que:
+  \begin{itemize}
+  \item[] $B_2$ e $B_1$ são eventos independentes e que
+    $P(B_2\mid B_1) = P(B_2)$
+  \item[] $B_2$ e $P_1$ são eventos independentes e que
+    $P(B_2\mid P_1) = P(B_2)$
+  \item[] $P_2$ e $B_1$ são eventos independentes e que
+    $P(P_2\mid B_1) = P(P_2)$
+  \item[] $P_2$ e $P_1$ são eventos independentes e que
+    $P(P_2\mid P_1) = P(P_2)$
+  \end{itemize}
+
+  \begin{block}{Generalizando,}
+    se dois eventos, $A$ e $B$, são independentes, temos que
+    $$P(A\mid B) = P(A) \qquad \mbox{ou} \qquad P(B\mid A) = P(B)$$
+  \end{block}
+
+  Pela regra do produto de probabilidades:
+  $$P(A\cap B) = P(B)\times P(A\mid B)$$
+  $$= P(A)\times P(B\mid A)$$
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Probabilidade condicional e independência}
+
+  \begin{block}{Independência}
+    Dois eventos $A$ e $B$ são independentes se, e somente se,
+    $$P(A\cap B) = P(A)\times P(B)$$
+  \end{block}
+  \vspace{.5cm}
+
+  {\bf Observação}: Dois eventos são mutuamente exclusivos se, e somente
+  se, $P(A\cap B) = 0$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Teorema de Bayes}
+
+  \begin{block}{Exemplo}
+    Temos três profissionais: um engenheiro florestal, um biólogo e um
+    engenheiro civil. Cada um deles plantou dez mudas de álamos em vasos
+    numa casa de vegetação. Sobreviveram nove das plantadas pelo
+    engenheiro florestal, cinco pelo biólogo e duas pelo engenheiro
+    civil. Dos trinta vasos, escolhe-se um ao acaso, e verifica-se se a
+    muda sobreviveu. Se ela sobreviveu, qual é a probabilidade de ela
+    ter sido plantada pelo engenheiro florestal?
+  \end{block}
+
+  Sejam os eventos:
+  {\footnotesize
+    \begin{tabular}{ll}
+      $S$: a muda sobreviver &
+      $F$: muda plantada pelo Engenheiro Florestal \\
+      $B$: muda plantada pelo Biólogo &
+      $C$: Muda plantada pelo Engenheiro Civil\\
+    \end{tabular}
+  }
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Teorema de Bayes}
+
+  \begin{block}{Teorema de Bayes}
+    Suponha que os eventos $C_1, C_2, \ldots, C_k$ formem uma partição
+    do espaço amostral, $\Omega$ e que suas probabilidades sejam
+    conhecidas. Suponha, ainda, que para um evento $A$, conheçam-se as
+    probabilidades condicionais, $P(A|C_i)$ para todo $i=1,\ldots,
+    k$. Então, para qualquer $j$,
+
+    $$P(C_j|A) = \frac{P(A|C_j)P(C_j)}{\sum_{i=1}^{k}P(A|C_i)P(C_i)}.$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Teorema de Bayes}
+
+  \begin{block}{Exemplo}
+    Uma água é contaminada se forem encontrados bacilos tipo A ou tipo B
+    e C, simultaneamente. As probabilidade de se encontrarem bacilos
+    tipo A, B e C são, respectivamente, 0,30, 0,20 e 0,80. Existindo
+    bacilos do tipo A não existirão bacilos tipo B. Existindo bacilos
+    tipo B, a probabilidade de existirem bacilos tipo C é reduzida à
+    metade. Calcular:\\[0.2cm]
+
+    \begin{itemize}
+    \item a probabilidade de ocorrer bacilos tipo B ou C ou ambos;
+    \item a probabilidade de a água estar contaminada;
+    \item sabendo que a água está contaminada, calcular a probabilidade
+      de ela ter sido contaminada pelo bacilos do tipo B e C.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Exercícios}
+  \begin{enumerate}[1]
+  \item Dados dois eventos $B$ e $C$, tais que, $P(B) = 0,6$,
+    $P(C) = 0,3$ e $P(B\cap C) = 0,20$, verifique se $B$ e $C$ são
+    independentes.
+  \item Uma urna contém 6 bolas azuis e 4 brancas, de onde são retiradas
+    duas bolas ao acaso e sem reposição. Sejam os eventos $A_1$, sair
+    bola azul na primeira extração, e $B_2$, sair bola branca na segunda
+    extração. Pede-se:\\[0.2cm]
+    \begin{itemize}
+      \setlength\itemsep{0.8em}
+    \item Calcular as probabilidades de todos os possíveis resultados do
+      experimento;
+    \item Calcular a probabilidade de sair bola branca na segunda
+      extração;
+    \item Calcular a probabilidade de ter saído bola azul na primeira
+      extração dado que saiu branca na segunda extração;
+    \item Verificar se $A_1$ e $B_2$ são eventos independentes.
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Exercícios}
+
+  \begin{enumerate}[3]
+  \item Três fábricas fornecem equipamentos de precisão para o
+    laboratório de química da universidade. Apesar de serem aparelhos de
+    precisão, existe uma pequena chance de superestimação das medidas
+    efetuadas. A tabela a seguir, apresenta as probabilidades associadas
+    às categorias dos equipamentos produzidos em cada fábrica:\\[0.2cm]
+    \begin{center}
+      \begin{tabular}{cccc} \hline
+        & \multicolumn{3}{c}{Categoria} \\
+        \cmidrule(lr){2-4}
+        Fábrica & Subestima & Exata & Superestima \\ \hline
+        I       & 0,010     & 0,98  & 0,010 \\
+        II      & 0,005     & 0,98  & 0,015 \\
+        III     & 0,000     & 0,99  & 0,01 \\ \hline
+      \end{tabular}
+    \end{center}
+  \end{enumerate}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Exercícios}
+
+  As fábricas fornecem, respectivamente, 20\%, 30\% e 50\% dos aparelhos
+  utilizados. Escolhemos, ao acaso, um desses aparelhos e perguntamos a
+  probabilidade de:\\[0.3cm]
+  \begin{itemize}
+  \item Haver superestimação de medida?
+  \item Não haver superestimação de medida?
+  \item Dando medidas exatas, ter sido fabricado em III?
+  \item Ter sido produzido por I, dado que não subestima as medidas?
+  \end{itemize}
+\end{frame}
+
+\end{document}
