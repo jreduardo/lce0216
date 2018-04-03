@@ -31,7 +31,7 @@
 
 \title[LCE0216]{LCE0216 \\[-0.1cm]
   Introdução à Bioestatística Florestal \\[0.2cm]
-  1. Estatística Descritiva}
+  2. Estatística Descritiva}
 \author[Demétrio C. G. B.]{
   Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
   Monitores: Eduardo E. R. Junior \& Giovana Fumes
