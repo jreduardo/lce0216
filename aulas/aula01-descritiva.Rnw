@@ -22,6 +22,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage{graphicx}
 
 %-------------------------------------------
@@ -475,23 +476,34 @@ lattice::xyplot(fx ~ x | comp,
 %-------------------------------------------
 \begin{frame}
   \frametitle{Representação Tabular - Variáveis Contínuas}
+  \small
 
-  Esquematicamente, sendo $l$ os limites para definição das classes:
+  Esquematicamente,
+  \vspace{-0.5cm}
+
   \begin{table}
     \caption{Título da Tabela}
-    \begin{tabular}{l r}
+    \begin{tabular}{l l r}
       \hline
-      Classes & Frequências \\
+      Classes & Classes & Frequências \\
       \hline
-      $l_1 \vdash l_2$ & $f_1$ \\
-      $l_2 \vdash l_3$ & $f_2$ \\
-      $\vdots$ & $\vdots$ \\
-      $l_{k-1} \vdash l_{k}$ & $f_k$ \\
+      $[l_1, l_2)$    & $l_1 \vdash l_2$ & $f_1$ \\
+      $[l_2, l_3)$    & $l_2 \vdash l_3$ & $f_2$ \\
+      $\vdots$        & $\vdots$ & $\vdots$ \\
+      $[l_{k-1}, l_k)$ & $l_{k-1} \vdash l_{k}$ & $f_k$ \\
       \hline
-              & $\sum_{i=1}^{k} f_i=n$ \\
+      &       & $\sum_{i=1}^{k} f_i=n$ \\
       \hline
     \end{tabular}
   \end{table}
+
+  em que os limites $l_i$ são definidos como:
+  $$
+  l_i = \begin{dcases}
+    x_{(1)},     & \text{se i=1}\\
+    l_{i-1} + h, & \text{se i=2,\ldots,k}\\
+  \end{dcases}
+  $$
 
   Analogamente ao caso discreto, pode-se definir a \textbf{frequência
     relativa} como $f_{i}^{'}=\frac{f_i}{n} $, bem como as frequências
@@ -503,7 +515,7 @@ lattice::xyplot(fx ~ x | comp,
   \frametitle{Representação Tabular - Variáveis Contínuas}
 
   {\bf Exemplo:} Construir a tabela de distribuição de frequências para
-  a variável diâmetro das árvores em uma floresta.
+  a variável diâmetro das árvores (cm) em uma floresta.
 
   \begin{block}{Dados observados}
     \centering \small
@@ -519,10 +531,10 @@ lattice::xyplot(fx ~ x | comp,
   \pause
   Obtendo as quantidades para construção da tabela:\\[0.3cm]
 
-  $A = x_{(n)} - x_{(1)} = 92,5 - 10,2 = 82,3$\\
+  $A = x_{(n)} - x_{(1)} = 92,5 - 10,2 = 82,3$ (cm)\\
   $K = \sqrt{n} = \sqrt{40} = 6,32 \Rightarrow 7 $ classes\\
   $K = 1 + \log_2 n = 1 + \log_2 40 = 6,32 \Rightarrow 7 $ classes\\
-  $h = A / K = 82,3 / 7 \approx 11,8$.\\
+  $h = A / K = 82,3 / 7 \approx 11,8$ (cm).\\
 
 \end{frame}
 
@@ -532,8 +544,8 @@ lattice::xyplot(fx ~ x | comp,
 
   \begin{center}
     \begin{table}
-      \caption{Distribuição de frequências para diâmetro das árvores em
-        uma floresta}
+      \caption{Distribuição de frequências para diâmetro das árvores (cm)
+        em uma floresta.}
       \begin{tabular}{lcccc} \hline
         Diâmetro & $f_i$ & $f'_i$ & $F_i$ & $F'_i$ \\ \hline
         10,2 $\vdash$ 22,0 & 22 & 0,550 & 22 & 0,550\\
@@ -880,7 +892,7 @@ points(ht2$breaks, c(0, ht2$counts), type = "b")
 
   \vspace{0.5cm}
 
-  Neste caso, a construção de tabelas e gráficos são feitas de forma
+  Neste caso, a construção de tabelas e gráficos é feita de forma
   análoga ao caso das variáveis qualitativas nominais (\textbf{tabela de
     frequência} e \textbf{diagramas de barra} ou \textbf{gráfico de
     setores}).
