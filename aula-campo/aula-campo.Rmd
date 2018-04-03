@@ -1,0 +1,213 @@
+---
+title: |
+  | Bioestatística Florestal - Aula de campo
+  | Análise descritiva dos dados obtidos em aula
+author: Eduardo E. R. Junior \& Clarice G. B. Demétrio
+date: "30 de março de 2018"
+header-includes:
+  - \usepackage{mathpazo}
+  - \usepackage{float}
+output:
+  pdf_document:
+    highlight: default
+---
+
+```{r include=FALSE}
+
+library(ggplot2)
+library(cowplot)
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    comment = "#>",
+    fig.align = "center",
+    fig.pos = "H",
+    out.width = ".95\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+```
+
+Este arquivo contém as análises realizadas a partir do conjunto de dados
+mensurados na aula de campo. Na aula de campo, formaram-se quatro grupos
+em que cada um mensurou, em linha, o comprimento à altura do peito
+(`CAP`) e se há ou não bifurcação (`bifur`) em árvores Sapucaia.
+
+Os dados foram anotados em uma folha e organizados em uma planilha
+eletrônica (Excel, LibreOffice, Gnumeric, etc.) e posteriormente
+exportados em formato texto, nesse documento o formato do arquivo
+exportado `.tsv`, cujo separador é a tabulação. Abaixo são apresentados
+os códigos em R para análise dos dados
+
+
+1. O primeiro passo é a leitura (ou carregamento) dos dados na sessão R,
+   isso é feito com a função `read.table(...)`. Note os argumentos da
+   função, o que cada um representa é documentado na ajuda sobre ela
+   (`help(read.table)`).
+
+```{r}
+
+# Lê os dados
+dados <- read.table("dados.tsv",
+                    header = TRUE,
+                    dec = ".",
+                    sep = "\t",
+                    encoding = "UTF-8")
+
+# Verifica a estrutura do objeto (note o número de observações, número
+# de variáveis e o tipo das variáveis)
+str(dados)
+
+```
+
+2. Agora desejamos obter o DAP. Embora tenhamos mensurado o CAP,
+   comumente reporta-se os resultados na escala do DAP.
+
+```{r}
+
+# Adiciona uma coluna com o diâmetro à altura do peito
+dados$DAP <- dados$CAP / pi
+str(dados)
+
+```
+
+3. Com a variável de interesse (DAP) já calculada, agora podemos
+   verificar algumas estatísticas descritivas.
+
+```{r}
+
+# Calcula estatísticas de posição para DAP (geral)
+cbind(c("Média" = mean(dados$DAP),
+        "Mediana" = median(dados$DAP),
+        "1º quartil" = quantile(dados$DAP, prob = 1/4),
+        "3º quartil" = quantile(dados$DAP, prob = 3/4),
+        "Mínimo" = min(dados$DAP),
+        "Máximo" = max(dados$DAP)))
+
+# Calcula estatísticas de dispersão para DAP (geral)
+cbind(c("Variância" = var(dados$DAP),
+        "Desvio Padrão" = sd(dados$DAP),
+        "Amplitude" = max(dados$DAP) - min(dados$DAP),
+        "Amplitude inter-quartílica" = IQR(dados$DAP),
+        "Coef. de variação" = sd(dados$DAP)/mean(dados$DAP)))
+
+```
+
+4. Uma hipótese levantada sobre o estudo realizado é que árvores com
+   bifurcação apresentam um menor volume de madeira do que as àrvores
+   não bifurcadas. Portanto, podemos verificar as estatísticas
+   descritivas para as àrvores bifurcadas e não bifurcadas.
+
+```{r}
+
+# Calcula estatísticas descritivas para DAP (estratificado por bifurcação)
+tapply(dados$DAP, dados$bifur, length) # número de árvores
+tapply(dados$DAP, dados$bifur, mean) # média
+tapply(dados$DAP, dados$bifur, sd)   # variância
+
+# Calcula várias estatísticas de uma vez (posição)
+tapply(dados$DAP, dados$bifur, function(x) {
+    cbind(c("Variância" = var(x),
+            "Desvio Padrão" = sd(x),
+            "Amplitude" = max(x) - min(x),
+            "Amplitude inter-quartílica" = IQR(x),
+            "Coef. de variação" = sd(x)/mean(x)))
+})
+
+# Calcula várias estatísticas de uma vez (dispersão)
+tapply(dados$DAP, dados$bifur, function(x) {
+    cbind(c("Média" = mean(x),
+            "Mediana" = median(x),
+            "1º quartil" = quantile(x, prob = 1/4),
+            "3º quartil" = quantile(x, prob = 3/4),
+            "Mínimo" = min(x),
+            "Máximo" = max(x)))
+})
+
+```
+
+5. Uma forma mais interessante de ver os resultados é a partir de
+   gráficos. Nesse documento os gráficos serão realizados a partir do
+   pacote [`ggplot2`](http://ggplot2.tidyverse.org/) que possui
+   facilidades para gráficos estratificados além de fornecer um tema
+   padrão bastante agradável e o pacote
+   [`cowplot`](https://cran.r-project.org/web/packages/cowplot/index.html)
+   para exibir gráficos lado a lado
+
+```{r, eval=FALSE}
+
+# Instala o pacote ggplot2
+install.packages(c("ggplot2", "cowplot"))
+
+# Carrega o pacote ggplot na sessão
+library(ggplot2)
+library(cowplot)
+
+```
+
+Com os pacotes devidamente instalados e carregados, faz-se:
+
+```{r, fig.width=9, fig.height=4}
+
+# Histograma (geral)
+g1 <- ggplot(dados, aes(x = DAP)) +
+    geom_histogram(bins = 6) +
+    labs(x = "Diâmetro à altura do peito",
+         y = "Frequência absoluta")
+
+# Boxplot (geral)
+g2 <- ggplot(dados, aes(y = DAP, x = "Geral")) +
+    geom_boxplot() +
+    labs(x = "",
+         y = "Diâmetro à altura do peito")
+
+# Exibe os gráficas na mesma janela
+plot_grid(g1, g2)
+
+```
+
+```{r, fig.width=10, fig.height=4}
+
+# Histograma (estratificado por bifurcação)
+g1 <- ggplot(dados, aes(x = DAP)) +
+    geom_histogram(bins = 6) +
+    labs(x = "Diâmetro à altura do peito",
+         y = "Frequência absoluta") +
+    facet_wrap(~bifur, ncol = 2)
+
+# Boxplot (estratificado por bifurcação)
+g2 <- ggplot(dados, aes(y = DAP, x = bifur)) +
+    geom_boxplot() +
+    labs(x = "Àrvore bifurcada",
+         y = "Diâmetro à altura do peito")
+
+# Exibe os gráficas na mesma janela
+plot_grid(g1, g2)
+
+```
+
+6. Outra curiosidade é se os resultados são muitos distintos em cada
+   linha, como cada grupo ficou responsável por mensurar os resultados
+   em cada linha precisamos apenas estratificar os resultados por
+   grupo. Aqui só faremos os gráficos, emboras as estatísticas pontuais
+   também possam ser calculadas.
+
+```{r, fig.width=10, fig.height=8}
+
+# Histograma (estratificado por bifurcação)
+g1 <- ggplot(dados, aes(x = DAP)) +
+    geom_histogram(bins = 6) +
+    labs(x = "Diâmetro à altura do peito",
+         y = "Frequência absoluta") +
+    facet_wrap(~grupo, ncol = 4)
+
+# Boxplot (estratificado por bifurcação)
+g2 <- ggplot(dados, aes(y = DAP, x = grupo)) +
+    geom_boxplot() +
+    labs(x = "Grupo",
+         y = "Diâmetro à altura do peito")
+
+# Exibe os gráficas na mesma janela
+plot_grid(g1, g2, ncol = 1)
+
+```
