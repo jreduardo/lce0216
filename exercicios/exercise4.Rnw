@@ -1,0 +1,250 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático 4 - probabilidade\\
+    03 de abril de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+
+\begin{document}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    fig.align = "center",
+    fig.pos = "h",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.}Em um levantamento da avifauna, as aves foram classificadas
+segundo sua dieta preferencial em insentívoras (I) e frugívoras(F).
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Represente o espaço amostral para uma amostra de três aves;
+\item Represente o evento A = ``Pelo menos uma ave é frugívora'';
+\item Represente o evento B = ``Exatamente duas aves são frugívoras''.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} Em um levantamento em floresta de {\it Pinus oocarpa}, foram
+observadas 830 árvores, segundo a tabela abaixo. Os defeitos são
+excludentes, isto é, cada árvore foi classificada em apenas uma das
+quatro classes de defeito.
+
+\begin{center}
+  \begin{tabular}{cccccc} \hline
+    & \multicolumn{4}{c}{Classes de Defeito do Tronco} & \\
+    Idade	& Bifurcada & Tortas & Rabo-de-raposa & Sem defeito & Total \\ \hline
+    Jovem & 24 & 91 & 78 & 181 & 374 \\
+    Madura & 36 & 74 & 76 & 270 & 456 \\ \hline
+    Total & 60 & 165 & 154 & 451 & 830 \\ \hline
+  \end{tabular}
+\end{center}
+Considerando os seguintes eventos: A = ``Árvore jovem''; B = ``Árvore
+madura''; C = ``Árvore bifurcada''; D = ``Árvore torta''; E = ``Árvore
+com rabo-de-raposa''; F = ``Árvore jovem e bifurcada''; G = ``Árvore
+madura e torta'' e H = ``Árvore jovem sem defeitos'', calcule as
+seguintes probabilidades:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item $\Pr(\text{A} \cup \text{C})$
+\item $\Pr(\text{B} \cup \text{E})$
+\item $\Pr(\text{D} \cup \text{F})$
+\item $\Pr(\text{C} \cup \text{G})$
+\item $\Pr(\text{B} \cup \text{H})$
+\item $\Pr(\text{C} \cup \text{D} \cup \text{E})$
+\item $\Pr(\text{A} \cap (\text{C} \cup \text{D} \cup \text{E}))$
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.} Um estudo do comportamento de capivaras produziu o seguinte
+resultado:
+
+\begin{center}
+  \begin{tabular}{cccc} \hline
+    & \multicolumn{2}{c}{Comportamento} & \\
+    Ambiente & Agressivo & Não Agressivo & Total \\ \hline
+    Restrito & 22 & 5 & 27 \\
+    Amplo & 20 & 12 & 32 \\ \hline
+    Total & 42 & 17 & 59 \\ \hline
+  \end{tabular}
+\end{center}
+
+Se um animal for selecionado aleatoriamente deste grupo:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Qual a probabilidade deste animal estar em um ambiente restrito?
+\item Qual a probabilidade deste animal ter um comportamento agressivo?
+\item Se este animal está em um ambiente restrito, qual a probabilidade
+  dele ter um comportamento agressivo?
+\item Se este animal está em um ambiente restrito, qual a probabilidade
+  dele ter um comportamento não agressivo?
+\item Se este animal tem um comportamento agressivo, qual a
+  probabilidade dele estar em um ambiente restrito?
+\item Se este animal tem um comportamento agressivo, qual é a
+  probabilidade dele estar num ambiente amplo?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{4.} Um aluno de Engenharia Florestal considera as chances de
+conseguir dois estágios práticos. As chances dele conseguir o estágio
+numa empresa florestal são de 80\%, enquanto que as chances de conseguir
+um estágio num parque nacional são de 70\%. As possibilidades de
+conseguir ambos os estágios, entretanto, são de 50\%. Pergunta-se:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Qual a probabilidade do aluno conseguir o estágio no parque
+  nacional, dado que ele conseguiu estágio na empresa?
+\item Qual a probabilidade do aluno conseguir o estágio na empresa
+  florestal, dado que ele conseguiu o estágio no parque nacional?
+\item Qual a probabilidade do aluno conseguir pelo menos um dos
+  estágios?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} Numa certa cidade, 40\% da população têm cabelos castanhos,
+25\% têm olhos castanhos e 15\% têm cabelos e olhos castanhos. Uma
+pessoa da cidade é selecionada aleatoriamente.
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Se ela tem cabelos castanhos, qual é a probabilidade dela ter
+  também olhos castanhos?
+\item Qual é a probabilidade dela não ter nem cabelos nem olhos
+  castanhos?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{6.} Temos um pacote com 20 sementes com 40\% de poder
+germinativo cada. Duas sementes são selecionadas aleatoriamente e
+plantadas. Qual é a probabilidade de que:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Duas sementes não germinem;
+\item Duas sementes germinem;
+\item Somente uma semente germine.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{7.} Num estudo sobre fecundidade de duas raças suínas, foram
+examinados 28 animais, obtendo-se o resultado exposto na Tabela
+\ref{tab:7}.
+
+\begin{table}[H]
+  \centering
+  \caption{Frequência absoluta (relativa) de fecundidade de duas raças
+    suínas}
+  \label{tab:7}
+  \begin{tabular}{cccc} \hline
+    & \multicolumn{2}{c}{Fecundidade} & \\ \cline{2-3}
+    Raças & Fecundas ($F$) & Não fecundas ($\bar{F}$) & total \\ \hline
+    A (A) & 12 (0,43) & 2 (0,07) & 14 (0,50) \\
+    B (B) & 8 (0,28) & 6 (0,22) & 14 (0,50) \\ \hline
+    Total & 20 (0,71) & 8 (0,29) & 28 (1,00) \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item A fecundidade é independente da raça? Justifique através da
+  definição de independência de eventos.
+\item Calcule $\Pr(\text{F} \mid \text{A})$?
+\item Calcule $\Pr(\text{F} \cup \text{A})$?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{8.} Uma empresa de sementes fiscalizadas vende pacotes com 20 kg
+cada. As máquinas A, B e C enchem 25, 35 e 40\% do total produzido,
+respectivamente. Da produção de cada máquina 5, 4 e 2\%, respectivamente
+são pacotes fora do peso aceitável. Escolhe-se ao acaso um pacote e
+verifica-se que está fora do peso aceitável. Qual a probabilidade de que
+o pacote tenha vindo da máquina A?
+\vspace{1cm}
+
+\noindent
+\textbf{9.} Um técnico de campo detecta uma certa doença, caso ela
+exista em uma árvore, com probabilidade 0,9. Se a doença não existir, o
+técnico corretamente aponta isso com probabilidade 0,8. Considere que o
+técnico vistoriou uma áre com 10\% de incidência da doença. Para uma
+árvore escolhida ao acaso, qual a probabilidade de ela estar realmente
+doente, se o técnico indicou que ela possui a doença?
+
+\end{document}

@@ -43,7 +43,7 @@
     \vspace{0.1cm}
     LCE0216 - Introdução à Bioestatística Florestal\\
     Profª Clarice Garcia Borges Demétrio\\
-    Exercício prático - estatística descritiva\\
+    Exercício prático 1 - estatística descritiva\\
     13 de março de 2018\\
   \end{minipage}
   \hfill

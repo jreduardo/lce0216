@@ -1,0 +1,139 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático 2 - estatística descritiva\\
+    26 de março de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+
+\begin{document}
+% \setlength\parindent{0pt}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    fig.align = "center",
+    fig.pos = "h",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.} Construa tabelas para resumir a informação contida nos
+seguintes conjuntos de dados:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Classes de capacidade de uso do solo (SR - sem restrições; RCA - com
+  restrições a culturas anuais; P - pastagens; CP - culturas perenes; F -
+  atividades florestais).
+  \begin{center}
+    \begin{tabular}{ccccccc} \hline
+      P& RCA& CP& CP& F& P& P\\
+      P& CP& CP& SR& CP& P& RCA\\
+      F& CP& CP& P& F& P& RCA\\
+      P& RCA& SR& CP& SR& P& RCA\\
+      P& F& CP& RCA& SR& F& F\\
+      RCA& P& CP& P& CP& RCA& P\\
+      CP& P& CP& F& SR& F& F\\
+      F& F& RCA& RCA& P& P& CP\\
+      CP& CP& CP& CP& RCA& CP& CP\\
+      RCA& CP& SR& CP\\ \hline
+    \end{tabular}
+  \end{center}
+
+\item Densidade da madeira (g/cm$^3$) de clones de {\it Eucalyptus
+    grandis}.
+  \begin{center}
+    \begin{tabular}{cccccc} \hline
+      0,347& 0,373& 0,297& 0,360& 0,338& 0,357\\
+      0,343& 0,345& 0,392& 0,330& 0,405& 0,364\\
+      0,294& 0,267& 0,413& 0,295& 0,427& 0,333\\
+      0,324& 0,230& 0,445& 0,327& 0,359& 0,446\\
+      0,256& 0,329& 0,471& 0,306& 0,328\\ \hline
+    \end{tabular}
+  \end{center}
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} Considerando os dados apresentados no exercício 1, contrua:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Um gráfico de barras para os dados referentes as classes de
+  capacidade de uso do solo.
+\item Um histograma para os dados de densidade de madeira de clones de {\it
+    Eucalyptus grandis}.
+\end{enumerate}
+
+\end{document}

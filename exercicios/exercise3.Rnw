@@ -1,0 +1,281 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático 3 - estatística descritiva\\
+    29 de março de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+
+\begin{document}
+% \setlength\parindent{0pt}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    fig.align = "center",
+    fig.pos = "h",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.} Os dados da Tabela \ref{tab:1} referem-se ao diâmetro de
+árvores em uma floresta.
+
+\begin{table}[H]
+  \centering
+  \caption{Diâmetro de árvores em uma floresta.}
+  \label{tab:1}
+  \begin{tabular}{ccccccccc} \hline
+    25,60 & 27,75 & 29,95 & 32,20 & 33,90 & 34,75 & 35,20 & 36,00 & 37,10 \\
+    39,20 & 41,75 & 44,05 & 25,90 & 28,30 & 31,25 & 32,20 & 33,95 & 34,80 \\
+    35,55 & 36,70 & 38,90 & 39,55 & 42,80 & 45,20 & 25,90 & 29,05 & 31,70 \\
+    33,75 & 34,75 & 35,10 & 35,65 & 37,05 & 39,10 & 40,45 & 43,95 & 46,74 \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Construa a tabela de distribuição de frequências com seis classes
+  para os dados.
+\item Construa o histograma.
+\item Indique um valor representativo para os dados; comente sobre a
+  assimetria.
+\item Classifique a variável que compõe este banco de dados.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} Um talhão de 3 ha de cana-de-açúcar foi subdividido em
+parcelas de 1000$m^2$ cada uma. As produções referentes a essas
+parcelas, em toneladas, são:
+
+\begin{center}
+  \begin{tabular}{rrrrrr}
+    \hline
+    9,8 & 9,3 & 10,1 & 9,5  & 10,8 & 9,0 \\
+    8,6 & 8,8 & 9,2  & 10,1 & 8,7  & 7,8 \\
+    8,3 & 9,5 & 9,9  & 9,2  & 8,7  & 9,0 \\
+    9,6 & 9,8 & 10,2 & 9,7  & 11,4 & 9,4 \\
+    8,7 & 9,4 & 9,1  & 8,9  & 9,3  & 12,5 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Construa um diagrama de ramos e folhas para a apresentação desses
+  dados.
+\item Calcule os quartis. Faça um esboço do {\it box-plot}. Interprete
+  os resultados com relação à tendência central, dispersão e assimetria.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.} Considere a produção de madeira (m$^3$/ha) de diferentes
+talhões de {\it Eucalyptus camaldulensis} aos 7 anos.
+
+\begin{center}
+  \begin{tabular}{cccccccccc} \hline
+    220 & 223 & 218 & 216 & 228 & 246 & 250 & 261 & 276 & 239 \\
+    174 & 232 & 171 & 225 & 208 & 245 & 248 & 214 & 204 & 270 \\
+    201 & 271 & 238 & 132 & 270 & 256 & 189 & 199 & 143 & 218 \\
+    221 & 271 & 183 & 148 & 221 & 275 & 186 & 208 & 198 & 237 \\
+    223 & 201 & 245 & 198 & 245 & 166 & 228 & 204 & 224 & 166 \\ \hline
+  \end{tabular}
+\end{center}
+
+\noindent Obtenha as estatísticas (a) média; (b) mediana; (c) primeiro e
+o terceiro quartis; (d) percentil 90\%; (e) variância;  (f) desvio
+padrão; e coeficiente de variação (CV).
+\vspace{1cm}
+\pagebreak
+
+\noindent
+\textbf{4.} A distribuição dos diâmetros das árvores de uma floresta
+nativa está representada na tabela de frequências abaixo:
+
+\begin{center}
+  \begin{tabular}{cc} \hline
+    Classes de & Frequência \\
+    Diâmetro (cm) & \\ \hline
+    10 $\vdash$20 & 351 \\
+    20 $\vdash$30 & 160 \\
+    30 $\vdash$40 &  86 \\
+    40 $\vdash$50 &  40 \\
+    50 $\vdash$60 &  20 \\
+    60 $\vdash$70 &   4 \\
+    70 $\vdash$80 &   4 \\
+    80 $\vdash$90 &   3 \\
+    90 $\vdash$100&   1 \\ \hline
+    Total         & 669 \\ \hline
+  \end{tabular}
+\end{center}
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Qual o diâmetro médio e o diâmetro mediano das árvores dessa
+  floresta? Qual dos dois é maior?
+\item Qual é a classe modal dos diâmetros das árvores desta floresta?
+  Calcule a moda.
+\item Qual o desvio padrão dos diâmetros das árvores desta floresta?
+\item Um Engenheiro Florestal deseja fazer um corte seletivo retirando
+  20\% das maiores árvores.  Qual o diâmetro mínimo das árvores a serem
+  removidas?
+\item Uma Engenheira Florestal deseja fazer um corte seletivo retirando
+  40\% das menores árvores.  Qual o diâmetro mínimo das árvores
+  remanescentes?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} Para os dados do exercício 2, construa uma tabela de classes
+de frequências e represente os dados graficamente, por meio do
+histograma e do polígono de frequências.
+\vspace{0.5cm}
+
+\noindent
+\textbf{6.} Dispõe-se de uma relação de 36 produções em kg/ha de milho
+do município de Chapecó e uma relação de 36 produções, também em kg/ha,
+do município de Campos Novos. A distribuição de frequências é dada na
+Tabela \ref{tab:6}.
+
+\begin{table}[H]
+  \centering
+  \caption{Distribuição de frequências do rendimento de milho para Chapecó
+    e Campos Novos}
+  \label{tab:6}
+\begin{tabular}{cc||cc} \hline
+  Rendimento Chapecó & Frequência & Rendimento Campos Novos & Frequência \\ \hline
+  $4200\vdash 4552$ & 1 & $6613 \vdash 7095$ & 1 \\
+  $4552 \vdash 4904$ & 3 & $7095 \vdash 7577$ & 2\\
+  $4904 \vdash 5256$ & 5 & $7577 \vdash 8059$ & 4\\
+  $5256 \vdash 5608$ & 8 & $8059 \vdash 8541$ & 13\\
+  $5608 \vdash 5960$ & 8 & $8541 \vdash 9023$ & 7\\
+  $5960 \vdash 6312$ & 6 & $9023 \vdash 9505$ & 7\\
+  $6312 \vdash 6664$ & 5 & $9505 \vdash 9987$ & 2\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Construa um histograma para cada localidade. As distribuições
+  apresentam uma forma simétrica? Justifique.
+\item Localize nos histogramas a classe que contém o percentil de ordem
+  90 ($P_{90}$) e calcule seu valor.
+\item Acima de que valor encontram-se 85\% das produções de milho para
+  cada localidade?
+\end{enumerate}
+\vspace{0.5cm}
+\pagebreak
+
+\noindent
+\textbf{7.} Construa uma tabela e faça um gráfico para resumir a
+informação contida no seguinte conjunto de dados:
+\begin{center}
+  \begin{tabular}{ccccccc} \hline
+    R& A& R& B& B& A& R\\
+    A& A& R& B& R& B& R\\
+    A& B& B& R& A& R& B\\
+    B& R& R& A& B& A& B\\
+    \hline
+  \end{tabular}
+\end{center}
+em que A - amarelo, B - branco e R - rosa representam as cores de uma
+espécie de ipê. Que tipo de variável é essa? Qual é a moda desse
+conjunto de dados?
+\vspace{0.5cm}
+
+\noindent
+\textbf{8.}  Os dados a seguir referem-se à contagem do número de
+bifurcações presentes em uma amostra de árvores.
+
+\begin{center}
+  \begin{tabular}{ccccccc} \hline
+    0& 2& 3& 0& 4& 2& 3\\
+    2& 0& 3& 2& 0& 2& 3\\
+    2& 2& 2& 3& 2& 0& 2\\
+    0& 1& 1& 3& 2& 1& 4\\
+    1& 3& 2& 0& 2& 2& 2\\
+    0& 4& 1& 1& 2& 0& \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Construa uma tabela de frequências.
+\item Para os dados organizados na tabela do item a, calcule a média, a
+  mediana, a moda, o primeiro e o terceiro quartis e o percentil 20.
+\item Para os dados organizados na tabela do item a, calcule a
+  variância, o desvio padrão e o coeficiente de variação.
+\item Que tipo de variável compõe este banco de dados?
+\end{enumerate}
+
+\end{document}
