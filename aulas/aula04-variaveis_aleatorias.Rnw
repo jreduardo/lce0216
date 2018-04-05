@@ -1,0 +1,955 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  4. Variáveis Aleatórias}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitores: Eduardo E. R. Junior \& Giovana Fumes
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 05 de abril de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias}
+
+  \begin{block}{\bf Definição}
+    Uma variável aleatória (v.a) é uma função que associa, a cada ponto
+    pertencente a um espaço amostral $(\Omega)$, um único número real.
+    $$
+    \text{v.a}\; X\text{:}\quad \Omega \to \mathbb{R}
+    $$
+  \end{block}
+
+  \begin{figure}[b]
+    \includegraphics[width=7cm]{images/vaexemplo}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Exemplo}
+
+  \begin{block}{}
+    Consideremos o experimento lançamento de duas moedas não viciadas e
+    a observação das faces voltadas para cima.
+
+    O espaço amostral associado a esse experimento é dado por:
+    $$\Omega = \{\mbox{(Cara, Cara), (Cara, Coroa),
+      (Coroa, Cara), (Coroa, Coroa)}\}.$$
+  \end{block}
+
+  Seja, por exemplo, $X$ o número de caras e $Y$ o número de coroas
+  \begin{center}
+    \begin{tabular}{lcc} \hline
+      Possíveis resultados & $x$ & $y$ \\ \hline
+      (Cara, Cara)         & \textcolor[rgb]{1.00,1.00,1.00}{2}   & \textcolor[rgb]{1.00,1.00,1.00}{0} \\
+      (Cara, Coroa)        & \textcolor[rgb]{1.00,1.00,1.00}{1}   & \textcolor[rgb]{1.00,1.00,1.00}{1} \\
+      (Coroa, Cara)        & \textcolor[rgb]{1.00,1.00,1.00}{1}   & \textcolor[rgb]{1.00,1.00,1.00}{1} \\
+      (Coroa, Coroa)       & \textcolor[rgb]{1.00,1.00,1.00}{0}   & \textcolor[rgb]{1.00,1.00,1.00}{2} \\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Exemplo}
+  \begin{block}{}
+    Consideremos o experimento lançamento de duas moedas não viciadas e
+    a observação das faces voltadas para cima.
+
+    O espaço amostral associado a esse experimento é dado por:
+    $$\Omega = \{\mbox{(Cara, Cara), (Cara, Coroa),
+      (Coroa, Cara), (Coroa, Coroa)}\}.$$
+  \end{block}
+
+  Seja, por exemplo, $X$ o número de caras e $Y$ o número de coroas
+  \begin{center}
+    \begin{tabular}{lcc} \hline
+      Possíveis resultados & $x$ & $y$ \\ \hline
+      (Cara, Cara)         & 2   & 0 \\
+      (Cara, Coroa)        & 1   & 1 \\
+      (Coroa, Cara)        & 1   & 1 \\
+      (Coroa, Coroa)       & 0   & 2 \\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Definições}
+  \begin{center}
+    Variáveis aleatórias
+    $\left\{
+      \begin{array}{l}
+        \mbox{discretas}\\
+        \mbox{contínuas}\\
+      \end{array}\right.
+    $
+  \end{center}
+
+  \begin{block}{Variável aleatória discreta}
+    Uma quantidade $X$, associada a cada possível resultado do espaço
+    amostral, é denominada {\bf variável aleatória discreta}, se assume
+    valores em um conjunto enumerável, com certa probabilidade.
+  \end{block}
+
+  \begin{block}{Variável aleatória contínua}
+    Uma quantidade $X$, associada a cada possível resultado do espaço
+    amostral, é denominada {\bf variável aleatória contínua}, se seu
+    conjunto de valores é qualquer intervalo dos números reais, o que
+    seria um conjunto não enumerável.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  \begin{block}{Um problema}
+    Em 24 de março de 2013 foi divulgado o resultado de uma experiência
+    realizada por um grupo de meninas da nona série da Hjallerup School,
+    as quais concluíram que a proximidade dos roteadores WiFi prejudica
+    o desenvolvimento de plantas
+    \href{http://abcnews.go.com/blogs/technology/2013/05/can-wifi-signals-stunt-plant-growth/}{
+      (leia a matéria)}
+  \end{block}
+
+  \begin{figure}[b]
+    \includegraphics[width=4.5cm]{images/va1}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  \small
+
+  \begin{block}{Suposição}
+    Desejamos verificar a validade do estudo de tais meninas e, para
+    tanto, iremos realizar um experimento com plantas de feijão.
+    \begin{itemize}
+    \item São necessários para um certo ensaio, 20 copos com ao menos
+      uma muda;
+    \item Restrição: 40 copos disponíveis e apenas 120 sementes;
+    \item Suposição: porcentagem de germinação da semente do feijão, em
+      condições iguais às do ensaio, é de 30\%.
+    \end{itemize}
+
+    {\bf Ideia:} formar os copos com ao menos uma muda para verificar se
+    a proximidade do roteador prejudica o desenvolvimento da planta.
+  \end{block}
+
+  \begin{multicols}{2}
+    \vspace*{0.05cm}
+    Quantos feijões por copo devemos plantar para a obtenção dos 20
+    copos com ao menos uma muda?
+    \newpage
+    \begin{figure}[b]
+      \includegraphics[width=4cm]{images/feijao7}
+    \end{figure}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  {\bf A)} Se forem utilizados 3 feijões por copo...
+  \begin{itemize}
+  \item Qual é a porcentagem esperada de copos com pelo menos um feijão
+    germinado? Com três feijões germinados? Com nenhum feijão germinado?
+  \item Qual é o número médio de feijões germinados por copo?
+  \item Dê uma ideia da variação esperada do número de feijões
+    germinados.
+  \item Qual é o número médio de copos com ao menos um feijão germinado?
+  \end{itemize}
+
+  \begin{figure}[b]
+    \includegraphics[width=4.5cm]{images/feijao8}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf B)} Será que não seria melhor utilizar quatro feijões por copo e
+  apenas 30 copos? Nesse caso,
+  \begin{itemize}
+  \item Qual é a porcentagem esperada de copos com pelo menos um feijão
+    germinado? Com três feijões germinados? Com nenhum feijão germinado?
+  \item Qual é o número médio esperado de feijões germinados por copo?
+  \item Dê uma ideia de variação esperada do número de feijões
+    germinados.
+  \item Qual é o número médio de copos com ao menos um feijão germinado?
+  \end{itemize}
+  \begin{multicols}{2}
+    \textcolor[rgb]{1.00,1.00,1.00}{feijão}
+    \newpage
+    \begin{figure}[b]
+      \includegraphics[width=3cm]{images/feijao1}
+    \end{figure}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  \begin{multicols}{2}
+    {\bf Análise da situação A}
+    \newpage
+    \begin{figure}[b]
+      \includegraphics[width=2cm]{images/feijao2}
+    \end{figure}
+  \end{multicols}
+
+  Seja $G$ o evento germinar e $\bar{G}$ o evento não germinar.
+  \begin{enumerate}[(a)]
+  \item Construir o espaço amostral associado a esse experimento.
+  \item Calcular as probabilidades associadas a cada um dos elementos do
+    espaço amostral.
+  \item Considerar $X$ a variável número de feijões germinados e
+    associar um valor $x$ a cada um dos elementos do espaço amostral.
+  \item Considerar $Y$ a variável que associa o valor 0 ao resultado em
+    que não há nenhum feijão germinado e o valor 1 aos resultados em que
+    há pelo menos um feijão germinado. Associar um valor $y$ a cada um
+    do elementos do espaço amostral.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  \begin{center}
+    \begin{tabular}{cccc} \hline
+      Possíveis & \\
+      Resultados & Probabilidades & $x$ & $y$ \\ \hline
+      $GGG$                   & 0,027 & 3 & 1 \\
+      $GG\bar{G}$             & 0,063 & 2 & 1 \\
+      $G\bar{G}G$             & 0,063 & 2 & 1 \\
+      $G\bar{G}\bar{G}$       & 0,147 & 1 & 1 \\
+      $\bar{G}GG$             & 0,063 & 2 & 1 \\
+      $\bar{G}G\bar{G}$       & 0,147 & 1 & 1 \\
+      $\bar{G}\bar{G}G$       & 0,147 & 1 & 1 \\
+      $\bar{G}\bar{G}\bar{G}$ & 0,343 & 0 & 0 \\ \hline
+      Total                   & 1,000 \\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  \begin{itemize}
+  \item[]
+    \begin{figure}[b]
+      \includegraphics[width=8cm]{images/vad1.jpg} %
+    \end{figure}
+  \item[]
+  \item[]<2->
+    \begin{figure}[b]
+      \includegraphics[width=8cm]{images/vad2.jpg} %
+    \end{figure}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  \begin{block}{Distribuição de uma variável aleatória discreta}
+    Damos o nome de {\bf distribuição de probabilidade} (modelo
+    probabilístico) da variável aleatória discreta $X$, ao conjunto de
+    ponto $(x_i, P(x_i))$, em que $x_i$ representa os diferentes valores
+    da variável aleatória e $P(x_i)$ a probabilidade de ocorrência de
+    $x_i$, satisfazendo:
+    $$P(x_i)\geq 0 \quad \mbox{e} \quad \sum_i P(x_i) = 1.$$
+  \end{block}
+
+  \vspace{.5cm}
+  \begin{itemize}
+  \item Costuma-se adotar, também, a notação $P(X=x_i)$ para designar a
+    probabilidade da variável aleatória $X$ assumir o valor $x_i$.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  No exemplo com feijões...
+
+  \begin{center}
+    {\footnotesize
+      \begin{tabular}{cc} \hline
+        $x$ & $P(X=x) = P(x)$ \\ \hline
+        0 & 0,343\\
+        1 & 0,441\\
+        2 & 0,189\\
+        3 & 0,027 \\ \hline
+        Total & 1,000 \\ \hline
+      \end{tabular}
+    }
+  \end{center}
+\vspace{-0.5cm}
+
+<<fig.width=5.5, fig.height=3.5, out.width="0.8\\textwidth", echo=FALSE>>=
+
+x <- c(0, 1, 2, 3)
+px <- c(0.343, 0.441, 0.189, 0.027)
+xyplot(px ~ x,
+       type = "h",
+       lwd = 3,
+       xlab = expression("Valores de"~X),
+       ylab = expression("Probabilidade"~P(X==x)))
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  \begin{multicols}{2}
+  No exemplo com feijões ...
+
+  \begin{center}
+    {\footnotesize
+      \begin{tabular}{cc} \hline
+        $x$ & $P(X=x) = P(x)$ \\ \hline
+        0 & 0,343\\
+        1 & 0,441\\
+        2 & 0,189\\
+        3 & 0,027 \\ \hline
+        Total & 1,000 \\ \hline
+      \end{tabular}
+    }
+  \end{center}
+
+<<fig.width=5.5, fig.height=3.5, out.width="0.5\\textwidth", echo=FALSE>>=
+
+x <- c(0, 1, 2, 3)
+px <- c(0.343, 0.441, 0.189, 0.027)
+xyplot(px ~ x,
+       type = "h",
+       lwd = 3,
+       xlab = expression("Valores de"~X),
+       ylab = expression("Probabilidade"~P(X==x)))
+
+@
+
+\newpage
+
+Qual é a porcentagem esperada de copos
+\begin{itemize}
+\item com três feijões germinados?
+\item[]<2-> 2,7\%
+\item com nenhum feijão germinado?
+\item[]<3-> 34,3\%
+\item com pelo menos um feijão germinado?
+\item[]<4-> 65,7\%
+
+\end{itemize}
+\end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf Exercício}: Obter a distribuição da variável aleatória $Y$ e um
+  gráfico que a represente.
+
+  \vspace{3cm}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  \begin{block}{Função de probabilidades}
+    A função que fornece as probabilidades de ocorrências dos valores
+    que a variável aleatória pode assumir é chamada {\bf função de
+      probabilidades} (f.p.)
+  \end{block}
+
+  \begin{itemize}
+  \item[]<2-> {\bf Exemplo}: A função de probabilidades da variável $X$
+    = número de feijões germinados, é dada por:
+    $$
+    P(x) = \left(
+      \begin{array}{c}
+        3 \\ x
+      \end{array}\right) 0,3^x 0,7^{(3-x)}, \quad \mbox{para} \quad x=0,1,2,3.
+    $$
+  \item[]<3-> Calcular $P(0), P(1), P(2)$ e $P(3)$ por meio da função de
+    probabilidades.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  Mas ...
+  \begin{center}
+    Qual é o número médio esperado de feijões germinados por copo?
+  \end{center}
+
+  \begin{block}{Valor médio ou esperança matemática de $X$}
+    Dada a variável aleatória $X$, assumindo os valores
+    $x_1, x_2, \ldots$ com as respectivas probabilidades
+    $P(x_1), P(x_2), \ldots$, chamamos {\bf valor médio} ou {\bf
+      esperança matemática de $X$} ao valor:
+    $$\mu_X = \mbox{E}(X) = \sum_ix_iP(x_i).$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  No exemplo com feijões ...
+
+  Calcular o valor médio ou esperança da variável aleatória $X$.
+
+  \begin{center}
+    {\footnotesize
+      \begin{tabular}{ccc} \hline
+        $x$ & $P(X=x) = P(x)$ & $xP(x)$ \\ \hline
+        0 & 0,343 & \textcolor[rgb]{1.00,1.00,1.00}{0}\\
+        1 & 0,441 & \textcolor[rgb]{1.00,1.00,1.00}{0,441}\\
+        2 & 0,189 & \textcolor[rgb]{1.00,1.00,1.00}{0,378}\\
+        3 & 0,027 & \textcolor[rgb]{1.00,1.00,1.00}{0,081}\\ \hline
+        Total & 1,000 & \textcolor[rgb]{1.00,1.00,1.00}{0,9}\\ \hline
+      \end{tabular}
+    }
+  \end{center}
+
+  Interpretação: Espera-se, na observação de um número grande de
+  copos, obter um número médio de
+  \textcolor[rgb]{1.00,1.00,1.00}{0,9} feijões germinados por
+  copo.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  No exemplo com feijões ...
+
+  Calcular o valor médio ou esperança da variável aleatória $X$.
+
+  \begin{center}
+    {\footnotesize
+      \begin{tabular}{ccc} \hline
+        $x$ & $P(X=x) = P(x)$ & $xP(x)$ \\ \hline
+        0 & 0,343 &\textcolor[rgb]{1.00,0.00,0.00}{ 0}\\
+        1 & 0,441 & \textcolor[rgb]{0.98,0.00,0.00}{0,441}\\
+        2 & 0,189 & \textcolor[rgb]{0.98,0.00,0.00}{0,378}\\
+        3 & 0,027 & \textcolor[rgb]{0.98,0.00,0.00}{0,081}\\ \hline
+        Total & 1,000 & \textcolor[rgb]{0.98,0.00,0.00}{0,9}\\ \hline
+      \end{tabular}
+    }
+  \end{center}
+
+  Interpretação: Espera-se, na observação de um número grande de copos,
+  obter um número médio de \textcolor[rgb]{0.98,0.00,0.00}{0,9} feijões
+  germinados por copo.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf Exercício}: Calcular o valor médio ou esperança da variável
+  aleatória $Y$.
+  \vspace{3cm}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  \begin{block}{Valor médio ou esperança matemática de uma função de
+      $X$}
+    Dada uma variável aleatória $X$, assumindo os valores
+    $x_1, x_2, \ldots$, com as respectivas probabilidades
+    $P(x_1), P(x_2), \ldots$, chamamos {\bf valor médio} ou {\bf
+      esperança matemática de uma função $h(X)$} ao valor:
+    $$\mbox{E}[h(X)] = \sum_ih(x_i)P(x_i).$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf Exercício}: Calcular:
+  \begin{enumerate}
+  \item o valor médio ou esperança da função $3X$
+  \item o valor médio ou esperança da função $X^2$
+  \item o valor médio ou esperança da função $(X-0,5)^2$
+  \item o valor médio ou esperança da função $(X-\mu_X)^2$
+  \item E$[|X-\mu_X|]$
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf Observação}: Sejam $a$ e $b$ duas constantes quaisquer e
+  $h(X) = a + bX$, então
+  \begin{eqnarray*}
+    \mbox{E}(a + bX) &=& \sum_i(a+bx_i)P(x_i) \\
+                     &=& \sum_i\big[aP(x_i) + bx_iP(x_i)\big] \\
+                     &=& \sum_i aP(x_i) + \sum_i bx_iP(x_i) \\
+                     &=& a\sum_iP(x_i) + b\sum_i x_iP(x_i) \\
+                     &=& a + b\mbox{E}(X)\\
+  \end{eqnarray*}
+
+  {\bf Exercício}: Calcular E$(30X)$, E$(10 + X)$, E$(1-2X)$ e
+  E$(X-\mu_X)$
+  \vspace{3cm}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  \begin{block}{Variância de X}
+    Dada a variável aleatória $X$, chamamos de {\bf variância} de $X$ ao
+    valor médio ou esperança da função $(X-\mu_X)^2$,
+    $$\sigma^2_X = \mbox{Var}(X) = \mbox{E}\big[(X-\mu_X)^2\big].$$
+  \end{block}
+
+  Automaticamente ficam definidos o desvio padrão e o coeficiente de
+  variação da variável aleatória $X$, dados respectivamente por:
+  $$\sigma_X = \sqrt{\sigma^2_X} \qquad \mbox{e}
+  \qquad CV_X = 100\times\frac{\sigma_X}{\mu_x}.$$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf Exemplo}: Calcular para as variáveis aleatórias $X$ e $Y$ a
+  variância, o desvio padrão e o coeficiente de variação.
+  \vspace{3cm}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  {\bf Observação}:
+  \begin{eqnarray*}
+    \sigma^2_X &=& \mbox{Var}(X) = \mbox{E}\big[(X-\mu_x)^2\big]\\
+               &=& \mbox{E}(X^2 - 2X\mu_X + \mu_X^2) \\
+               &=& \mbox{E}(X^2) - 2\mbox{E}(X)\mu_X + \mu_X^2\\
+               &=& \mbox{E}(X^2) - 2\mu_X^2 + \mu_X^2\\
+               &=& \mbox{E}(X^2) - \mu_X^2\\
+               &=& \mbox{E}(X^2) - \Big[\mbox{E}(X)\Big]^2\\
+  \end{eqnarray*}
+
+  \begin{block}{Variância de $X$}
+    Fórmula mais prática para o cálculo da variância de $X$:
+    $$\sigma^2_X = \mbox{Var}(X) = \mbox{E}(X^2) -
+    \Big[\mbox{E}(X)\Big]^2.$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf Exemplo}: Recalcular a variância de $X$ utilizando a fórmula mais
+  prática.
+  \vspace{3cm}
+
+  {\bf Exercício}: Refazer todos os cálculos considerando 4 feijões por
+  vaso e responder a sequência {\bf B)} de questões iniciais.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  {\bf Exemplo}: Seja $F(X) = P(X\leq x)$.
+  \begin{center}
+    {\footnotesize
+      \begin{tabular}{ccc} \hline
+        $x$ & $P(X=x) = P(x)$ & $F(x)=P(X\leq x)$ \\ \hline
+        0 & 0,343 & \textcolor[rgb]{1.00,1.00,1.00}{ 0,343}\\
+        1 & 0,441 & \textcolor[rgb]{1.00,1.00,1.00}{0,784}\\
+        2 & 0,189 &\textcolor[rgb]{1.00,1.00,1.00}{ 0,973}\\
+        3 & 0,027 & \textcolor[rgb]{1.00,1.00,1.00}{1,000}\\ \hline
+        Total & 1,000 & \\ \hline
+      \end{tabular}
+    }
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+  {\bf Exemplo}: Seja $F(X) = P(X\leq x)$.
+  \begin{center}
+    {\footnotesize
+      \begin{tabular}{ccc} \hline
+        $x$ & $P(X=x) = P(x)$ & $F(x)=P(X\leq x)$ \\ \hline
+        0 & 0,343 &\textcolor[rgb]{1.00,0.00,0.00}{ 0,343}\\
+        1 & 0,441 & \textcolor[rgb]{0.98,0.00,0.00}{0,784}\\
+        2 & 0,189 & \textcolor[rgb]{0.98,0.00,0.00}{0,973}\\
+        3 & 0,027 & \textcolor[rgb]{0.98,0.00,0.00}{1,000}\\ \hline
+        Total & 1,000 & \\ \hline
+      \end{tabular}
+    }
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  \begin{block}{Função de distribuição acumulada}
+    Dada a variável aleatória $X$, chamaremos de {\bf função de
+      distribuição acumulada} ou simplesmente {\bf função de
+      distribuição} a função $F:\mathbb{R}\rightarrow [0,1]$ definida
+    por:
+    $$F(x) = P(X\leq x).$$
+  \end{block}
+
+  {\bf Exercício}: Calcular para a variável aleatória $X$ = número de
+  feijões germinados,
+  \begin{multicols}{2}
+    \begin{itemize}
+    \item $F(-1) = P(X\leq -1)$
+    \item $F(0) = P(X\leq 0)$
+    \item $F(0,5) = P(X\leq 0,5)$
+    \end{itemize}
+    \newpage
+    \begin{itemize}
+    \item $F(1) = P(X\leq 1)$
+    \item $F(3) = P(X\leq 3)$
+    \item $F(4) = P(X\leq 4)$
+    \end{itemize}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias discretas}
+
+  A função de distribuição acumulada da variável aleatória $X$ = número
+  de feijões germinados é dada a seguir, bem como o gráfico que a
+  representa.
+
+  \begin{multicols}{2}
+    \footnotesize
+    $$F(x) = \left\{
+      \begin{array}{lll}
+        0,000 & \mbox{para} & x < 0\\
+        0,343 & \mbox{para} & 0\leq x < 1\\
+        0,784 & \mbox{para} & 1\leq x < 2\\
+        0,973 & \mbox{para} & 2\leq x < 3\\
+        1,000 & \mbox{para} & x \geq 3\\
+      \end{array}
+    \right.$$
+    \newpage
+<<echo=FALSE, fig.width=4.5, fig.height=3, out.width="0.5\\textwidth">>=
+
+xyplot(c(0, cumsum(px)[-4]) ~ x,
+       xlim = c(-1, 4),
+       ylab = expression(F(x)),
+       xlab = expression(x),
+       panel = function(x, y, ...) {
+           panel.xyplot(x, y, ...)
+           panel.points(x, cumsum(px), pch = 19)
+           x0 <- c(-3, x[-4])
+           for (i in 1:4) {
+               panel.segments(x0[i], y[i], x[i]-0.05, y[i])
+           }
+           panel.segments(x[4], 1, 5, 1)
+       })
+
+@
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  {\bf Exemplo}: A distribuição de frequências da velocidade máxima
+  diária do vento em 2014, é apresentada a seguir:
+
+  \begin{multicols}{2}
+    \begin{figure}[b]
+      \includegraphics[width=6.0cm]{images/hist_vel_vento}
+    \end{figure}
+    \vspace{-0.5cm}
+
+    \begin{itemize}
+    \item[]<2->
+      $$\mbox{Densidade} = \frac{\mbox{freq. rel.}}{\mbox{amplitude}}$$
+    \end{itemize}
+
+    \newpage
+    \begin{table}
+      \footnotesize
+      \centering
+      \caption{Distribuição de frequências da velocidade máxima do
+        vento}
+      \vspace{-0.5cm}
+      \begin{tabular}{cccc} \hline
+        $X_i$ & $x^*_i$ & $f_i$ & $f'_i$  \\ \hline
+        2,00 $\vdash$ 4,00 & 3,00 & 11 & 0,0301\\
+        4,00 $\vdash$ 6,00 & 5,00 & 46 & 0,1260\\
+        6,00 $\vdash$ 8,00 & 7,00 & 146 & 0,4000\\
+        8,00 $\vdash$ 10,00 & 9,00 & 100 & 0,2740\\
+        10,00 $\vdash$ 12,00 & 11,00 & 35 & 0,0959\\
+        12,00 $\vdash$ 22,00 & 17,00 & 27 & 0,0740\\ \hline
+        Total                &        & 365& 1,000\\ \hline
+      \end{tabular}
+    \end{table}
+  \end{multicols}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  \begin{figure}[b]
+    \includegraphics[width=7.0cm]{images/hist_vel_vento}
+  \end{figure}
+  \vspace{-0.5cm}
+
+  Dado o histograma acima, obter aproximadamente, a porcentagem de dias
+  com velocidade máxima do vento avaliada
+  \begin{itemize}
+  \item entre 4 e 8 (m/s)
+  \item entre 6 e 10 (m/s)
+  \item entre 2 e 22 (m/s)
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  \begin{block}{Função densidade de probabilidade}
+    Condições para que uma função seja uma função densidade de
+    probabilidade:
+    \begin{enumerate}[(i)]
+    \item $f(x) \geq 0, \; \forall x \in D_f$
+    \item A área entre o gráfico da função $f$ e o eixo $x$ é igual a 1,
+      ou seja
+      $$\int_{-\infty}^{+\infty} f(x)dx = 1$$
+    \end{enumerate}
+  \end{block}
+
+  \begin{itemize}
+  \item[]<2-> Consequências ...
+  \item[]<2-> $P(a < X < b) = P(a\leq X < b) = P(a < X \leq b) =
+    P(a \leq X \leq b)$
+  \item[]<2-> Se $a=b=c$, então $P(X=c) = 0$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  {\bf Exemplo}: Seja uma função $f(x)$ dada por:
+  $$f(x) = \left\{
+    \begin{array}{rlc}
+      0    & \mbox{para} & x \leq 0\\
+      ax^3 & \mbox{para} & 0 < x \leq 2\\
+      0 & \mbox{para} & x > 2\\
+    \end{array}\right.$$
+  em que $a$ é uma constante.
+
+  Obter $a$ de modo que $f(x)$ seja uma função densidade de
+  probabilidade de uma variável aleatória contínua $X$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  {\bf Exemplo}: Seja uma função $f(x)$ dada por:
+  $$f(x) = \left\{
+    \begin{array}{rlc}
+      0    & \mbox{para} & x \leq 0\\
+      0,2-0,02x & \mbox{para} & 0 < x \leq 10\\
+      0 & \mbox{para} & x > 10\\
+    \end{array}\right.$$
+  \begin{enumerate}[(a)]
+  \item Verifique que $f(x)$ é uma função densidade de probabilidade;
+  \item Construir o gráfico dessa função;
+  \item Calcular as porcentagens esperadas para
+    \begin{itemize}
+    \item X entre 5 e 10 unidades;
+    \item X entre 3 e 5 unidades;
+    \item X entre 0 e 2 unidades;
+    \item X entre 0 e 10 unidades;
+    \item X maior do que 10 unidades;
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  \begin{block}{Valor médio ou esperança matemática de $X$}
+    $$\mu_X = \mbox{E}(X) = \int_{-\infty}^{+\infty}xf(x)d(x)$$
+  \end{block}
+
+  \begin{block}{Moda}
+    $$Mo_X = \mbox{max} f(x), \; x\in Df$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  \begin{block}{Valor médio ou esperança matemática de uma função
+      $h(X)$}
+    $$\mbox{E}\big[h(X)\big] = \int_{-\infty}^{+\infty} h(x)f(x) dx$$
+  \end{block}
+
+  \begin{block}{Variância de $X$}
+    \begin{eqnarray*}
+      \sigma^2_X = \mbox{Var}(X)
+      &=& \mbox{E}\big[(X-\mu_X)^2\big]\\
+      &=& \int_{-\infty}^{+\infty}(x-\mu_X)^2f(x)dx\\
+      &=&...\\
+      &=&\mbox{E}(X^2) - \big[\mbox{E}(X)\big]^2
+    \end{eqnarray*}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+  \begin{block}{Função de distribuição acumulada}
+    Dada a variável aleatória $X$, com função densidade de probabilidade
+    $f(x)$, temos que a função de distribuição acumulada é dada por:
+    $$F(t) = P(X\leq t)=\int_{-\infty}^t f(x) dx.$$
+  \end{block}
+  \begin{itemize}
+  \item Percentil:
+    $$P_{100p} \mbox{ é o valor de $t$ tal que $F(t)=p$}$$
+  \item Caso particular: Mediana
+    $$Md_X = P_{50} \mbox{ é o valor de $t$ tal que $F(t)=0,5$}.$$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  {\bf Exemplo:} Calcular, supondo o modelo teórico,
+  $$f(x) = \left\{
+    \begin{array}{rlc}
+      0    & \mbox{para} & x \leq 0\\
+      ax^3 & \mbox{para} & 0 < x \leq 2\\
+      0 & \mbox{para} & x > 2\\
+    \end{array}\right.$$
+  \begin{enumerate}
+  \item o valor médio de $X$ ($\mu_X$)
+  \item E($X^2$)
+  \item a variância e o desvio padrão de $X$.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Variáveis aleatórias contínuas}
+
+  {\bf Exercício}: Para a função $f(x)$, dada por:
+  $$f(x) = \left\{
+    \begin{array}{rlc}
+      0    & \mbox{para} & x \leq 0\\
+      0,2-0,02x & \mbox{para} & 0 < x \leq 10\\
+      0 & \mbox{para} & x > 10\\
+    \end{array}\right.$$
+
+  Pede-se:
+  \begin{enumerate}[(a)]
+  \item Calcular $\mu_X$
+  \item Calcular $\sigma^2_X$.
+  \end{enumerate}
+\end{frame}
+
+\end{document}
