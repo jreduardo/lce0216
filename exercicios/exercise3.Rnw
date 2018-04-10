@@ -110,8 +110,9 @@ opts_chunk$set(
   para os dados.
 \item Construa o histograma.
 \item Indique um valor representativo para os dados; comente sobre a
-  assimetria.
+  assimetria. \textbf{R: média = 35,437, desvio padrão = 5,5389.}
 \item Classifique a variável que compõe este banco de dados.
+  \textbf{R: variável quantitativa contínua.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -137,6 +138,7 @@ parcelas, em toneladas, são:
   dados.
 \item Calcule os quartis. Faça um esboço do {\it box-plot}. Interprete
   os resultados com relação à tendência central, dispersão e assimetria.
+  \textbf{R: 1ºQ = 8,9; mediana = 9,35; 3ºQ = 9,8.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -156,7 +158,10 @@ talhões de {\it Eucalyptus camaldulensis} aos 7 anos.
 
 \noindent Obtenha as estatísticas (a) média; (b) mediana; (c) primeiro e
 o terceiro quartis; (d) percentil 90\%; (e) variância;  (f) desvio
-padrão; e coeficiente de variação (CV).
+padrão; e coeficiente de variação (CV). \textbf{R:
+  média = 218,66; mediana = 221;  1ºQ = 199; 3ºQ=245;
+  percentil 90\% = 270; variância = 1234,188;  desvio
+  padrão = 35,13101; CV = 16,06\%.}
 \vspace{1cm}
 \pagebreak
 
@@ -183,16 +188,18 @@ nativa está representada na tabela de frequências abaixo:
 
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item Qual o diâmetro médio e o diâmetro mediano das árvores dessa
-  floresta? Qual dos dois é maior?
+  floresta? Qual dos dois é maior?\textbf{R: média=24,043;
+    mediana=19,529.}
 \item Qual é a classe modal dos diâmetros das árvores desta floresta?
-  Calcule a moda.
+  Calcule a moda.\textbf{R: moda=16,476.}
 \item Qual o desvio padrão dos diâmetros das árvores desta floresta?
+  \textbf{R: desvio padrão=12,487.}
 \item Um Engenheiro Florestal deseja fazer um corte seletivo retirando
   20\% das maiores árvores.  Qual o diâmetro mínimo das árvores a serem
-  removidas?
+  removidas?\textbf{R: 33,08cm.}
 \item Uma Engenheira Florestal deseja fazer um corte seletivo retirando
   40\% das menores árvores.  Qual o diâmetro mínimo das árvores
-  remanescentes?
+  remanescentes?\textbf{R: 17,692cm.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -229,9 +236,11 @@ Tabela \ref{tab:6}.
 \item Construa um histograma para cada localidade. As distribuições
   apresentam uma forma simétrica? Justifique.
 \item Localize nos histogramas a classe que contém o percentil de ordem
-  90 ($P_{90}$) e calcule seu valor.
+  90 ($P_{90}$) e calcule seu valor.\textbf{R: P$_{90}$ = 6412,57 kg/ha
+    (Chapecó) P$_{90}$ = 9403,53 kg/ha (Campos novos).}
 \item Acima de que valor encontram-se 85\% das produções de milho para
-  cada localidade?
+  cada localidade?\textbf{R: P$_{15}$ = 4960,32 kg/ha
+    (Chapecó) P$_{90}$ = 7881,82 kg/ha (Campos novos).}
 \end{enumerate}
 \vspace{0.5cm}
 \pagebreak
@@ -250,7 +259,7 @@ informação contida no seguinte conjunto de dados:
 \end{center}
 em que A - amarelo, B - branco e R - rosa representam as cores de uma
 espécie de ipê. Que tipo de variável é essa? Qual é a moda desse
-conjunto de dados?
+conjunto de dados?\textbf{R: Qualitativa nominal, Mo= B e R (bimodal).}
 \vspace{0.5cm}
 
 \noindent
@@ -273,9 +282,12 @@ bifurcações presentes em uma amostra de árvores.
 \item Construa uma tabela de frequências.
 \item Para os dados organizados na tabela do item a, calcule a média, a
   mediana, a moda, o primeiro e o terceiro quartis e o percentil 20.
+  \textbf{R: média=1,732; mediana=2; moda=2; 1ºQ=1; 3ºQ=1; P$_{20}$=0.}
 \item Para os dados organizados na tabela do item a, calcule a
   variância, o desvio padrão e o coeficiente de variação.
-\item Que tipo de variável compõe este banco de dados?
+  \textbf{R: variância=1,451; desvio padrão=1,205; CV=69,56\%.}
+\item Que tipo de variável compõe este banco de dados?\textbf{R:
+    quantitativa discreta.}
 \end{enumerate}
 
 \end{document}

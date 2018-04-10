@@ -114,7 +114,8 @@ print.xtable(xt,
 
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item Calcule a média, variância, mediana, 1º e 3º quartil e amplitude
-  dos diâmetros observados;
+  dos diâmetros observados; \textbf{R: média=16,667; variância=33,356;
+    mediana=16,4; 1ºQ=11,7; 3ºQ=20,7; A=20,1.}
 \item Apresente os dados em uma tabela de frequências;
 \item Faça uma representação gráfica do conjunto de dados.
 \end{enumerate}

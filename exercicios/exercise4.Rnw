@@ -94,8 +94,11 @@ segundo sua dieta preferencial em insentívoras (I) e frugívoras(F).
 
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item Represente o espaço amostral para uma amostra de três aves;
-\item Represente o evento A = ``Pelo menos uma ave é frugívora'';
+  \textbf{R: $\Omega=\{$ III, IIF, IFI, IFF, FII, FIF, FFI, FFF $\}$.}
+\item Represente o evento A = ``Pelo menos uma ave é
+  frugívora'';\textbf{R: A$=\{$ III $\}^\text{C}.$}
 \item Represente o evento B = ``Exatamente duas aves são frugívoras''.
+  \textbf{R: B$=\{$ IFF, FIF, FFI $\}$.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -121,13 +124,14 @@ madura e torta'' e H = ``Árvore jovem sem defeitos'', calcule as
 seguintes probabilidades:
 
 \begin{enumerate}[label=\alph*), labelindent=5mm]
-\item $\Pr(\text{A} \cup \text{C})$
-\item $\Pr(\text{B} \cup \text{E})$
-\item $\Pr(\text{D} \cup \text{F})$
-\item $\Pr(\text{C} \cup \text{G})$
-\item $\Pr(\text{B} \cup \text{H})$
-\item $\Pr(\text{C} \cup \text{D} \cup \text{E})$
+\item $\Pr(\text{A} \cup \text{C})$\textbf{R: 0,49.}
+\item $\Pr(\text{B} \cup \text{E})$\textbf{R: 0,64.}
+\item $\Pr(\text{D} \cup \text{F})$\textbf{R: 0,23.}
+\item $\Pr(\text{C} \cup \text{G})$\textbf{R: 0,16.}
+\item $\Pr(\text{B} \cup \text{H})$\textbf{R: 0,77.}
+\item $\Pr(\text{C} \cup \text{D} \cup \text{E})$\textbf{R: 0,46.}
 \item $\Pr(\text{A} \cap (\text{C} \cup \text{D} \cup \text{E}))$
+  \textbf{R: 0,23.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -149,15 +153,21 @@ Se um animal for selecionado aleatoriamente deste grupo:
 
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item Qual a probabilidade deste animal estar em um ambiente restrito?
+  \textbf{R: 0,46.}
 \item Qual a probabilidade deste animal ter um comportamento agressivo?
+  \textbf{R: 0,71.}
 \item Se este animal está em um ambiente restrito, qual a probabilidade
   dele ter um comportamento agressivo?
+  \textbf{R: 0,81.}
 \item Se este animal está em um ambiente restrito, qual a probabilidade
   dele ter um comportamento não agressivo?
+  \textbf{R: 0,19.}
 \item Se este animal tem um comportamento agressivo, qual a
   probabilidade dele estar em um ambiente restrito?
+  \textbf{R: 0,52.}
 \item Se este animal tem um comportamento agressivo, qual é a
   probabilidade dele estar num ambiente amplo?
+  \textbf{R: 0,476.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -171,10 +181,13 @@ conseguir ambos os estágios, entretanto, são de 50\%. Pergunta-se:
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item Qual a probabilidade do aluno conseguir o estágio no parque
   nacional, dado que ele conseguiu estágio na empresa?
+  \textbf{R: 0,625.}
 \item Qual a probabilidade do aluno conseguir o estágio na empresa
   florestal, dado que ele conseguiu o estágio no parque nacional?
+  \textbf{R: 0,71.}
 \item Qual a probabilidade do aluno conseguir pelo menos um dos
   estágios?
+  \textbf{R: 1.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -186,8 +199,10 @@ pessoa da cidade é selecionada aleatoriamente.
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item Se ela tem cabelos castanhos, qual é a probabilidade dela ter
   também olhos castanhos?
+  \textbf{R: 0,375.}
 \item Qual é a probabilidade dela não ter nem cabelos nem olhos
   castanhos?
+  \textbf{R: 0,50.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -198,8 +213,11 @@ plantadas. Qual é a probabilidade de que:
 
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item Duas sementes não germinem;
+  \textbf{R: 0,347.}
 \item Duas sementes germinem;
+  \textbf{R: 0,147.}
 \item Somente uma semente germine.
+  \textbf{R: 0,505.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -224,9 +242,11 @@ examinados 28 animais, obtendo-se o resultado exposto na Tabela
 
 \begin{enumerate}[label=\alph*), labelindent=5mm]
 \item A fecundidade é independente da raça? Justifique através da
-  definição de independência de eventos.
+  definição de independência de eventos.\textbf{R: não.}
 \item Calcule $\Pr(\text{F} \mid \text{A})$?
+  \textbf{R: 0,86.}
 \item Calcule $\Pr(\text{F} \cup \text{A})$?
+  \textbf{R: 0,78.}
 \end{enumerate}
 \vspace{0.5cm}
 
@@ -236,7 +256,7 @@ cada. As máquinas A, B e C enchem 25, 35 e 40\% do total produzido,
 respectivamente. Da produção de cada máquina 5, 4 e 2\%, respectivamente
 são pacotes fora do peso aceitável. Escolhe-se ao acaso um pacote e
 verifica-se que está fora do peso aceitável. Qual a probabilidade de que
-o pacote tenha vindo da máquina A?
+o pacote tenha vindo da máquina A?\textbf{R: 0,362.}
 \vspace{1cm}
 
 \noindent
@@ -245,6 +265,6 @@ exista em uma árvore, com probabilidade 0,9. Se a doença não existir, o
 técnico corretamente aponta isso com probabilidade 0,8. Considere que o
 técnico vistoriou uma áre com 10\% de incidência da doença. Para uma
 árvore escolhida ao acaso, qual a probabilidade de ela estar realmente
-doente, se o técnico indicou que ela possui a doença?
+doente, se o técnico indicou que ela possui a doença?\textbf{R: 0,333.}
 
 \end{document}
