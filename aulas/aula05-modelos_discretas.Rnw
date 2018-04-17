@@ -1,0 +1,576 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  5. Principais Modelos Discretos}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitores: Eduardo E. R. Junior \& Giovana Fumes
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 17 de abril de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+library(tidyr)
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Modelos discretos}
+  \begin{itemize}
+    \item Estabelem a relação entre variável e a realização do
+      experimento que a origina;
+    \item Uma variável aleatória segue determinado modelo se cada
+      possível valor da variável acontecer conforme uma determinada lei
+      de atribuição de probabilidades;
+    \item A lei de atribuição é dada pela \textbf{função de
+        probabilidade};
+    \item Para alguns casos a função de probabilidade pode ser escrita
+      de maneira mais compacta. Esses casos refletem variáveis
+      aleatórias que ocorrem com frequência em situações práticas.
+    \item Neste curso, veremos os modelos discretos \textbf{Bernoulli},
+      \textbf{binomial} e \textbf{Poisson}.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Bernoulli}
+  \begin{block}{\bf Distribuição de Bernoulli}
+    {\bf Experimento:} O departamento de Entomologia e Acarologia da
+    ESALQ/USP realizou um experimento para verificar a eficácia de um
+    novo controle de determinada praga. Um grupo de 30 insetos foram
+    submetidos à nova substância e, depois de um determinado período,
+    foram avaliados. Tomando-se ao acaso, um inseto do estudo,
+    verifica-se se este esta vivo ou morto.
+  \end{block}
+  \begin{flushright}
+    \begin{figure}[b]
+      \includegraphics[width=3cm]{images/pulgao_pinus.jpg}
+    \end{figure}
+  \end{flushright}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Bernoulli}
+  Variável aleatória $X$: mortalidade.
+
+  \begin{multicols}{2}
+    \begin{center}
+      \begin{eqnarray*}
+        x &=& 1 \quad \mbox{se morreu}\\
+        x &=& 0 \quad \mbox{se não morreu}
+      \end{eqnarray*}
+    \end{center}
+    \newpage
+
+    \begin{figure}[b]
+      \includegraphics[width=3cm]{images/pulgao_pinus.jpg}
+    \end{figure}
+  \end{multicols}
+
+  Algumas pressuposições:
+  \begin{itemize}
+  \item É realizada apenas uma repetição do experimento;
+  \item Apenas dois resultados possíveis: morreu ou não morreu.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Bernoulli}
+  Evento $M$ = \{O inseto morreu\}
+  $$P(M) = \pi \quad \quad P(\bar{M}) = 1-\pi.$$
+
+  \begin{block}{Distribuição de probabilidade:}
+    \begin{center}
+      \begin{tabular}{ccc} \hline
+        Resultados & $x$ & $P(X=x)$\\ \hline
+        \\
+        $\bar{M}$ & 0 & $1-\pi$ \\
+        $M$  & 1 & $\pi$ \\ \hline
+        Total &  & $(1 - \pi) + \pi = 1$ \\ \hline
+      \end{tabular}
+    \end{center}
+  \end{block}
+  \vspace{.5cm}
+
+  Portanto, a variável aleatória $X$: mortalidade, tem distribuição de
+  Bernoulli.
+\end{frame}
+
+\begin{frame}{Distribuição de Bernoulli}
+  \begin{block}{A função de probabilidade de uma variável Bernoulli é
+      dada por:}
+    $$P(X=x) = \pi^x(1-\pi)^{1-x}.$$
+  \end{block}
+  \vspace{.5cm}
+
+  Logo,
+  \begin{itemize}
+  \item[] $P(X=0) =$
+  \item[] $P(X=1) =$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]{Distribuição de Bernoulli}
+  \begin{block}{A função de probabilidade de uma variável Bernoulli é
+      dada por:}
+    $$P(X=x) = \pi^x(1-\pi)^{1-x}.$$
+  \end{block}
+  \vspace{.5cm}
+
+  Logo,
+  \begin{itemize}
+  \item[] $P(X=0) = \pi^0(1-\pi)^{1-0} = 1-\pi$.
+  \item[] $P(X=1) = \pi^1(1-\pi)^{1-1} = \pi$.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Bernoulli}
+  \begin{block}{Média}
+    $$\mbox{E}(X) = \mu_X = \sum_{x=0}^1 xP(X=x) = 0\times(1-\pi) +
+    1\times\pi = \pi.$$
+  \end{block}
+
+  \begin{block}{Variância}
+    $$\mbox{Var}(X) = \sigma^2_X = \mbox{E}(X^2)
+    -\big[\mbox{E}(X)\big]^2 = \pi - \pi^2 = \pi(1-\pi)$$
+  \end{block}
+
+  Logo, o desvio padrão de uma variável aleatória com distribuição de
+  Bernoulli é dado por:
+  $$\sigma_X = \sqrt{\pi(1-\pi)}.$$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Bernoulli}
+
+<<echo=FALSE>>=
+pis <- c(0.2, 0.5, 0.9)
+names(pis) <- pis
+fl <- parse(text = sprintf("pi==%.2f", pis))
+da <- purrr::map_dfr(pis, .id = "pi", function(x)
+    data.frame(x = 0:1, px = dbinom(0:1, 1, x)))
+
+xyplot(px ~ x | pi,
+       type = "h",
+       xlim = c(-0.5, 1.5),
+       grid = TRUE,
+       lwd = 4,
+       ylab = expression(P(X==x)),
+       strip = strip.custom(
+           factor.levels = fl
+       ),
+       data = da)
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Bernoulli}
+
+  {\bf Exemplo:} Um pesquisador diz que o tratamento das estacas com uma
+  certa concentração de hormônio eleva a porcentagem esperada de
+  enraizamento. 10 estacas foram tratadas e destas, 6
+  enraizaram. Escolhe-se ao acaso uma estaca. Seja $X$ = ``a estaca
+  enraizar'', verifique se é um ensaio de Bernoulli. Determinar a
+  $P(X=x)$, calcular $\mbox{E}(X)$ e $\mbox{Var}(X)$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+
+    {\bf Experimento:} Verificar se dois insetos submetidos à nova
+    substância permaneceram vivos ou morreram.
+
+    Pressuposições:
+    \begin{itemize}
+    \item O fato de um inseto morrer, ou não, não tem influência no fato
+      de o outro inseto morrer, ou não; ou seja, as mortes são {\bf
+        independentes};
+    \item A probabilidade dos insetos morrerem é a mesma, igual a $\pi$.
+    \item Só há dois resultados possível para cada inseto: morreu ou não
+      morreu (ensaio de Bernoulli); e
+    \item Existem duas repetições.
+    \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+
+  Variável aleatória $X$ = número de insetos mortos.
+  \begin{center}
+    \begin{tabular}{ccc} \hline
+      Resultado & Probabilidade & $x$ \\ \hline
+      $MM$ & $\pi\pi$ & 2 \\
+      $M\bar{M}$ & $\pi(1-\pi)$ & 1\\
+      $\bar{M}M$ & $(1-\pi)\pi$ & 1 \\
+      $\bar{M}\bar{M}$ &  $(1-\pi)(1-\pi)$ & 0 \\ \hline
+      Total            & 1 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  Distribuição de probabilidades
+  \begin{center}
+    \begin{tabular}{cc} \hline
+      $x_i$  &  $P(X=x)$ \\ \hline
+      0  &  $(1-\pi)^2$ \\
+      1  &  $2\pi(1-\pi)$ \\
+      2  &  $\pi^2$ \\ \hline
+        Total & 1 \\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+  \small
+
+  \begin{block}{Generalizando...}
+    A probabilidade de $x$ insetos morrerem e, portanto, $n-x$ insetos
+    permanecerem vivos, nesta sequência,
+    $$\underbrace{M M \ldots M}_{x},
+    \underbrace{\bar{M} \bar{M} \ldots \bar{M}}_{n-x}$$
+    é dada por $\pi^x(1-\pi)^{n-x}$.\\[0.4cm]
+
+    Mas note que outras sequências podem ocorrer com a mesma
+    probabilidade, tais como:
+    $$\tiny M M M \ldots \bar{M} \bar{M} M \bar{M} \ldots \bar{M}
+    \quad \mbox{ou} \quad
+    M M M\ldots \bar{M} M \bar{M} \bar{M} \ldots \bar{M}.$$
+
+    Existem
+    $$\binom{n}{x} = \frac{n!}{x!(n-x)!}$$
+    de tais sequências.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+  \begin{block}{Generalizando...}
+    Logo,
+    $$P(X=x) = \binom{n}{x}\pi^x(1-\pi)^{n-x}, \quad
+    \mbox{para} \; x=0,1,2,\ldots,n.$$
+  \end{block}
+
+  {\bf Observações}:
+  \begin{itemize}
+  \item A denominação binomial decorre do fato de os coeficientes
+    $\binom{n}{x}$ serem exatamente os coeficientes do desenvolvimento
+    binomial dos termos $(a+b)^n$;
+  \item O cálculo dos coeficientes, para $n$ e $x$ grandes, é difícil de
+    ser realizado.
+  \end{itemize}
+
+  {\bf Notação}: $X \sim B(n;\pi)$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{\bf Distribuição binomial}
+  Pressuposições:
+  \begin{itemize}
+  \item Existem $n$ repetições ou provas idênticas do experimento;
+  \item Só há dois tipos de resultados possíveis em cada repetição;
+  \item As probabilidades $\pi$ de sucesso e $(1-\pi)$ de fracasso
+    permanecem constantes em todas as repetições;
+  \item Os resultados das repetições são independentes uns dos outros.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+  $$P(X=x) = \binom{n}{x} \pi^x(1-\pi)^{n-x}, \quad
+  \mbox{para} \; x=0,1,2,\ldots,n.$$
+
+  \begin{block}{Média}
+    $$\mu_X = \mbox{E}(X) = n\pi.$$
+  \end{block}
+
+  \begin{block}{Variância}
+    $$\sigma^2_X = \mbox{Var}(X) = n\pi(1-\pi)$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+
+<<echo=FALSE, fig.width=9, fig.height=6>>=
+
+pis <- c(0.2, 0.5, 0.9)
+names(pis) <- pis
+ns <- c(3, 8, 20)
+names(ns) <- ns
+
+fln <- parse(text = sprintf("n==%.2f", ns))
+flp <- parse(text = sprintf("pi==%.2f", pis))
+
+da <- purrr::map_dfr(ns, .id = "n", function(n) {
+    purrr::map_dfr(pis, .id = "pi", function(p)
+        data.frame(x = 0:n, px = dbinom(0:n, n, p)))
+}) %>%
+    transform(n  = forcats::fct_inorder(factor(n)),
+              pi = forcats::fct_inorder(factor(pi)))
+
+useOuterStrips(
+    xyplot(px ~ x | n + pi,
+           # scales = list(x = "free"),
+           type = "h",
+           grid = TRUE,
+           lwd = 4,
+           ylab = expression(P(X==x)),
+           data = da),
+    strip = strip.custom(factor.levels = fln),
+    strip.left = strip.custom(factor.levels = flp)
+)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+
+  Um lote de {\it Eucaliptus saligna} com uma proporção de 5\% de
+  sementes híbridas ({\it E. saligna x E. cloeziana}) foi utilizado para
+  a implantação de uma floresta. Se dez árvores desta floresta forem
+  selecionadas ao acaso, qual a probabilidade de
+  \begin{enumerate}[{\bf (a)}]
+  \item Nenhuma delas ser híbrido;
+  \item Pelo menos uma delas ser híbrido;
+  \item Todas elas serem híbridos.
+  \item Seja $Y$ o número de sementes híbridas em 10 sementes. Calcule
+    E$(Y)$ e Var$(Y)$.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição binomial}
+  \small
+
+  {\bf Exercício}: Seja $X$ a variável aleatória número de plantas com
+  mutação em um total de $n$ plantas irradiadas e $p=0,0001$ a
+  probabilidade de uma planta irradiada apresentar mutação. Calcular:
+  \begin{enumerate}[(a)]
+    \footnotesize
+  \item A probabilidade de não aparecer plantas com mutação em um total
+    de 1000 plantas irradiadas;
+  \item A probabilidade de aparecer ao menos uma planta com mutação em
+    1000 plantas irradiadas;
+  \item A probabilidade de não aparecer planta com mutação em 2000
+    plantas irradiadas;
+  \item A probabilidade de aparecer pelo menos duas plantas com mutação
+    em 2000 plantas irradiadas;
+  \item O número médio esperado de plantas com mutação em 2000 plantas
+    irradiadas;
+  \item A variância esperada do número de plantas com mutação em 2000
+    plantas irradiadas;
+  \item O número mínimo de plantas que devemos irradiar de modo que a
+    probabilidade de aparecer ao menos uma planta com mutação seja maior
+    ou igual a 0,90.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Poisson}
+  Largamente utilizada quando desejamos contar número de ocorrências de
+  um evento de interesse, por unidade de tempo, comprimento, área ou
+  volume. Exemplos:
+  \begin{itemize}
+  \item número de indivíduos por quadrante de 1 m$^2$;
+  \item número de colônias de bactérias por 0,01 mm$^2$ de uma dada cultura, observado em uma plaqueta de laboratório;
+  \item número de defeitos em 1000 m de tecido;
+  \item número de acidentes em uma esquina movimentada e bem sinalizada, por dia;
+  \item número de partículas radioativas emitidas numa unidade de tempo: e número de micronúcleos/1000 células.
+  \end{itemize}
+  \vspace{0.2cm}
+
+  {\bf Importante}: Muito utilizada em estudos de dinâmica de populações
+  e de entomologia.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Poisson}
+  \begin{block}{Função de probabilidades}
+    A função de probabilidades de uma variável aleatória $X$ com
+    distribuição de Poisson com parâmetro $\lambda$ é dada por:
+    $$P(x) = P(X=x) = \frac{e^{-\lambda}\lambda^x}{x!},
+    \quad x=0,1,2,3,\ldots,$$
+    em que $\lambda$ é igual ao número de ocorrências do evento de
+    interesse por unidade de tempo, distância, área, $\ldots$
+  \end{block}
+  \vspace{.5cm}
+
+  {\bf Notação}: $X \sim P(\lambda)$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Poisson}
+
+  \begin{block}{Média}
+    A esperança de uma variável aleatória $X$ com distribuição de
+    Poisson com parâmetro $\lambda$ é dada por:
+    $$\mu_X = \mbox{E}(X) = \lambda.$$
+  \end{block}
+
+  \begin{block}{Variância}
+    A variância de uma variável aleatória $X$ com distribuição de
+    Poisson com parâmetro $\lambda$ é dada por:
+    $$\sigma^2_X = \mbox{Var}(X) = \lambda.$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Poisson}
+
+<<echo=FALSE>>=
+lambdas <- c(2, 5, 15)
+names(lambdas) <- lambdas
+fl <- parse(text = sprintf("lambda==%.2f", lambdas))
+
+da <- purrr::map_dfr(lambdas, .id = "lambda", function(l) {
+        data.frame(x = 0:30, px = dpois(0:30, lambda = l))
+}) %>% transform(lambda  = forcats::fct_inorder(factor(lambda)))
+
+xyplot(px ~ x | lambda,
+       type = "h",
+       grid = TRUE,
+       lwd = 3,
+       ylab = expression(P(X==x)),
+       strip = strip.custom(
+           factor.levels = fl
+       ),
+       data = da)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Poisson}
+
+  {\bf Exemplo}: A emissão de partículas radioativas tem sido modelada
+  por meio de uma distribuição de Poisson, com o valor do parâmetro
+  dependendo da fonte utilizada. Suponha que o número de partículas
+  alfa, emitidas por minuto, seja uma variável aleatória seguindo o
+  modelo de Poisson com parâmetro 5, isto é, a taxa média de ocorrência
+  é de 5 emissões a cada minuto. Calcule a probabilidade de haver mais
+  de duas emissões em um minuto.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição de Poisson}
+
+  {\bf Exemplo}: Sabe-se que numa certa rede de computadores ocorre em
+  média uma queda por semana. Um pesquisador deseja realizar um trabalho
+  envolvendo simulação em que são necessários 2 dias consecutivos sem
+  haver queda na rede. Supondo o modelo de Poisson, calcular a
+  probabilidade dele não conseguir realizar a simulação.
+\end{frame}
+
+\begin{frame}{Aproximação binomial pela Poisson}
+
+  \begin{block}{}
+    A distribuição de Poisson, $P(\lambda)$, com $\lambda = n\pi$ é uma
+    boa aproximação à distribuição binomial $B(n,\pi)$, quando $\pi$ for
+    pequeno e $n$ for bastante grande, tal que $n\pi\leq 10$.
+    \vspace{0.5cm}
+
+    De fato, a distribuição Poisson é uma distribuição limite da
+    binomial. Quando $n\to\infty$ e $\pi\to 0$ a distribuição binomial
+    resulta na distribuição de Poisson com $\lambda=n\pi$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Aproximação binomial pela Poisson}
+  \small
+
+  {\bf Exemplo}: Seja $X$ a variável número de plantas com mutação em um
+  total de $n$ plantas irradiadas e $\pi=0,0001$ a probabilidade de uma
+  planta irradiada apresentar mutação. Calcular:
+  \begin{enumerate}[(a)]
+    \footnotesize
+  \item A probabilidade de não aparecer planta com mutação em 1000
+    plantas irradiadas;
+  \item A probabilidade de aparecer ao menos uma planta com mutação em
+    1000 plantas irradiadas;
+  \item A probabilidade de não aparecer plantas com mutação em 2000
+    irradiadas;
+  \item A probabilidade de aparecer ao menos duas plantas com mutação em
+    2000 plantas irradiadas;
+  \item O número médio esperado de plantas com mutação em 2000 plantas
+    irradiadas;
+  \item A variância esperada do número de plantas com mutação em 2000
+    plantas irradiadas;
+  \item O número mínimo de plantas que devem ser irradiadas de modo que
+    a probabilidade de aparecer ao menos uma planta com mutação seja
+    maior ou igual a 0,90.
+  \end{enumerate}
+\end{frame}
+
+\end{document}
