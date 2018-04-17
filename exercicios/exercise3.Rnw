@@ -240,7 +240,7 @@ Tabela \ref{tab:6}.
     (Chapecó) P$_{90}$ = 9403,53 kg/ha (Campos novos).}
 \item Acima de que valor encontram-se 85\% das produções de milho para
   cada localidade?\textbf{R: P$_{15}$ = 4960,32 kg/ha
-    (Chapecó) P$_{90}$ = 7881,82 kg/ha (Campos novos).}
+    (Chapecó) P$_{15}$ = 7881,82 kg/ha (Campos novos).}
 \end{enumerate}
 \vspace{0.5cm}
 \pagebreak
@@ -282,7 +282,7 @@ bifurcações presentes em uma amostra de árvores.
 \item Construa uma tabela de frequências.
 \item Para os dados organizados na tabela do item a, calcule a média, a
   mediana, a moda, o primeiro e o terceiro quartis e o percentil 20.
-  \textbf{R: média=1,732; mediana=2; moda=2; 1ºQ=1; 3ºQ=1; P$_{20}$=0.}
+  \textbf{R: média=1,732; mediana=2; moda=2; 1ºQ=1; 3ºQ=2; P$_{20}$=0.}
 \item Para os dados organizados na tabela do item a, calcule a
   variância, o desvio padrão e o coeficiente de variação.
   \textbf{R: variância=1,451; desvio padrão=1,205; CV=69,56\%.}
