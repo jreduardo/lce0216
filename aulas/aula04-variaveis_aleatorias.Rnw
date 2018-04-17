@@ -293,14 +293,15 @@ options(OutDec = ",")
     \begin{tabular}{cccc} \hline
       Possíveis & \\
       Resultados & Probabilidades & $x$ & $y$ \\ \hline
-      $GGG$                   & 0,027 & 3 & 1 \\
-      $GG\bar{G}$             & 0,063 & 2 & 1 \\
-      $G\bar{G}G$             & 0,063 & 2 & 1 \\
+      $\bar{G}\bar{G}\bar{G}$ & 0,343 & 0 & 0 \\
+      $\bar{G}\bar{G}G$       & 0,147 & 1 & 1 \\
+      $\bar{G}G\bar{G}$       & 0,147 & 1 & 1 \\
       $G\bar{G}\bar{G}$       & 0,147 & 1 & 1 \\
       $\bar{G}GG$             & 0,063 & 2 & 1 \\
-      $\bar{G}G\bar{G}$       & 0,147 & 1 & 1 \\
-      $\bar{G}\bar{G}G$       & 0,147 & 1 & 1 \\
-      $\bar{G}\bar{G}\bar{G}$ & 0,343 & 0 & 0 \\ \hline
+      $G\bar{G}G$             & 0,063 & 2 & 1 \\
+      $GG\bar{G}$             & 0,063 & 2 & 1 \\
+      $GGG$                   & 0,027 & 3 & 1 \\
+      \hline
       Total                   & 1,000 \\ \hline
     \end{tabular}
   \end{center}
@@ -328,9 +329,9 @@ options(OutDec = ",")
   \begin{block}{Distribuição de uma variável aleatória discreta}
     Damos o nome de {\bf distribuição de probabilidade} (modelo
     probabilístico) da variável aleatória discreta $X$, ao conjunto de
-    ponto $(x_i, P(x_i))$, em que $x_i$ representa os diferentes valores
-    da variável aleatória e $P(x_i)$ a probabilidade de ocorrência de
-    $x_i$, satisfazendo:
+    pontos $(x_i, P(x_i))$, em que $x_i$ representa os diferentes
+    valores da variável aleatória e $P(x_i)$ a probabilidade de
+    ocorrência de $x_i$, satisfazendo:
     $$P(x_i)\geq 0 \quad \mbox{e} \quad \sum_i P(x_i) = 1.$$
   \end{block}
 
