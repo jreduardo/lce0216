@@ -1,0 +1,1019 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  5. Principais Modelos Contínuos}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitores: Eduardo E. R. Junior \& Giovana Fumes
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 19 de abril de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+library(latticeExtra)
+theme <- custom.theme.2()
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+library(tidyr)
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Modelos contínuos}
+  \begin{itemize}
+    \item Estabelecem a relação entre variável e a realização do
+      experimento que a origina;
+    \item Uma variável aleatória contínua segue determinado modelo se
+      cada possível intervalo da variável acontecer conforme uma determinada
+      lei de atribuição de probabilidades;
+    \item A lei de atribuição é dada pela \textbf{função densidade de
+        probabilidade};
+    \item Neste curso, veremos os modelos contínuos \textbf{Normal},
+      \textbf{Exponencial} e \textbf{Weibull}.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+  \begin{itemize}
+  \item Um dos modelos mais importantes de uma distribuição contínua de
+    probabilidade;
+  \item Representa, com boa aproximação, muitos fenômenos da natureza;
+  \item Alguns exemplos de variáveis aleatórias contínuas que seguem
+    distribuição normal (geralmente):
+    \begin{itemize}
+    \item Peso: de matéria seca, de raiz, de animais, de pessoas, de
+      frutos, de sacas de café,...
+    \item Altura: de árvores, plantas, animais;
+    \item DAP, CAP;
+    \item Produtividade: de cana-de-açúcar, de soja,...
+    \item Erros de medida em geral.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+  \small
+
+  {\bf Exemplo prático:} Na figura abaixo, apresenta-se o histograma dos
+  comprimentos à altura do peito (DAP) obtidos na aula de campo com o
+  professor Thadeu. Os pontos acima do eixo $x$ são os valores
+  observados e a curva em preto é a função de densidade da distribuição
+  normal com média e variância amostrais.
+
+<<echo=FALSE>>=
+
+cap18 <- c(86.2, 111, 70.5, 76.6, 52.2, 95.8, 185.3, 91, 65.5, 93.5, 93,
+           59, 111, 105.6, 68.2, 132.3, 63, 62, 54, 70, 77.7, 132,
+           134.5, 50, 36.5, 43.4, 83, 85, 52.3, 48.3, 92.4, 108, 110.8)
+histogram(~cap18,
+          type = "density",
+          origin = 0,
+          ylim = c(-0.001, 0.015),
+          axis = axis.grid,
+          xlab = "Comprimento à altura do peito de sapucaias",
+          ylab = "Densidade",
+          panel = function(x, ...) {
+              pars <- list(mean = mean(x), sd = sd(x))
+              panel.histogram(x, col = "gray70", border = "white", ...)
+              panel.mathdensity(dnorm, args = pars, col = 1)
+              panel.points(x = x, y = -5e-4, col = "gray30")
+          })
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+  \small
+
+  {\bf Um problema:}
+    Sabe-se que as árvores em uma floresta de {\it Pinus caribaea}
+    apresentam diâmetro médio de 23 cm, variância de 49 cm$^2$. O
+    histograma de uma amostra aleatória de diâmetros de 1000 àrvores e a
+    função densidade de probabilidade teórica são apresentados na figura
+    a seguir.
+
+<<echo=FALSE>>=
+
+set.seed(1234)
+am <- rnorm(1000, 23, 7)
+histogram(~am,
+          type = "density",
+          origin = 0,
+          axis = axis.grid,
+          xlab = "Comprimento à altura do peito de sapucaias",
+          ylab = "Densidade",
+          panel = function(x, ...) {
+              pars <- list(mean = 23, sd = 7)
+              panel.histogram(x, col = "gray70", border = "white", ...)
+              panel.mathdensity(dnorm, args = pars, col = 1)
+              panel.points(x = x, y = -0.002, col = "gray40")
+              # panel.rug(x)
+          })
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+<<echo=FALSE, out.width=".8\\textwidth">>=
+
+histogram(~am,
+          type = "density",
+          origin = 0,
+          axis = axis.grid,
+          xlab = "Comprimento à altura do peito de sapucaias",
+          ylab = "Densidade",
+          panel = function(x, ...) {
+              pars <- list(mean = 23, sd = 7)
+              panel.histogram(x, col = "gray70", border = "white", ...)
+              panel.mathdensity(dnorm, args = pars, col = 1)
+              panel.points(x = x, y = -0.002, col = "gray40")
+              # panel.rug(x)
+          })
+
+@
+
+\begin{itemize}
+\item Sistema I:
+  \begin{center}
+    \begin{tabular}{lcr}\hline
+      Classificação & Diâmetro & Porcentagem esperada \\ \hline
+      I & até 17 $cm$ & \underline{\textcolor[rgb]{1.00,1.00,1.00}{100}}\% \\
+      II & de 17 a 30 $cm$ & \underline{\textcolor[rgb]{1.00,1.00,1.00}{100}}\% \\
+      III & acima de 30 $cm$ & \underline{\textcolor[rgb]{1.00,1.00,1.00}{100}}\% \\ \hline
+    \end{tabular}
+  \end{center}
+\end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+<<echo=FALSE, out.width=".8\\textwidth">>=
+
+histogram(~am,
+          type = "density",
+          origin = 0,
+          axis = axis.grid,
+          xlab = "Comprimento à altura do peito de sapucaias",
+          ylab = "Densidade",
+          panel = function(x, ...) {
+              pars <- list(mean = 23, sd = 7)
+              panel.histogram(x, col = "gray70", border = "white", ...)
+              panel.mathdensity(dnorm, args = pars, col = 1)
+              panel.points(x = x, y = -0.002, col = "gray40")
+              # panel.rug(x)
+          })
+
+@
+
+\begin{itemize}
+\item Sistema II:
+  \begin{center}
+    \begin{tabular}{lcr}\hline
+      Classificação & Diâmetro & Porcentagem esperada \\ \hline
+      I & até \underline{\textcolor[rgb]{1.00,1.00,1.00}{00}} $cm$ & 20\% \\
+      II & de \underline{\textcolor[rgb]{1.00,1.00,1.00}{00}} a \underline{\textcolor[rgb]{1.00,1.00,1.00}{00}} $cm$ & 60\% \\
+      III & acima de \underline{\textcolor[rgb]{1.00,1.00,1.00}{00}} $cm$ & 20\% \\ \hline
+    \end{tabular}
+  \end{center}
+\end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+<<echo=FALSE, out.width=".8\\textwidth">>=
+
+histogram(~am,
+          type = "density",
+          origin = 0,
+          axis = axis.grid,
+          xlab = "Comprimento à altura do peito de sapucaias",
+          ylab = "Densidade",
+          panel = function(x, ...) {
+              pars <- list(mean = 23, sd = 7)
+              panel.histogram(x, col = "gray70", border = "white", ...)
+              panel.mathdensity(dnorm, args = pars, col = 1)
+              panel.points(x = x, y = -0.002, col = "gray40")
+              # panel.rug(x)
+          })
+
+@
+
+{\bf Observações:}
+\begin{itemize}
+  \small
+\item As observações estão mais concentradas em torno do valor central e
+  a concentração vai diminuindo a medida que os valores vão aumentando
+  ou diminuindo;
+\item Distribuição em forma de sino (\textit{bell curve});
+\item Distribuição simétrica em torno do seu ponto central;
+\end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+  {\bf Observações gerais:}
+  \begin{itemize}
+  \item As distribuições amostrais de estatísticas como médias e
+    proporções podem ser aproximadas pela distribuição normal
+    $\Rightarrow$ Inferência estatística
+  \item Distribuições binomial e Poisson $\Rightarrow$ aproximação
+    através da distribuição normal
+  \item Denominação: distribuição gaussinana $\Rightarrow$ Karl F. Gauss
+    (1777-1855).
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+  \begin{block}{Definição}
+    Dizemos que uma variável aleatória $X$ tem distribuição normal, com
+    parâmetros $\mu$ e $\sigma$, em que $-\infty < \mu < \infty$ e
+    $\sigma > 0$, se sua função densidade de probabilidade for dada por:
+    $$f_X(x) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \quad x \in \mathbb{R}.$$
+    {\bf Notação}: $X \sim N(\mu, \sigma^2)$.
+  \end{block}
+
+  Pode-se demonstrar que:
+  \vspace{-0.2cm}
+  \begin{multicols}{2}
+    \small
+    \begin{itemize}
+    \item $f_X(x) > 0$
+    \item $\int_{-\infty}^{+\infty} f_X(x)dx = 1$
+    \end{itemize}
+    \newpage
+
+    \begin{itemize}
+    \item E$(X) = \mu$
+    \item Var$(X) = \sigma^2$
+    \end{itemize}
+  \end{multicols}
+  \vspace{-0.3cm}
+  \begin{itemize}
+    \small
+  \item $f_X(x)$ é simétrica ao redor de $\mu$, ou seja,
+    $f(\mu-x)=f(\mu+x)$ para todo $x$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+<<echo=FALSE>>=
+
+mus <- c(-5, 0, 5)
+names(mus) <- mus
+sds <- c(0.7, 1, 2)
+names(sds) <- sds
+
+flm <- parse(text = sprintf("mu==%.2f", mus))
+fls <- parse(text = sprintf("sigma^2=='%.1f'", sds^2))
+
+da <- purrr::map_dfr(sds, .id = "sd", function(sd) {
+    purrr::map_dfr(mus, .id = "mu", function(mu) {
+        xs <- seq(-12, 12, length.out = 500)
+        data.frame(x = xs, fx = dnorm(xs, mu, sd))
+    })
+}) %>%
+    transform(mu = forcats::fct_inorder(factor(mu)),
+              sd = forcats::fct_inorder(factor(sd)))
+
+xyplot(fx ~ x | mu,
+       groups = sd,
+       type = "l",
+       grid = TRUE,
+       layout = c(3, 1),
+       ylab = expression(f[X](x)),
+       auto.key = list(
+           column = 3,
+           points = FALSE,
+           lines = TRUE,
+           text = fls
+       ),
+       strip = strip.custom(
+           factor.levels = flm
+       ),
+       data = da)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+<<echo=FALSE, out.width="1\\textwidth", fig.width=9, fig.height=6.5>>=
+
+add_alpha <- function(col, alpha = 1){
+    apply(sapply(col, col2rgb)/255, 2,
+          function(x) rgb(x[1], x[2], x[3], alpha = alpha))
+}
+paint_prob <- function(x, y,
+                       col,
+                       alpha = 0.4,
+                       quantiles,
+                       ypos_mark,
+                       text_mark,
+                       text_qnt) {
+    polygon(x = c(x, rev(x)),
+            y = c(y, rep(0, length(y))),
+            col = add_alpha(col, alpha))
+    arrows(quantiles[1], ypos_mark,
+           quantiles[2], ypos_mark,
+           code = 3,
+           angle = 90,
+           length = 0.05,
+           lwd = 1.5,
+           col = col)
+    legend(0,
+           ypos_mark,
+           text_mark,
+           cex = 1.2,
+           bg = "white",
+           box.col = "white",
+           adj = c(0.1, 0.5),
+           xjust = 0.5,
+           yjust = 0.5,
+           y.intersp = 0.1,
+           x.intersp = 0.1)
+    text(x = quantiles,
+         y = ypos_mark,
+         labels = text_qnt,
+         adj = c(0.5, 1.5))
+}
+
+x <- seq(-3.5, 3.5, length.out = 500)
+fx <- dnorm(x)
+cols <- trellis.par.get("superpose.symbol")$col[1:3]
+
+q90 <- -qnorm(.05)
+q95 <- -qnorm(.025)
+q99 <- -qnorm(.005)
+
+i90 <- abs(x) < q90
+i95 <- abs(x) < q95
+i99 <- abs(x) < q99
+
+par(mar = c(0, 0, 0, 0))
+plot(fx ~ x,
+     type = "l",
+     ylim = c(-0.06, 0.4),
+     xaxt = "n",
+     yaxt = "n",
+     bty = "n",
+     ann = FALSE)
+paint_prob(x[i99], fx[i99],
+           col = cols[1],
+           quantiles = c(-q99, q99),
+           ypos_mark = -0.06,
+           text_mark = "99%",
+           text_qnt = expression(mu-2.58*sigma, mu+2.58*sigma))
+paint_prob(x[i95], fx[i95],
+           col = cols[2],
+           quantiles = c(-q95, q95),
+           ypos_mark = -0.04,
+           text_mark = "95%",
+           text_qnt = expression(mu-1.96*sigma, mu+1.96*sigma))
+paint_prob(x[i90], fx[i90],
+           col = "cadetblue4",
+           quantiles = c(-q90, q90),
+           ypos_mark = -0.02,
+           text_mark = "90%",
+           text_qnt = expression(mu-1.65*sigma, mu+1.65*sigma))
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+  A probabilidade de uma variável aleatória com distribuição normal
+  tomar um valor entre dois pontos quaisquer, $x_1$ e $x_2$, tal que
+  $x_1 < x_2$, é igual a área sob a curva normal compreendida entre os
+  dois pontos.
+  \vspace{0.3cm}
+
+  \begin{multicols}{2}
+<<echo=FALSE, out.width=".7\\textwidth", fig.width=5, fig.height=3>>=
+
+par(mar = c(2, 0, 0, 0))
+plot(fx ~ x,
+     type = "l",
+     lwd = 1.5,
+     xaxt = "n",
+     yaxt = "n",
+     bty = "n",
+     ann = FALSE)
+axis(side = 1,
+     at = c(-2, -0.5),
+     labels = expression(x[1], x[2]))
+axis(side = 1,
+     at = c(-3.5, 3.5),
+     labels = rep("", 2))
+ind <- x < -0.5 & x > -2
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+
+@
+
+$$
+\begin{aligned}
+P(x_1 < &X < x_2) = \\
+  &\int_{x_1}^{x_2}
+  \frac{1}{\sqrt{2\pi\sigma^2}}
+  e^{-\frac{(x-\mu)^2}{2\sigma^2}}dx
+  \end{aligned}
+  $$
+
+\end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+  {\bf Observação:} A função de densidade acumulada $F(x)$ da
+  distribuição normal,
+  $$
+  \Phi(x) = F(x) = P(X < x) =
+  \int_{-\infty}^{x}
+  \frac{1}{\sqrt{2\pi\sigma^2}}
+  e^{-\frac{(t-\mu)^2}{2\sigma^2}}dt,
+  $$
+  usada para o cálculo de probabilidades,
+  $$P(x_1 < X < x_2) = F(x_2) - F(x_1),$$
+  não pode ser obtida analiticamente (em forma fechada), sendo
+  necessário o uso de métodos numéricos.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal padrão}
+
+  \begin{block}{}
+    Se $X$ uma variável aleatória com distribuição $N(\mu, \sigma^2)$,
+    então a variável aleatória $Z$, definida por:
+    $$Z = \frac{X-\mu}{\sigma},$$
+    tem uma distribuição $N(0,1)$, denominada \textbf{normal padrão},
+    cuja função densidade de probabilidade é dada por:
+    $$f_Z(z) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}z^2}, \quad
+    z\in \mathbb{R}.$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal padrão}
+
+  {\bf Observações}:
+  \begin{itemize}
+  \item A nova distribuição têm média correspondente à origem e desvio
+    padrão como medida de afastamento da média;
+  \item E$(Z) = \mu_Z = 0$ e Var$(Z) = \sigma^2_Z = 1$;
+  \item Probabilidades calculadas para valores com de $z$ com precisão
+    de duas casas decimais foram tabeladas para facilitar cálculos
+    manuais.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Tabela normal padrão}
+  \centering
+  \begin{figure}
+    \hspace*{-0.9cm}
+    \includegraphics[width=1.15\textwidth]{images/tab}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Tabela normal padrão}
+  \centering
+  $P(Z < -1)= \Phi(-1) = \textcolor{white}{0,1587}$ \pause
+  \begin{figure}
+    \includegraphics[width=9cm]{images/tab1}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]{Tabela normal padrão}
+  \centering
+  $P(Z < -1)= \Phi(-1) = \textcolor{white}{0,1587}$
+  \begin{figure}
+    \includegraphics[width=9cm]{images/tab2}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]{Tabela normal padrão}
+  \centering
+  $P(Z < -1)= \Phi(-1) = 0,1587$
+  \begin{figure}
+    \includegraphics[width=9cm]{images/tab3}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Tabela normal padrão}
+  \centering
+
+  \vspace{-0.6cm}
+  \begin{align*}
+    P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
+                              &\textcolor{white}{=0,8508 - 0,0217}\\
+                              &\textcolor{white}{=0.8201}
+  \end{align*}
+  \vspace{-0.6cm}
+  \begin{figure}
+    \includegraphics[width=9cm]{images/tab11}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]{Tabela normal padrão}
+  \centering
+
+  \vspace{-0.6cm}
+  \begin{align*}
+    P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
+                              &= 0,8508 - \textcolor{white}{0,0217}\\
+                              &\textcolor{white}{=0.8201}
+  \end{align*}
+  \vspace{-0.6cm}
+  \begin{figure}
+    \includegraphics[width=9cm]{images/tab22}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]{Tabela normal padrão}
+  \centering
+
+  \vspace{-0.6cm}
+  \begin{align*}
+    P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
+                              &= 0,8508 - 0,0217\\
+                              &\textcolor{white}{=0.8201}
+  \end{align*}
+  \vspace{-0.6cm}
+  \begin{figure}
+    \includegraphics[width=9cm]{images/tab33}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[noframenumbering]{Tabela normal padrão}
+  \centering
+
+  \vspace{-0.6cm}
+  \begin{align*}
+    P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
+                              &= 0,8508 - 0,0217\\
+                              &= 0.8201
+  \end{align*}
+  \vspace{-0.6cm}
+  \begin{figure}
+    \includegraphics[width=9cm]{images/tab33}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Padronização de uma variável}
+
+  Com a tabela de probabilidades de uma variável normal padrão, pode-se
+  calcular probabilidades para qualquer outra variável normalmente
+  distribuída padronizando-a. Seja, por exemplo, X$\sim
+  \mbox{N}(23,49)$. Deseja-se calcular $P(\text{X}<16)$
+  \vspace{0.5cm}
+
+  Para padronizar X, devemos subtrair a média e dividir pelo desvio
+  padrão
+  $$
+  P\left ( Z< \frac{x-\mu}{\sigma}\right )= P\left (Z<
+  \frac{16-23}{7}\right )=P(\mbox{Z}<-1)=0,1587.
+  $$
+  Portanto: $P(\mbox{X}<16 ) = P(\mbox{Z} < -1) = 0,1587$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Padronização de uma variável}
+  Padronizar uma variável normalmente distribuída é mapeá-la na escala
+  da normal padrão.
+  \begin{figure}
+    \includegraphics[width=.9\textwidth]{images/esquema_padroniza}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+  {\bf Exercício}: Sabendo-se que $Z \sim N(0,1)$, usando a tabela da
+  distribuição normal padrão, calcular:
+  \begin{enumerate}[(a)]
+  \item $P(0 < Z < 2,14)$
+  \item $P(-3,01 < Z < 0)$
+  \item $P(-3,01 < Z < 2,14)$
+  \item $P(Z > 0)$
+  \item $P(Z > 1,00)$
+  \item $P(Z < - 1,00)$
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+  Agora podemos calcular as probabilidades associadas aos intervalos
+  correspondentes a variável $X$: diâmetro, em $cm$, de uma árvore que
+  se distribui conforme modelo $N(23, 49)$.
+  \begin{enumerate}[(a)]
+  \item $P(X < 17)$
+  \item $P(17 < X < 30)$
+  \item $P(X > 30)$
+  \end{enumerate}
+  \vspace{0.5cm}
+  Assim, as porcentagens esperadas são dadas por:
+  \begin{center}
+    \begin{tabular}{lcr}\hline
+      Classificação & Diâmetro & Porcentagem esperada \\ \hline
+      I & até 17 $cm$ & \underline{\textcolor[rgb]{1.00,1.00,1.00}{100}}\% \\
+      II & de 17 a 30 $cm$ & \underline{\textcolor[rgb]{1.00,1.00,1.00}{100}}\% \\
+      III & acima de 30 $cm$ & \underline{\textcolor[rgb]{1.00,1.00,1.00}{100}}\% \\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição normal ou Gaussiana}
+
+  {\bf Exercício}: Calcular os valores de $X$ correspondentes às
+  porcentagens esperadas, em que $X$: diâmetro, em $cm$, de uma árvore
+  se distribui conforme modelo $N(23, 49)$.
+
+  \begin{center}
+    \begin{tabular}{lcr}\hline
+      Classificação & Diâmetro & Porcentagem esperada \\ \hline
+      I & até \underline{\textcolor[rgb]{1.00,1.00,1.00}{000}} $cm$ & 20\% \\
+      II & de \underline{\textcolor[rgb]{1.00,1.00,1.00}{000}} a \underline{\textcolor[rgb]{1.00,1.00,1.00}{000}} $cm$ & 60\% \\
+      III & acima de \underline{\textcolor[rgb]{1.00,1.00,1.00}{000}} $cm$ & 20\% \\ \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Aproximação binomial pela normal}
+  Seja $Y$ uma variável aleatória representando o número de sucessos em
+  um total de $n$ ensaios independentes e $\pi$ a probabilidade de
+  ocorrer sucesso em cada ensaio, dizemos que $Y \sim B(n;\pi)$.
+  \vspace{0.5cm}
+
+  A variável $Y$ pode ser aproximada por uma distribuição normal com
+  média $\mu_Y=n\pi$ e variância $\sigma_Y^2=n\pi(1-\pi)$.
+\end{frame}
+
+\begin{frame}{Aproximação binomial pela normal}
+
+<<echo=FALSE, fig.width=9, fig.height=6>>=
+
+pis <- c(0.2, 0.5, 0.9)
+names(pis) <- pis
+ns <- c(3, 8, 20)
+names(ns) <- ns
+
+fln <- parse(text = sprintf("n==%.2f", ns))
+flp <- parse(text = sprintf("pi==%.2f", pis))
+
+da <- purrr::map_dfr(ns, .id = "n", function(n) {
+    purrr::map_dfr(pis, .id = "pi", function(p)
+        data.frame(x = 0:n, px = dbinom(0:n, n, p)))
+}) %>%
+    transform(n  = forcats::fct_inorder(factor(n)),
+              pi = forcats::fct_inorder(factor(pi)))
+
+db <- purrr::map_dfr(ns, .id = "n", function(n) {
+    purrr::map_dfr(pis, .id = "pi", function(p) {
+        xs <- seq(-5, 20, by = 0.1)
+        mu <- n * p
+        sd <- sqrt(n * p * (1 - p))
+        data.frame(x = xs, fx = dnorm(xs, mu, sd))
+    })
+}) %>%
+    transform(n  = forcats::fct_inorder(factor(n)),
+              pi = forcats::fct_inorder(factor(pi)))
+
+useOuterStrips(
+    xyplot(px ~ x | n + pi,
+           # scales = list(x = "free"),
+           type = "h",
+           grid = TRUE,
+           lwd = 4,
+           col = "black",
+           ylab = expression(P(X==x)),
+           data = da) +
+    as.layer(
+        xyplot(fx ~ x | n + pi,
+               type = "l",
+               lwd = 1.5,
+               col = "#0080ff",
+               data = db)
+    ),
+    strip = strip.custom(factor.levels = fln),
+    strip.left = strip.custom(factor.levels = flp)
+)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Aproximação binomial pela normal}
+  \begin{block}{Quando a aproximação é boa?}
+    Quando a probabilidade $\pi$ de ocorrer sucesso não está muito
+    próxima de 0 ou de 1 e o número $n$ de ensaios é grande.
+  \end{block}
+
+  \vspace{1cm}
+  \begin{center}
+    O cálculo da probabilidade pela normal é feito utilizando-se uma
+    distribuição $N(n\pi, n\pi(1-\pi))$.
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Aproximação binomial pela normal}
+  \begin{block}{Correção de continuidade}
+    Consiste em somar ou subtrair 0,5 aos limites do intervalo para o
+    qual desejamos calcular as probabilidades.
+  \end{block}
+  \vspace{1cm}
+
+  \begin{itemize}
+  \item Em muitas situações práticas o cálculo das probabilidades pode
+    ser realizado sem levarmos em conta a correção de continuidade;
+  \item Pode-se ignorar a correção para os casos em que
+    $0,30 < \pi < 0,75$ e $n$ maior do que 400.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Aproximação binomial pela normal}
+
+  {\bf Exercício}: As mudas em um viveiro são classificadas em grandes
+  ou pequenas, conforme sua altura. Verificou-se que 45\% das mudas são
+  consideradas grandes. Supondo que as mudas são colocadas em
+  recipientes que comportam 60 unidades, aleatoriamente, pergunta-se:
+  \begin{enumerate}[(a)]
+  \item Em que porcentagem esperada de recipientes teremos pelo menos
+    50\% de mudas grandes? (50\% é igual a 30 mudas).
+  \item Em que porcentagem de recipientes teremos exatamente 50\% de
+    mudas grandes?
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição exponencial}
+  \begin{block}{Distribuição exponencial}
+    \begin{itemize}
+    \item Teoria da confiabilidade;
+    \item Utilizada para prever o período de tempo necessário até a
+      ocorrência de um evento;
+    \item Probabilidade ao longo do tempo ou da distância entre
+      ocorrências num intervalo contínuo;
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição exponencial}
+
+  \begin{block}{Função densidade de probabilidade}
+    $$f(x) = \left\{
+      \begin{array}{l}
+        \frac{1}{\beta} e^{-\frac{x}{\beta}}, \quad x\geq 0,\\
+        0, \quad \mbox{caso contrário}
+      \end{array} \right.$$
+    em que $\frac{1}{\beta}$ indica a taxa de ocorrência por unidade de
+    medida, que pode ser tempo, distância, volume.
+
+    Notação: $X\sim \text{Exp}(\beta)$.
+  \end{block}
+
+  \begin{block}{Esperança e variância}
+    Obtida analiticamente por integração por partes!
+    $$\mbox{E}(X) = \beta$$
+    $$\mbox{Var}(X) = \beta^2$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição exponencial}
+
+FIGURAS
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição exponencial}
+  \begin{block}{Função de densidade de probabilidade acumulada}
+    $$F(x) = P(X < x) = \displaystyle{\int_0^x \frac{1}{\beta}
+      e^{-\frac{1}{\beta}x}} dx = 1 - e^{-\frac{1}{\beta}b}.$$
+    \vspace{0.2cm}
+
+    $$P(a<X<b) = F(b) - F(a) = e^{-\frac{1}{\beta}a} -
+    e^{-\frac{1}{\beta}b}.$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição exponencial}
+
+  {\bf Exemplo:} Considere que a variável volume diário de chuva (mm) em
+  Pelotas-RS no mês de janeiro segue uma distribuição exponencial com
+  parâmetro $\beta = 14,36$. Qual é a proporção de dias com volume de
+  chuva superior a 30 mm?
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição exponencial}
+
+  {\bf Exemplo:} Uma industria fabrica lâmpadas especiais que ficam em
+  operação continuamente. Empresa oferece aos seus clientes a garantia
+  de reposição, caso a lâmpada dure menos de 50 horas. A vida útil dessa
+  lâmpada é modelada por meio da distribuição exponencial com parâmetro
+  $\beta = 8000$. Determine a proporção de trocas por defeito de
+  fabricação.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição exponencial}
+  \begin{block}{Falta de memória}
+    \begin{align*}
+      P(X \geq t+s | X \geq s)
+      &= \frac{P(X \geq t+s, X \geq s)}{P(X\geq s)} =
+        \frac{P(X \geq t+s)}{P(X\geq s)}\\
+      &= \frac{e^{-\frac{t+s}{\beta}}}{e^{-\frac{s}{\beta}}}\\
+      &= e^{-\frac{t}{\beta}} = P(X\geq t)\\
+    \end{align*}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição Exponencial}
+
+  {\bf Exemplo:} O intervalo de tempo, em minutos, entre emissões
+  consecutivas de uma fonte radioativa é uma variável aleatória com
+  distribuição exponencial de parâmetro $\beta=5$. Calcule:
+  \begin{enumerate}[{\bf (a)}]
+  \item A probabilidade de haver uma emissão em um intervalo inferior a
+    2 minutos;
+  \item A probabilidade do intervalo ser superior ou igual a 7, sabendo
+    que ele é superior ou igual a 5.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição Weibull}
+
+  \begin{block}{Distribuição Weibull}
+    \begin{itemize}
+    \item Teoria da confiabilidade;
+    \item Tempo de vida.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição Weibull}
+
+  \begin{block}{Função densidade de probabilidade}
+    $$f(x) = \left\{
+      \begin{array}{l}
+        \frac{\beta}{\theta}\Big(\frac{x}{\theta}\Big)^{\beta-1} e^{-\left(\frac{x}{\theta}\right)^\beta}, \quad x\geq 0,\\
+        0, \quad \mbox{caso contrário}
+      \end{array} \right.
+    $$
+    em que $\theta > 0$ é o parâmetro de escala e $\beta$ é o parâmetro
+    de forma.
+  \end{block}
+
+  \begin{block}{Função densidade de probabilidade acumulada}
+    $$P(X < a) = \displaystyle{\int_0^a \frac{\beta}{\theta}
+      \Big(\frac{x}{\theta}\Big)^{\beta-1}e^{-\big(\frac{x}{\theta}\big)^\beta dx} = 1-e^{-\big(\frac{a}{\theta}\big)^\beta} }$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição Weibull}
+  \begin{block}{Distribuição Weibull: Esperança e Variância}
+    $$\mbox{E}(X) = \theta \Gamma\Big(1 + \frac{1}{\beta}\Big)$$
+    $$\mbox{Var}(X) = \theta^2\Big[ \Gamma \Big(1+\frac{2}{\beta}\Big)-
+    \Big(\Gamma\Big(1 + \frac{1}{\beta}\Big)\Big)^2\Big]$$
+
+    \begin{itemize}
+    \small
+    \item $\Gamma(n) = \displaystyle{\int_0^\infty x^{n-1}e^{-x}dx} $;
+    \item Se $n \in N$, então $\Gamma(n) = (n-1)\Gamma(n-1)$ e
+      $\Gamma(n) = (n-1)!$.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição Weibull}
+
+  FIGURAS
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição Weibull}
+
+  {\bf Exemplo:} O tempo de falha de uma submontagem eletrônica usada em
+  uma estação de trabalho RISK é satisfatoriamente modelado por uma
+  distribuição de Weibull com $\beta=0,5$ e $\theta = 1000$. Obtenha o
+  tempo médio de falha de uma submontagem. Qual a probabilidade da
+  submontagem sobreviver mais de 4000h.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Distribuição Weibull}
+
+  {\bf Exemplo:} Suponha que a precipitação diária para a cidade de
+  Santa Maria - RS, no mês de dezembro, segue uma distribuição Weibull
+  com parâmetro de forma $\beta = 0,6792$ e parâmetro de escala
+  $\theta = 11,6427$. Qual é a probabilidade da precipitação diária ser
+  inferior a 10 mm no mês de dezembro?
+\end{frame}
+
+\end{document}
