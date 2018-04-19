@@ -83,7 +83,7 @@ library(tidyr)
 %-------------------------------------------
 \begin{frame}{Modelos discretos}
   \begin{itemize}
-    \item Estabelem a relação entre variável e a realização do
+    \item Estabelecem a relação entre variável e a realização do
       experimento que a origina;
     \item Uma variável aleatória segue determinado modelo se cada
       possível valor da variável acontecer conforme uma determinada lei
@@ -117,15 +117,15 @@ library(tidyr)
 
 %-------------------------------------------
 \begin{frame}{Distribuição de Bernoulli}
-  Variável aleatória $X$: mortalidade.
+  Variável aleatória $X$: mortalidade da praga.
 
   \begin{multicols}{2}
-    \begin{center}
-      \begin{eqnarray*}
-        x &=& 1 \quad \mbox{se morreu}\\
-        x &=& 0 \quad \mbox{se não morreu}
-      \end{eqnarray*}
-    \end{center}
+      $$ X =
+      \begin{dcases}
+        x = 1, & \mbox{se morreu}\\
+        x = 0, & \mbox{se nãomorreu}
+      \end{dcases}
+      $$
     \newpage
 
     \begin{figure}[b]
@@ -149,15 +149,12 @@ library(tidyr)
     \begin{center}
       \begin{tabular}{ccc} \hline
         Resultados & $x$ & $P(X=x)$\\ \hline
-        \\
         $\bar{M}$ & 0 & $1-\pi$ \\
         $M$  & 1 & $\pi$ \\ \hline
         Total &  & $(1 - \pi) + \pi = 1$ \\ \hline
       \end{tabular}
     \end{center}
   \end{block}
-  \vspace{.5cm}
-
   Portanto, a variável aleatória $X$: mortalidade, tem distribuição de
   Bernoulli.
 \end{frame}
@@ -254,8 +251,9 @@ xyplot(px ~ x | pi,
     \item O fato de um inseto morrer, ou não, não tem influência no fato
       de o outro inseto morrer, ou não; ou seja, as mortes são {\bf
         independentes};
-    \item A probabilidade dos insetos morrerem é a mesma, igual a $\pi$.
-    \item Só há dois resultados possível para cada inseto: morreu ou não
+    \item A probabilidade de os insetos morrerem é a mesma, igual a
+      $\pi$.
+    \item Só há dois resultados possíveis para cada inseto: morreu ou não
       morreu (ensaio de Bernoulli); e
     \item Existem duas repetições.
     \end{itemize}
@@ -279,7 +277,7 @@ xyplot(px ~ x | pi,
   Distribuição de probabilidades
   \begin{center}
     \begin{tabular}{cc} \hline
-      $x_i$  &  $P(X=x)$ \\ \hline
+      $x_i$  &  $P(X=x_i)$ \\ \hline
       0  &  $(1-\pi)^2$ \\
       1  &  $2\pi(1-\pi)$ \\
       2  &  $\pi^2$ \\ \hline

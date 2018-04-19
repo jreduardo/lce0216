@@ -854,8 +854,8 @@ xyplot(c(0, cumsum(px)[-4]) ~ x,
       0 & \mbox{para} & x > 10\\
     \end{array}\right.$$
   \begin{enumerate}[(a)]
-  \item Verifique que $f(x)$ é uma função densidade de probabilidade;
   \item Construir o gráfico dessa função;
+  \item Verifique que $f(x)$ é uma função densidade de probabilidade;
   \item Calcular as porcentagens esperadas para
     \begin{itemize}
     \item X entre 5 e 10 unidades;
