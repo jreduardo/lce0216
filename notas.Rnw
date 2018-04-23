@@ -1,0 +1,175 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+\usepackage[table]{xcolor}
+\newcolumntype{C}{>{\centering\arraybackslash}p{1in}}
+\newcolumntype{W}{>{\centering\arraybackslash}p{0.3in}}
+\newcolumntype{L}{>{\arraybackslash}p{1in}}
+
+\usepackage{float}
+\usepackage{mathpazo}
+
+\usepackage{natbib}
+\usepackage[resetlabels]{multibib}
+\newcites{Basic}{\large Bibliografica básica}
+\setlength{\bibsep}{3pt plus 0.3ex}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3, OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.booktabs = TRUE,
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino"))
+
+# Graphics
+library(latticeExtra)
+mycol <- c(1, "#377EB8", "#E41A1C", "#4DAF4A",
+           "#ff00ff", "#FF7F00", "#984EA3", "#FFFF33", "#808080")
+myreg <- colorRampPalette(c(mycol[3],  "gray90", mycol[2]))(100)
+
+## Trellis graphical style.
+ac <- list(pad1 = 0.5, pad2 = 0.5, tck = 0.5)
+ps <- list(
+    superpose.symbol = list(col = mycol, pch = 1),
+    box.rectangle = list(col = 1, fill = c("gray70")),
+    box.umbrella = list(col = 1, lty = 1),
+    box.dot = list(pch = "|"),
+    dot.symbol = list(col = 1, pch = 19),
+    dot.line = list(col = "gray50", lty = 3),
+    plot.symbol = list(col = 1),
+    plot.line = list(col = 1),
+    plot.polygon = list(col = "gray95"),
+    superpose.line = list(col = mycol, lty = 1),
+    superpose.polygon = list(col = mycol),
+    strip.background = list(col = c("gray90", "gray70")),
+    par.sub.text = list(
+        font = 1, just = "left", cex = 0.9,
+        x = grid::unit(10, "mm")),
+    layout.widths = list(
+        left.padding = 0.25,
+        right.padding = -1,
+        ylab.axis.padding = 0),
+    layout.heights = list(
+        bottom.padding = 0.25,
+        top.padding = 0,
+        axis.xlab.padding = 0,
+        xlab.top = 0),
+    axis.components = list(
+        bottom = ac, top = ac,
+        left = ac, right = ac)
+)
+trellis.par.set(ps)
+
+@
+
+\begin{center}
+  \bfseries
+  UNIVERSIDADE DE SÃO PAULO \\
+  ESCOLA SUPERIOR DE AGRICULTURA ``LUIZ DE QUEIROZ`` \\
+  DEPARTAMENTO DE CIÊNCIAS EXATAS \\[0.2cm]
+
+  LCE0216 - Introdução à Bioestatística Florestal \\
+  Professora responsável: Clarice Garcia Borges Demétrio
+\end{center}
+
+\begin{table}[ht]
+\centering
+\rowcolors{2}{gray!25}{white}
+% \begin{tabular}{p{1in}p{1in}p{1in}p{1in}p{1in}p{1in}p{in}}
+\begin{tabular}{WCCCCCC}
+  \toprule
+
+<<results="asis">>=
+
+da <- readxl::read_xlsx("notas/notas.xlsx",
+                        skip = 2,
+                        col_types = c("text", "text",
+                                      rep("numeric", 3)))
+da$med <- apply(da[, 3:5], 1, mean, na.rm = TRUE)
+gmeds <- apply(da[, 3:6], 2, mean, na.rm = TRUE)
+
+tab <- da
+colnames(tab) <- c("Nome", "Nº USP",
+                   paste(c("1ª", "2ª", "3ª"), "Avaliação"),
+                   "Nota Média")
+print.xtable(xtable(tab[, -1]),
+             only.contents = TRUE)
+
+
+@
+
+& Média & \Sexpr{gmeds[1]} & & & \Sexpr{gmeds[4]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\vspace{0.5cm}
+
+<<fig.height=4, out.width="0.8\\textwidth">>=
+
+xy1 <- histogram(~med,
+                 data = da,
+                 ylim = c(-0.05, 0.32),
+                 xlim = c(2.4, 10.5),
+                 col = "gray90",
+                 border = "white",
+                 type = "density",
+                 ylab = "Densidade",
+                 xlab = "",
+                 par.settings = list(
+                     layout.heights = list(
+                         bottom.padding = 13)
+                 ),
+                 panel = function(x, ...) {
+                     panel.histogram(x, ...)
+                     panel.lines(density(x[!is.na(x)]))
+                     panel.rug(x, col = 1)
+                 })
+# xy1
+
+xy2 <- bwplot(~med,
+              fill = "gray90",
+              xlim = c(2.4, 10.5),
+              do.out = FALSE,
+              data = da,
+              xlab = "Notas médias",
+              box.width = 0.3,
+              scales = list(x = list(draw = FALSE)),
+              par.settings = list(
+                  axis.line = list(col = "transparent"),
+                  clip = list(panel = "off")
+              ))
+# xy2
+
+print(xy1, position = c(0, 0, 1, 1), more = TRUE)
+print(xy2, position = c(0.047, 0, 0.995, 0.4), more = FALSE)
+
+@
+
+\end{document}
