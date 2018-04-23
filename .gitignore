@@ -1,7 +1,7 @@
 .Rhistory
-*/*_cache/*
-*/*_files/*
-*/figure/*
+**/*_cache/*
+**/*_files/*
+**/figure/*
 *.bib.bak
 
 # Ignore tex output files
