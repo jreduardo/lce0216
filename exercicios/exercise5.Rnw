@@ -1,0 +1,367 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático 5 - Variáveis aleatórias e distribuições de probabilidades\\
+    24 de abril de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+
+\begin{document}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    # fig.align = "center",
+    fig.pos = "H",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.} Seja X uma variável aleatória discreta, com a seguinte
+distribuição de probabilidades:
+
+\begin{table}[h]
+  \begin{center}
+    \begin{tabular}{c|ccc}
+      $x_i$ & 0 & 1 & 2 \\
+      \hline
+      $P(X = x_i)$ & $\frac{1}{2}$ & $\frac{1}{3}$ & $\frac{1}{6}$ \\
+    \end{tabular}
+  \end{center}
+\end{table}
+Calcule E$($X$)$ e Var$($X$)$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} Em uma plantação de Eucalipto, 30\% das árvores estão sendo
+atacadas por formigas. Retira-se, ao acaso, uma amostra de 10 árvores.
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+  \item Verifique se a variável X: número de árvores atacadas por
+    formigas pode ser estudada como uma variável aleatória binomial.
+  \item Apresente a função de probabilidade de X e apresente a
+    distribuição de probabilidades em um gráfico.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.} Seja $X$ uma variável aleatória contínua com função de
+probabilidade dada por:
+
+$$f(x) = \left\{
+  \begin{array}{l}
+    0, \mbox{ para } x<0\\
+    kx^2, \mbox{ para } 0 \leq x \leq 1 \\
+    0, \mbox{ para } x>1
+  \end{array}\right.,
+$$
+onde $k$ é uma constante. Pede-se:
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Determine $k$ de modo que a função $f(x)$ seja uma função
+  densidade de probabilidade.
+\item Faça o gráfico de $f(x)$.
+\item Calcule $P(0,5 < X \leq 1)$.
+\item Calcule a média e a variância de $X$
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{4.} Suponhamos que a porcentagem de germinação de sementes de
+feijão seja de 70\%. Vão ser semeadas quatro sementes por cova, as quais
+serão espaçadas de 0,40m entre linhas e 0,20m entre covas. Supondo-se
+que cada canteiro a ser semeado conste de seis linhas de 5 m de
+comprimento, qual o número médio de covas falhadas (nenhuma semente
+germinou, das quatro semeadas) por canteiro?
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} Sabendo que a probabilidade de nascer um bezerro do sexo
+feminino é 0,60. Calcule o valor esperado (esperança) e o desvio padrão
+da variável número de bezerros do sexo feminino nascidos em 30 partos.
+\vspace{0.5cm}
+
+\noindent
+\textbf{6.} Um contador eletrônico de bactérias registra, em média,
+cinco bactérias por cm$^3$ de um líquido. Admitindo que esta variável
+tenha distribuição de Poisson,
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Qual é o desvio padrão do número de bactérias por cm$^3$?
+\item Encontre a probabilidade de que pelo menos duas bactérias ocorram
+  num volume de líquido de 1 cm$^3$.
+\end{enumerate}
+\vspace{0.5cm}
+
+\pagebreak
+
+\noindent
+\textbf{7.} Uma armadilha para pegar vespa foi testada. Somente 128 das
+720 vespas atraídas pela isca puderam ser apanhadas. Portanto, a
+probabilidade de pegarmos uma vespa é $\pi=0,178$. Qual é a
+probabilidade que dentre três vespas atraídas pela isca da armadilha:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Nenhuma seja capturada;
+\item Pelo menos uma seja capturada?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{8.} Verificou-se que o número de quebras cromossômicas em um
+roedor, durante um dia, num local poluído, pode ser considerado como uma
+variável aleatória que tem distribuição de Poisson com parâmetro
+$\lambda=0,1$. Vamos supor que este roedor ficará 20 dias neste local
+poluído para experiência.
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Qual a probabilidade de se encontrarem menos de três quebras
+  cormossômicas?
+\item Qual é a probabilidade de se encontrarem mais de duas quebras
+  cromossômicas?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{9.} Uma vacina contra a febre aftosa tem probabilidade igual a
+0,001 de não imunizar um animal. Se forem vacinados cinco mil animais,
+qual a probabilidade de não ficarem imunes:
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Cinco animais?
+\item Dois animais ou mais?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{10.} A distribuição dos pesos de coelhos criados numa granja
+pode ser bem representada por uma distribuição normal, com média de 5kg
+e desvio padrão de 0,8kg. Um abatedouro comprará cinco mil coelhos e
+pretende classificá-los de acordo com o peso, do seguinte modo: 20\% dos
+leves como pequenos, os 55\% seguintes como médios, os 15\% seguintes
+como grandes e os 10\% mais pesados como extra. Quais os limites de peso
+para cada classificação?
+\vspace{0.5cm}
+
+\noindent
+\textbf{11.} Uma enchedora automática de garrafas de vinho está regulada
+para que o volume médio de líquido em cada garrafa seja $\mu=750$ cm$^3$
+e o desvio padrão seja $\sigma=7,5$ cm$^3$. Admitindo que a
+distribuição da variável volume de líquido seja normal.
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Qual a porcentagem esperada de garrafas em que o volume de líquido
+  é menor do que 742,5 cm$^3$?
+\item Qual a porcentagem esperada de garrafas em que o volume de líquido
+  não se desvia da média em mais do que dois desvios padrão, para mais
+  ou para menos?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{12.} Uma máquina de encher sacos de sementes de milho híbrido
+pode ser regulada de modo a descarregar uma média de $\mu$ kg de
+sementes por saco. Admitindo que a quantidade em quilogramas que a
+máquina descarrega tenha distribuição normal, com desvio padrão 0,3kg
+por saco, calcule o valor de $\mu$, de modo que sacos com mais de 22kg
+ocorram apenas 1\% das vezes.
+\vspace{0.5cm}
+
+\noindent
+\textbf{13.} De um lote de sementes extraímos uma amostra de 100
+sementes ao acaso; se o poder germinativo do lote é 90\%, calcular a
+probabilidade de 12 sementes da amostra não germinarem.
+\vspace{0.5cm}
+
+\noindent
+\textbf{14.} De um pomar de pessegueiros são colhidos dois mil frutos;
+se a probabilidade de um fruto colhido ser classificado como ideal para
+a indústria de conservas é de 0,45, qual a probabilidade de 950 ou mais
+pêssegos obterem a classificação ideal?
+\vspace{0.5cm}
+
+\pagebreak
+
+\section*{Respostas}
+
+\noindent
+\textbf{1.} E(X)$ = 2/3$; Var(X)$ = 5/9$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} b) $X \sim B(n = 10, \pi = 0.3)$;
+$P(X = x) = \binom{10}{x}0,3^{x}0,7^{10-x}$, para $x=0,1,\ldots,10$.
+
+<<out.width="0.6\\textwidth">>=
+
+x <- 0:10
+px <- dbinom(x, 10, 0.3)
+xyplot(px ~ x, type = "h", lwd = 3, grid = TRUE,
+       xlab = expression(x),
+       ylab = expression(P(x==x)))
+
+@
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.}
+
+a) $k = 3$.
+
+b)
+
+
+<<out.width="0.6\\textwidth">>=
+
+x <- seq(0, 1, length.out = 50)
+fx <- 3*x^2
+xyplot(fx ~ x, type = "l", lwd = 3, grid = TRUE,
+       xlab = expression(x),
+       ylab = expression(f[X](x)))
+
+@
+
+c) $P(0,5 \leq X \leq 1) = 0,875$.
+
+d) E$(X) = 7/8$; Var$(X) = 3/80$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{4.} $X$: nº de covas falhadas por canteiro.
+$X \sim B(n = 156, \pi = 0,0081)$, E$(X) = 1,26$ covas.
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} Esperança $= 18$ bezerros; Desvio padrão $= 7,2$ bezerros.
+\vspace{0.5cm}
+
+\noindent
+\textbf{6.}
+a) Desvio padrão $= \sqrt{5}$ bactérias por cm$^3$; \quad
+b) $P(X \geq 2) = 0,96$
+\vspace{0.5cm}
+
+\noindent
+\textbf{7.}
+a) $P(X = 0) = 0,556$; \quad
+b) $P(X \geq 1) = 0,444$
+\vspace{0.5cm}
+
+\noindent
+\textbf{8.}
+a) $P(X < 3) = 0,677$; \quad
+b) $P(X \geq 3) = 0,323$
+\vspace{0.5cm}
+
+\noindent
+\textbf{9.}
+a) $P(X=5) = 0,176$; \quad
+b) $P(X \geq 2) = 0,96$
+\vspace{0.5cm}
+
+\noindent
+\textbf{10.}
+Mais leves: $(-\infty;\; 4,33)$; \quad
+Médios: $[4,33;\; 5,54)$; \quad
+Grandes:  $[5,54;\; 6,02)$; \quad
+Extras:  $[6,02;\; \infty)$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{11.}
+a) $P(X < 742,5) = 0,159$; \quad
+b) $P(735 < X < 765) = 0,954$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{12.} $\mu = 21,303$
+\vspace{0.5cm}
+
+\noindent
+\textbf{13.} $P(X = 12) = 0,0988$ (pela aproximação normal 0,106).
+\vspace{0.5cm}
+
+\noindent
+\textbf{14.} $P(X \geq 950) = 0,0117$ (pela approximação normal com
+correção 0,0116 e sem correção 0,0123).
+\vspace{0.5cm}
+
+\end{document}
