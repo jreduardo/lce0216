@@ -32,10 +32,10 @@
 
 \title[LCE0216]{LCE0216 \\[-0.1cm]
   Introdução à Bioestatística Florestal \\[0.2cm]
-  5. Principais Modelos Contínuos}
+  6. Principais Modelos Contínuos}
 \author[Demétrio C. G. B.]{
   Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
-  Monitores: Eduardo E. R. Junior \& Giovana Fumes
+  Monitores: Eduardo E. R. Junior
 }
 \institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
   Universidade de São Paulo}
@@ -119,7 +119,7 @@ library(tidyr)
   \small
 
   {\bf Exemplo prático:} Na figura abaixo, apresenta-se o histograma dos
-  comprimentos à altura do peito (DAP) obtidos na aula de campo com o
+  circunferência à altura do peito (DAP) obtidos na aula de campo com o
   professor Thadeu. Os pontos acima do eixo $x$ são os valores
   observados e a curva em preto é a função de densidade da distribuição
   normal com média e variância amostrais.
@@ -134,7 +134,7 @@ histogram(~cap18,
           origin = 0,
           ylim = c(-0.001, 0.015),
           axis = axis.grid,
-          xlab = "Comprimento à altura do peito de sapucaias",
+          xlab = "Circunferência à altura do peito de sapucaias",
           ylab = "Densidade",
           panel = function(x, ...) {
               pars <- list(mean = mean(x), sd = sd(x))
@@ -166,7 +166,7 @@ histogram(~am,
           type = "density",
           origin = 0,
           axis = axis.grid,
-          xlab = "Comprimento à altura do peito de sapucaias",
+          xlab = "Diâmetro à altura do peito de sapucaias",
           ylab = "Densidade",
           panel = function(x, ...) {
               pars <- list(mean = 23, sd = 7)
@@ -189,7 +189,7 @@ histogram(~am,
           type = "density",
           origin = 0,
           axis = axis.grid,
-          xlab = "Comprimento à altura do peito de sapucaias",
+          xlab = "Diâmetro à altura do peito de sapucaias",
           ylab = "Densidade",
           panel = function(x, ...) {
               pars <- list(mean = 23, sd = 7)
@@ -289,7 +289,7 @@ histogram(~am,
     proporções podem ser aproximadas pela distribuição normal
     $\Rightarrow$ Inferência estatística
   \item Distribuições binomial e Poisson $\Rightarrow$ aproximação
-    através da distribuição normal
+    por meio da distribuição normal
   \item Denominação: distribuição gaussinana $\Rightarrow$ Karl F. Gauss
     (1777-1855).
   \end{itemize}
@@ -299,8 +299,8 @@ histogram(~am,
 \begin{frame}{Distribuição normal ou Gaussiana}
   \begin{block}{Definição}
     Dizemos que uma variável aleatória $X$ tem distribuição normal, com
-    parâmetros $\mu$ e $\sigma$, em que $-\infty < \mu < \infty$ e
-    $\sigma > 0$, se sua função densidade de probabilidade for dada por:
+    parâmetros $\mu$ e $\sigma^2$, em que $-\infty < \mu < \infty$ e
+    $\sigma^2 > 0$, se sua função densidade de probabilidade for dada por:
     $$f_X(x) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \quad x \in \mathbb{R}.$$
     {\bf Notação}: $X \sim N(\mu, \sigma^2)$.
   \end{block}
@@ -353,6 +353,7 @@ da <- purrr::map_dfr(sds, .id = "sd", function(sd) {
 xyplot(fx ~ x | mu,
        groups = sd,
        type = "l",
+       lwd = 2,
        grid = TRUE,
        layout = c(3, 1),
        ylab = expression(f[X](x)),
@@ -540,10 +541,10 @@ P(x_1 < &X < x_2) = \\
 
   {\bf Observações}:
   \begin{itemize}
-  \item A nova distribuição têm média correspondente à origem e desvio
+  \item A nova distribuição tem média correspondente à origem e desvio
     padrão como medida de afastamento da média;
   \item E$(Z) = \mu_Z = 0$ e Var$(Z) = \sigma^2_Z = 1$;
-  \item Probabilidades calculadas para valores com de $z$ com precisão
+  \item Probabilidades calculadas para valores de $z$ com precisão
     de duas casas decimais foram tabeladas para facilitar cálculos
     manuais.
   \end{itemize}
@@ -593,7 +594,7 @@ P(x_1 < &X < x_2) = \\
   \begin{align*}
     P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
                               &\textcolor{white}{=0,8508 - 0,0217}\\
-                              &\textcolor{white}{=0.8201}
+                              &\textcolor{white}{=0.8291}
   \end{align*}
   \vspace{-0.6cm}
   \begin{figure}
@@ -609,7 +610,7 @@ P(x_1 < &X < x_2) = \\
   \begin{align*}
     P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
                               &= 0,8508 - \textcolor{white}{0,0217}\\
-                              &\textcolor{white}{=0.8201}
+                              &\textcolor{white}{=0.8291}
   \end{align*}
   \vspace{-0.6cm}
   \begin{figure}
@@ -625,7 +626,7 @@ P(x_1 < &X < x_2) = \\
   \begin{align*}
     P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
                               &= 0,8508 - 0,0217\\
-                              &\textcolor{white}{=0.8201}
+                              &\textcolor{white}{=0.8291}
   \end{align*}
   \vspace{-0.6cm}
   \begin{figure}
@@ -641,7 +642,7 @@ P(x_1 < &X < x_2) = \\
   \begin{align*}
     P(-2,02 \leq Z \leq 1,04) &= \Phi(1,04) - \Phi(-2,02) \\
                               &= 0,8508 - 0,0217\\
-                              &= 0.8201
+                              &= 0.8291
   \end{align*}
   \vspace{-0.6cm}
   \begin{figure}
@@ -719,7 +720,8 @@ P(x_1 < &X < x_2) = \\
 
   {\bf Exercício}: Calcular os valores de $X$ correspondentes às
   porcentagens esperadas, em que $X$: diâmetro, em $cm$, de uma árvore
-  se distribui conforme modelo $N(23, 49)$.
+  se distribui conforme modelo $N(23, 49)$.\footnote{Assuma um intervalo
+  simétrico para a classificação II.}
 
   \begin{center}
     \begin{tabular}{lcr}\hline
@@ -742,6 +744,7 @@ P(x_1 < &X < x_2) = \\
   média $\mu_Y=n\pi$ e variância $\sigma_Y^2=n\pi(1-\pi)$.
 \end{frame}
 
+%-------------------------------------------
 \begin{frame}{Aproximação binomial pela normal}
 
 <<echo=FALSE, fig.width=9, fig.height=6>>=
@@ -763,7 +766,7 @@ da <- purrr::map_dfr(ns, .id = "n", function(n) {
 
 db <- purrr::map_dfr(ns, .id = "n", function(n) {
     purrr::map_dfr(pis, .id = "pi", function(p) {
-        xs <- seq(-5, 20, by = 0.1)
+        xs <- seq(-5, 25, by = 0.1)
         mu <- n * p
         sd <- sqrt(n * p * (1 - p))
         data.frame(x = xs, fx = dnorm(xs, mu, sd))
@@ -804,26 +807,8 @@ useOuterStrips(
   \end{block}
 
   \vspace{1cm}
-  \begin{center}
-    O cálculo da probabilidade pela normal é feito utilizando-se uma
-    distribuição $N(n\pi, n\pi(1-\pi))$.
-  \end{center}
-\end{frame}
-
-%-------------------------------------------
-\begin{frame}{Aproximação binomial pela normal}
-  \begin{block}{Correção de continuidade}
-    Consiste em somar ou subtrair 0,5 aos limites do intervalo para o
-    qual desejamos calcular as probabilidades.
-  \end{block}
-  \vspace{1cm}
-
-  \begin{itemize}
-  \item Em muitas situações práticas o cálculo das probabilidades pode
-    ser realizado sem levarmos em conta a correção de continuidade;
-  \item Pode-se ignorar a correção para os casos em que
-    $0,30 < \pi < 0,75$ e $n$ maior do que 400.
-  \end{itemize}
+  O cálculo da probabilidade pela normal é feito utilizando-se uma
+  distribuição $N(n\pi, n\pi(1-\pi))$.
 \end{frame}
 
 %-------------------------------------------
@@ -839,6 +824,89 @@ useOuterStrips(
   \item Em que porcentagem de recipientes teremos exatamente 50\% de
     mudas grandes?
   \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Aproximação Poisson pela normal}
+  Seja $Y$ uma variável aleatória representando o número de eventos
+  ocorridos em um determinado domínio e $\lambda$ a média do número de
+  ocorrências nesse determinado intervalo, dizemos que $Y \sim
+  P(\lambda)$.
+  \vspace{0.5cm}
+
+  A variável $Y$ pode ser aproximada por uma distribuição normal com
+  média $\mu_Y=\lambda$ e variância $\sigma_Y^2=\lambda$.
+\end{frame}
+
+\begin{frame}{Aproximação Poisson pela normal}
+
+<<echo=FALSE>>=
+
+
+lambdas <- c(2, 5, 15)
+names(lambdas) <- lambdas
+fl <- parse(text = sprintf("lambda==%.2f", lambdas))
+
+da <- purrr::map_dfr(lambdas, .id = "lambda", function(l) {
+        data.frame(x = 0:30, px = dpois(0:30, lambda = l))
+}) %>% transform(lambda  = forcats::fct_inorder(factor(lambda)))
+
+db <- purrr::map_dfr(lambdas, .id = "lambda", function(l) {
+        xs <- seq(-5, 35, by = 0.1)
+        data.frame(x = xs, fx = dnorm(xs, l, sqrt(l)))
+}) %>% transform(lambda  = forcats::fct_inorder(factor(lambda)))
+
+xyplot(px ~ x | lambda,
+       type = "h",
+       grid = TRUE,
+       lwd = 3,
+       col = "black",
+       ylab = expression(P(X==x)),
+       strip = strip.custom(
+           factor.levels = fl
+       ),
+       data = da) +
+    as.layer(
+        xyplot(fx ~ x | lambda,
+               type = "l",
+               lwd = 1.5,
+               col = "#0080ff",
+               data = db)
+    )
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Aproximação Poisson pela normal}
+  \begin{block}{Quando a aproximação é boa?}
+    Quando a taxa $\lambda$, quando a média de eventos em um determinado
+    domínio é suficientemente grande.
+  \end{block}
+
+  \vspace{1cm}
+  O cálculo da probabilidade pela normal é feito utilizando-se uma
+  distribuição $N(\lambda, \lambda)$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Aprox. de v.a's discretas por distribuição contínua}
+  \begin{block}{Correção de continuidade}
+    Consiste em somar ou subtrair 0,5 aos limites do intervalo para o
+    qual desejamos calcular as probabilidades.
+  \end{block}
+  \vspace{0.1cm}
+
+  \begin{itemize}
+  \item Em muitas situações práticas o cálculo das probabilidades pode
+    ser realizado sem levarmos em conta a correção de continuidade;
+  \item \textbf{Binomial}: para grandes amostras ($n$ grande) e
+    probabilidade de sucesso $\pi$ próximo a 0,5, a aproximação é
+    suficientemente boa, dispensando a correção;
+  \item \textbf{Poisson}: para contagens de média alta ($\lambda$
+    grande) a aproximação é suficientemente boa, dispensando a correção.
+  \end{itemize}
 \end{frame}
 
 %-------------------------------------------
@@ -879,14 +947,37 @@ useOuterStrips(
 %-------------------------------------------
 \begin{frame}{Distribuição exponencial}
 
-FIGURAS
+<<echo=FALSE>>=
+
+betas <- c(0.5, 1, 2)
+names(betas) <- betas
+fl <- parse(text = sprintf("beta==%.2f", betas))
+
+da <- purrr::map_dfr(betas, .id = "beta", function(b) {
+    x <- seq(0, 5, length.out = 50)
+    data.frame(x = x, fx = dexp(x, rate = 1/b))
+}) %>% transform(beta  = forcats::fct_inorder(factor(beta)))
+
+
+xyplot(fx ~ x | beta,
+       type = "l",
+       grid = TRUE,
+       lwd = 3,
+       col = "black",
+       ylab = expression(f[X](x)),
+       strip = strip.custom(
+           factor.levels = fl
+       ),
+       data = da)
+
+@
 
 \end{frame}
 
 %-------------------------------------------
 \begin{frame}{Distribuição exponencial}
   \begin{block}{Função de densidade de probabilidade acumulada}
-    $$F(x) = P(X < x) = \displaystyle{\int_0^x \frac{1}{\beta}
+    $$F(b) = P(X < b) = \displaystyle{\int_0^b \frac{1}{\beta}
       e^{-\frac{1}{\beta}x}} dx = 1 - e^{-\frac{1}{\beta}b}.$$
     \vspace{0.2cm}
 
@@ -968,7 +1059,7 @@ FIGURAS
   \end{block}
 
   \begin{block}{Função densidade de probabilidade acumulada}
-    $$P(X < a) = \displaystyle{\int_0^a \frac{\beta}{\theta}
+    $$F(a) = P(X < a) = \displaystyle{\int_0^a \frac{\beta}{\theta}
       \Big(\frac{x}{\theta}\Big)^{\beta-1}e^{-\big(\frac{x}{\theta}\big)^\beta dx} = 1-e^{-\big(\frac{a}{\theta}\big)^\beta} }$$
   \end{block}
 \end{frame}
@@ -992,7 +1083,44 @@ FIGURAS
 %-------------------------------------------
 \begin{frame}{Distribuição Weibull}
 
-  FIGURAS
+<<echo=FALSE>>=
+
+betas <- c(0.5, 1, 1.5, 3)
+names(betas) <- betas
+thetas <- c(0.7, 1, 2)
+names(thetas) <- thetas
+
+flb <- parse(text = sprintf("beta==%.2f", betas))
+flt <- parse(text = sprintf("theta=='%.1f'", thetas))
+
+da <- purrr::map_dfr(betas, .id = "beta", function(b) {
+    purrr::map_dfr(thetas, .id = "theta", function(t) {
+        xs <- seq(0, 5, length.out = 100)
+        data.frame(x = xs, fx = dweibull(xs, b, t))
+    })
+}) %>%
+    transform(beta = forcats::fct_inorder(factor(beta)),
+              theta = forcats::fct_inorder(factor(theta)))
+
+xyplot(fx ~ x | theta,
+       groups = beta,
+       type = "l",
+       grid = TRUE,
+       layout = c(3, 1),
+       ylab = expression(f[X](x)),
+       lwd = 2,
+       auto.key = list(
+           column = 4,
+           points = FALSE,
+           lines = TRUE,
+           text = flb
+       ),
+       strip = strip.custom(
+           factor.levels = flt
+       ),
+       data = da)
+
+@
 
 \end{frame}
 
@@ -1014,6 +1142,359 @@ FIGURAS
   com parâmetro de forma $\beta = 0,6792$ e parâmetro de escala
   $\theta = 11,6427$. Qual é a probabilidade da precipitação diária ser
   inferior a 10 mm no mês de dezembro?
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{Distribuição Qui-Quadrado}
+
+  Uma variável aleatória contínua $Y$, com valores positivos, tem uma
+  distribuição \textbf{qui-quadrado} com $\nu$ graus de liberdade, se
+  sua densidade for dada por:
+  \vspace{0.2cm}
+
+  \begin{block}{Função de densidade de probabilidade}
+    $$f(y;\nu)=\left\{
+      \begin{array}{l c}
+        \frac{1}{\Gamma(\nu/2)^{\nu/2}}y^{\nu/2-1}e^{-y/2} &
+          \mbox{se } y\geq 0\\
+        0 &\mbox{se } y<0
+      \end{array}
+    \right.
+    $$
+    \hspace{1.7cm} Notação: $Y \sim \chi^2_{(\nu)}$
+  \end{block}
+
+  \begin{block}{Média e variância}
+    \begin{itemize}
+    \item $\mbox{E}(Y) = \nu$;
+    \item $\mbox{Var}(Y)=2\nu$.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{Distribuição Qui-Quadrado}
+
+<<echo=FALSE>>=
+
+nus <- c(2, 5, 10)
+names(nus) <- nus
+fl <- parse(text = sprintf("nu==%.2f", nus))
+
+da <- purrr::map_dfr(nus, .id = "nu", function(p) {
+    x <- seq(0, 20, length.out = 50)
+    data.frame(x = x, fx = dchisq(x, p))
+}) %>% transform(nu  = forcats::fct_inorder(factor(nu)))
+
+xyplot(fx ~ x | nu,
+       type = "l",
+       grid = TRUE,
+       lwd = 3,
+       col = "black",
+       ylab = expression(f[X](x)),
+       strip = strip.custom(
+           factor.levels = fl
+       ),
+       data = da)
+
+@
+
+A função acumulada da distribuição qui-quadrado também é
+tabelada. Porém, a ênfase é dada nos quantis dessa distribuição devido a
+sua extensa aplicação para testes de hipóteses.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{Distribuição Qui-Quadrado}
+
+  \begin{figure}[b]
+    \includegraphics[width = 11cm]{images/chitab} %
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{Distribuição Qui-Quadrado}
+
+  Exemplo:
+  \begin{table}
+    \begin{tabular}{ll}
+      $ Y \sim \chi^2_{(10)}$, & $P(Y>2,56)=0,99$ \\
+                               & $P(Y>18,31)=0,05$
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{Distribuição Qui-Quadrado}
+
+  Resultado importante:
+  \vspace{0.5cm}
+
+  Considere uma Z$\sim \mbox{N}(0,1)$. Se Y$=\mbox{Z}^2$, tem-se que
+  Y$\sim \chi^2_{(1)}$.
+
+  Portanto, o quadrado de uma variável aleatória que segue uma
+  distribuição normal padronizada corresponde a uma distribuição
+  qui-quadrado com um grau de liberdade.
+  \vspace{0.5cm}
+
+  De modo geral, uma distribuição qui-quadrado com $\nu$ graus de
+  liberdade pode ser vista como a soma de $\nu$ normais padronizadas
+  independentes ao quadrado.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$t$ de Student}
+
+  Seja Z uma variável aleatória $N$(0,1) e $Y$ uma variável aleatória
+  $\chi^2_{(\nu)}$, com $Z$ e $Y$ independentes. Então, a variável
+  $$
+    T = \frac{Z}{\sqrt{Y/\nu}},
+  $$
+  tem densidade dada por
+  $$
+  f(t,\nu)=\frac{\Gamma((\nu+1)/2)}{\Gamma(\nu/2)\sqrt{\pi\nu}}
+  (1+t^2/\nu)^{-(\nu+1)/2}, \quad -\infty < t < +\infty.
+  $$
+
+  Dizemos que a variável tem uma distribuição \textbf{$t$ de Student}
+  com $\nu$ graus de liberdade.
+  \vspace{0.5cm}
+
+  Notação: $T \sim t_{(\nu)}$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$t$ de Student}
+  \small
+
+  O gráfico da densidade $t$ aproxima-se bastante de uma normal padrão
+  quando $\nu$ é grande. Dessa forma, quando $\nu\rightarrow\infty$,
+  pode-se usar a tabela da normal padrão ao invés da tabela $t$ de
+  Student.  Para $\nu > 50$ a aproximação já é muito boa.
+  \vspace{0.1cm}
+
+<<echo=FALSE, out.width=".7\\textwidth", fig.width=6, fig.height=5>>=
+
+dists <- list("dn" = dnorm,
+              "dt1" = purrr::partial(dt, df = 1),
+              "dt10" = purrr::partial(dt, df = 5),
+              "dt30" = purrr::partial(dt, df = 30))
+fl <- expression("Normal",
+                 t[(nu==1)],
+                 t[(nu==5)],
+                 t[(nu==30)])
+
+x <- seq(-4, 4, length = 100)
+da <- purrr::map_dfr(dists, .id = "dist",
+                     function(f) data.frame(x = x,  fx = f(x))) %>%
+    transform(dist = forcats::fct_inorder(factor(dist)))
+
+
+cols <- trellis.par.get("superpose.line")$col
+cols[1] <- 1
+
+xyplot(fx ~ x,
+       groups = dist,
+       type = "l",
+       grid = TRUE,
+       ylab = expression(f[X](x)),
+       auto.key = list(
+           column = 4,
+           points = FALSE,
+           lines = TRUE,
+           text = fl,
+           cex = 1.2
+       ),
+       par.settings = list(
+           superpose.line = list(col = cols, lwd = 2)
+       ),
+       data = da)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$t$ de Student}
+  \begin{figure}[b]
+    \includegraphics[width=10cm]{images/ttab}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$t$ de Student}
+
+  Exemplo:
+
+  \begin{align*}
+    T \sim t_{(\nu = 6)},\quad  &P(-1,943 < T < 1,943) = 0,90 \\
+                                &P(T > 2,4469) = 0,025
+  \end{align*}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$F$ de Snedecor}
+
+  Sejam $U$ e $V$ duas variáveis aleatórias independentes, cada uma com
+  distribuição qui-quadrado, com $\nu_1$ e $\nu_2$ graus de liberdade,
+  respectivamente. Então, a variável aleatória $W$ dada por:
+  $$
+  W=\frac{U/\nu_1}{V/\nu_2}
+  $$
+  tem densidade dada por
+  $$
+  f(w,\nu_1,\nu_2) =\frac{\Gamma((\nu_1+\nu_2)/2)}{\Gamma(\nu_1/2)
+    \Gamma(\nu_2/2)}\left(\frac{\nu_1}{\nu_2}\right)^{\nu_1/2}
+  \frac{w^{(\nu_1-2)/2}}{(1+\nu_1w/\nu_2)^{(\nu_1+\nu_2)/2}},
+  $$
+  para $w>0$. E dizemos que $W$ tem distribuição \textbf{$F$} de
+  Snedecor, com $\nu_1$ e $\nu_2$ graus de liberdade.
+  \vspace{0.5cm}
+
+  Notação: $W \sim F_{(\nu_1, \nu_2)}$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$F$ de Snedecor}
+
+  \begin{block}{Média e variância}
+    \small
+    $$
+    \mbox{E}(W)=\frac{\nu_2}{\nu_2-2} \quad \mbox{ e } \quad
+    \mbox{Var}(W)=\frac{2\nu_2^2(\nu_1+\nu_2-2)}{\nu_1(
+      \nu_2-2)^2(\nu_2-4)}
+    $$
+  \end{block}
+
+<<echo=FALSE>>=
+df1s <- purrr::set_names(c(1, 2, 5, 50))
+df2s <- purrr::set_names(c(10, 30, 50))
+
+fl1 <- parse(text = sprintf("nu[1]==%.2f", df1s))
+fl2 <- parse(text = sprintf("nu[2]=='%.0f'", df2s))
+
+da <- purrr::map_dfr(df1s, .id = "df1", function(d1) {
+    purrr::map_dfr(df2s, .id = "df2", function(d2) {
+        xs <- seq(0, 5, length.out = 100)
+        data.frame(x = xs, fx = df(xs, d1, d2))
+    })
+}) %>%
+    transform(df1 = forcats::fct_inorder(factor(df1)),
+              df2 = forcats::fct_inorder(factor(df2)))
+
+xyplot(fx ~ x | df2,
+       groups = df1,
+       type = "l",
+       grid = TRUE,
+       layout = c(3, 1),
+       ylab = expression(f[X](x)),
+       lwd = 2,
+       auto.key = list(
+           column = 4,
+           points = FALSE,
+           lines = TRUE,
+           text = fl1
+       ),
+       strip = strip.custom(
+           factor.levels = fl2
+       ),
+       data = da)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$F$ de Snedecor}
+  \begin{figure}[b]
+    \includegraphics[width=11cm]{images/ftab}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Outras distribuições importantes}
+  \framesubtitle{$F$ de Snedecor}
+
+  Exemplo:
+
+  \begin{table}
+    \begin{tabular}{ll}
+      $W \sim F(5,7)$, & $\mbox{P}(W>3,97)=0,05$ \\
+                       & $\mbox{P}(W \leq 3,97)=0,95$
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}[fragile]{Distribuições de probabilidade no R}
+
+  No R, há funções para trabalhar com distribuições conhecidas. Para
+  todas as distribuições apresentadas há funções do tipo
+  \begin{itemize}
+  \item \begin{alltt} \hlkwd{ddist}\hlstd{(}\hlkwc{x}\hlstd{,} \hlkwc{...}\hlstd{)}
+    \end{alltt}
+    \vspace{-0.5cm}
+    Calcula a probabilidade ou densidade no ponto
+    \hlkwc{\ttfamily \bf x};
+
+  \item \begin{alltt} \hlkwd{pdist}\hlstd{(}\hlkwc{q}\hlstd{,} \hlkwc{...}\hlstd{)}
+    \end{alltt}
+    \vspace{-0.5cm}
+    Calcula a probabilidade acumulada até o quantil
+    \hlkwc{\ttfamily \bf q};
+
+  \item \begin{alltt} \hlkwd{qdist}\hlstd{(}\hlkwc{p}\hlstd{,} \hlkwc{...}\hlstd{)}
+    \end{alltt}
+    \vspace{-0.5cm}
+    Obtém o quantil cuja probabilidade acumulada é
+    \hlkwc{\ttfamily \bf p};
+
+  \item \begin{alltt} \hlkwd{rdist}\hlstd{(}\hlkwc{n}\hlstd{,} \hlkwc{...}\hlstd{)}
+    \end{alltt}
+    \vspace{-0.5cm}
+    Gera \hlkwc{\ttfamily \bf n} números aleatórios da determinada
+    distribuição.
+  \end{itemize}
+  \vspace{0.5cm}
+
+  Em que \hlkwd{\texttt{dist}} é o sufixo que indica a distribuição.
+\end{frame}
+
+\begin{frame}[fragile]{Distribuições de probabilidade no R}
+
+<<echo=TRUE, eval=FALSE>>=
+
+help("Distributions")
+
+dpois(x = 5, lambda = 5)
+ppois(q = 5, lambda = 5)
+qpois(p = 0.9, lambda = 5)
+rpois(n = 10, lambda = 5)
+
+dbinom(x = 0:10, size = 10, prob = 0.5)
+pbinom(x = 5, size = 10, prob = 0.5)
+qbinom(x = 0.3, size = 10, prob = 0.5)
+rbinom(10, 1, 0.5)
+
+dnorm(x = 0)
+qnorm(p = -2, mean = 0, sd = 1)
+pnorm(q = 0.95, mean = 0, sd = 1)
+rnorm(n = 10, mean = -10, sd = 15)
+
+@
 \end{frame}
 
 \end{document}

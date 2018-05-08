@@ -416,14 +416,14 @@ useOuterStrips(
   probabilidade de uma planta irradiada apresentar mutação. Calcular:
   \begin{enumerate}[(a)]
     \footnotesize
-  \item A probabilidade de não aparecer plantas com mutação em um total
-    de 1000 plantas irradiadas;
+  \item A probabilidade de não aparecerem plantas com mutação em um
+    total de 1000 plantas irradiadas;
   \item A probabilidade de aparecer ao menos uma planta com mutação em
     1000 plantas irradiadas;
   \item A probabilidade de não aparecer planta com mutação em 2000
     plantas irradiadas;
-  \item A probabilidade de aparecer pelo menos duas plantas com mutação
-    em 2000 plantas irradiadas;
+  \item A probabilidade de aparecerem pelo menos duas plantas com
+    mutação em 2000 plantas irradiadas;
   \item O número médio esperado de plantas com mutação em 2000 plantas
     irradiadas;
   \item A variância esperada do número de plantas com mutação em 2000
@@ -528,7 +528,7 @@ xyplot(px ~ x | lambda,
   média uma queda por semana. Um pesquisador deseja realizar um trabalho
   envolvendo simulação em que são necessários 2 dias consecutivos sem
   haver queda na rede. Supondo o modelo de Poisson, calcular a
-  probabilidade dele não conseguir realizar a simulação.
+  probabilidade de ele não conseguir realizar a simulação.
 \end{frame}
 
 \begin{frame}{Aproximação binomial pela Poisson}
