@@ -1,0 +1,493 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  7. Noções de Amostragem}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitores: Eduardo E. R. Junior
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 08 de maio de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+library(tidyr)
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Conceitos iniciais}
+
+  \begin{block}{População}
+    É o conjunto de indivíduos, ou objetos, tendo pelo menos uma variável
+    em comum observável.
+  \end{block}
+
+  \begin{block}{Unidade Amostral}
+    Um item individual da população.
+  \end{block}
+
+  \begin{block}{Amostra}
+    É qualquer subconjunto de elementos da população. Em geral, no
+    entanto, trabalhamos apenas com amostras aleatórias, onde todos os
+    elementos da população têm a mesma probabilidade de serem
+    escolhidos.
+  \end{block}
+
+  \begin{block}{Variável}
+    É a característica de interesse que é medida/observada em cada
+    unidade amostral.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Conceitos iniciais}
+  \begin{center}
+    \begin{figure}[b]
+      \includegraphics[width=12cm]{images/pop_amost.jpg}
+    \end{figure}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Conceitos iniciais}
+
+  {\bf Exemplo:} O objetivo de um levantamento florestal é determinar a
+  taxa média de ocorrência de seca-do-ponteiro numa floresta de {\it
+    Eucalyptus saligna}.
+  \vspace{0.5cm}
+
+  \begin{tabular}{l}
+    População: \\
+    Unidade Amostral:\\
+    Variável:\\
+    Amostra:\\
+    Parâmetro: \\
+    Estimador:\\
+  \end{tabular}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem: conceitos iniciais}
+
+  \begin{block}{Amostragem}
+    É o processo da escolha da amostra. Consiste na escolha criteriosa
+    dos elementos a serem submetidos ao estudo.
+  \end{block}
+  \begin{multicols}{2}
+    Quando uma amostra é boa?
+    \begin{itemize}
+    \item Viés...
+    \item Precisão...
+    \end{itemize}
+    \newpage
+    \begin{center}
+      \begin{figure}[b]
+        \includegraphics[width=5cm]{images/pergunta.jpg} %
+      \end{figure}
+    \end{center}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem: conceitos iniciais}
+  \begin{block}{Viés}
+    Tendenciosidade presente no processo de amostragem que impede que a
+    amostra seja perfeitamente representativa da população,
+    independentemente do tamanho da amostra.
+  \end{block}
+
+  \begin{itemize}
+  \item {\bf \textcolor{red}{Viés de seleção:}} Tendência sistemática de
+    subrepresentar ou excluir da amostra um certo tipo de unidade;
+  \item {\bf \textcolor{red}{Viés de não resposta:}} Numa pesquisa de
+    opinião, o resultado de pessoas não responderem às questões do
+    entrevistador;
+  \item {\bf \textcolor{red}{Viés de resposta:}} Numa pesquisa de
+    opinião, a forma de apresentação das questões e a atitude do
+    entrevistador podem influenciar a resposta.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Conceitos iniciais}
+
+  {\bf Exemplo:} Estudando a influência do sistema de amostragem na
+  estrutura de tamanho das árvores de uma floresta tropical, um
+  Ecologista tomou 10 Amostras compostas de 5 árvores, 10 amostras
+  compostas de 20 árvores e 10 amostras compostas por 40 árvores.
+  \begin{multicols}{2}
+    \begin{itemize}
+    \item Qual o efeito do tamanho da amostra (número de árvores) nos
+      resultados obtidos?
+    \item Qual tipo de amostra se mostra menos variável?
+    \end{itemize}
+    \newpage
+
+    \begin{center}
+      \tiny
+      \begin{table}[H]
+        \caption{Média do diâmetro de árvores amostradas numa floresta nativa}
+        \begin{tabular}{cccc} \hline
+          Amostras & \multicolumn{3}{c}{Tamanho das amostras}\\
+                   & \multicolumn{3}{c}{(número de árvores)}\\
+                   & 5 & 20 & 40 \\ \hline
+          1 & 26,6 & 34,1 & 30,5 \\
+          2 & 32,9 & 31,2 & 29,8 \\
+          3 & 39,2 & 40,1 & 37,3 \\
+          4 & 30,3 & 30,4 & 29,4 \\
+          5 & 31,8 & 29,7 & 32,7 \\
+          6 & 48,0 & 38,8 & 31,5 \\
+          7 & 37,7 & 37,3 & 29,3 \\
+          8 & 20,0 & 35,6 & 30,6 \\
+          9 & 31,8 & 37,7 & 31,2 \\
+          10& 33,2 & 26,7 & 29,3 \\ \hline
+          Desvio padrão & 7,48 & 4,48 & 2,42 \\ \hline
+          CV(\%) & 22,55 & 13,13 & 7,75 \\ \hline
+        \end{tabular}
+      \end{table}
+    \end{center}
+  \end{multicols}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Conceitos iniciais}
+  \begin{block}{Precisão}
+    Capacidade dos sistemas de amostragem de gerar Estatísticas com
+    pequena variabilidade entre amostras (de mesmo tamanho) tomadas numa
+    mesma população.
+  \end{block}
+
+  \begin{center}
+    \begin{figure}[b]
+      \includegraphics[width=10cm]{images/vies_precisao.jpg} %
+    \end{figure}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Conceitos iniciais}
+
+  {\bf Exemplo:} Uma equipe precisa determinar a altura média de um
+  talhão para a determinação do volume de madeira produzido.
+
+  Como você realizaria a coleta dessa infomação? Comente sobre:
+
+  \begin{enumerate}
+  \item Equipamentos;
+  \item Equipe de coleta;
+  \item Plano de amostragem.
+  \end{enumerate}
+
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.25]{images/talhao}
+  \end{figure}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame} \frametitle{{\bf Amostragem}}
+
+Alguns métodos mais comuns de extração da amostra:
+\begin{itemize}
+\item Amostragem aleatória simples
+\item Amostragem estratificada
+\item Amostragem sistemática
+\item Amostragem por conglomerados
+\end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Aleatória Simples}
+
+  \begin{block}{}
+    É um método de selecionar, sem reposição, $n$ elementos de uma
+    população de tamanho $N$, conhecido e finito, onde cada elemento tem
+    a mesma chance de ser selecionado.
+  \end{block}
+  \vspace{0.5cm}
+
+  Procedimento para a obtenção de uma amostra aleatória simples de
+  tamanho $n$:
+  \begin{enumerate}
+  \item Enumerar os $N$ elementos da população de 1 a $N$.
+  \item Sortear, sem reposição, $n$ números compreendidos de 1 a $N$.
+  \item Os elementos correspondentes aos números escolhidos formarão a
+    amostra.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Estratificada}
+
+  \begin{block}{}
+    Na amostragem estratificada, a população (por exemplo de uma escola)
+    é dividida em estratos (alunos do 3º, 4º e 7º ano) e os elementos
+    que formarão a amostra são retirados de dentro de cada um desses
+    estratos.
+  \end{block}
+  \vspace{0.3cm}
+
+  Uma amostragem estratificada é indicada quando:
+  \begin{itemize}
+  \item É fácil o acesso à uma lista contendo todos os nomes dos
+    elementos da população;
+  \item As informações sobre a população estão disponíveis e embora ela
+    seja heterogênea posso identificar grupos homogêneos dentro dessa
+    mesma população e assim dividi-la em diferentes estratos para depois
+    obter uma amostra.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Estratificada}
+
+  {\bf Exemplo}: Seja uma área florestal, onde, através de técnicas de
+  interpretação de imagens fotográficas, foram detectados três estratos:
+  Estrato I (floresta alta sem babaçu), Estrato II (floresta alta com
+  babaçu), Estrato III (floresta baixa cipoálica).
+  \begin{itemize}
+  \item Deseja-se estimar o volume de madeira dessa área (m$^3$)
+    observando-se apenas 10 unidades amostrais.
+  \item Como você realizaria essa amostragem?
+  \item Você recomendaria o uso da amostragem aleatória simples?
+  \end{itemize}
+
+  \begin{center}
+    \begin{figure}[b]
+      \includegraphics[width=6cm]{images/ae_floresta.jpg} %
+    \end{figure}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Estratificada}
+
+  Na {\bf amostragem estratificada} a população de tamanho $N$ é
+  dividida em $L$ subpopulações disjuntas, denominadas estratos de
+  tamanho $N_1, N_2, \ldots, N_L$. Em seguida é realizada uma amostragem
+  aleatória simples dentro de cada estrato.
+  \vspace{1cm}
+
+  \begin{block}{Amostragem estratificada proporcional}
+    É uma amostragem estratificada onde o número $n_i$ de elementos
+    amostrados em cada estrato é proporcional ao tamanho $N_i$ e cada um
+    dos estratos $(i=1,2,,\ldots, L)$.
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Estratificada}
+
+  \begin{block}{Procedimento para a obtenção de uma amostra
+      estratificada de tamanho $n$:}
+    Considerando:
+    \begin{itemize}[]
+    \item $N$ o número de elementos da população
+    \item $L$ o número de estratos
+    \item $N_i$ o número de elementos do $i-$ésimo estrato tal que
+      $N = N_1 + N_2 + \ldots + N_L$
+    \item $n$ o tamanho da amostra a ser selecionada,
+    \end{itemize}
+
+    \begin{enumerate}
+    \item Calcular a fração da amostragem dada por $f=\frac{n}{N}$
+    \item Calcular o número de elementos a serem sorteados em cada estrato:
+      $$n_1\approx N_1f \quad n_2 \approx N_2f \quad \ldots \quad n_L
+      \approx N_L f,$$
+      com $n = n_1 + n_2 + \ldots + n_L$.
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Estratificada}
+
+  \begin{block}{Cálculo da média}
+    $$\bar{x}_{AE} = \frac{N_1\bar{x}_1 + N_2\bar{x}_2 + \ldots +
+      N_L\bar{x}_L}{N},$$
+    onde $\bar{x}_i$ corresponde a média aritmética simples dos $n_i$
+    elementos amostrados do estrato $i$.
+  \end{block}
+  \vspace{1cm}
+
+  {\bf Exercício}: Considerando-se o esquema apresentado anteriormente,
+  obter uma amostra estratificada de tamanho $n=10$ e indicar as plantas
+  selecionadas.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem por Conglomerado}
+  \begin{block}{}
+    \begin{itemize}
+    \item Neste tipo de amostragem ao invés de selecionar elementos
+      seleciona-se um grupo (famílias, organizações e quarteirões) ou
+      seja, a unidade a ser sorteada inicialmente é um conglomerado o
+      qual é formado por elementos (pessoas). De cada um desses
+      conglomerados observa-se todos os seus elementos.
+    \item O número de elementos de um conglomerado deve ser pequeno e o
+      número de conglomerados razoavelmente grande.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem por Conglomerado}
+
+  Uma amostragem por conglomerado é indicada quando:
+
+  \begin{itemize}
+  \item Não se possui uma lista contendo todos os nomes dos elementos da
+    população;
+  \item Existe grande heterogeneidade entre os elementos da população;
+  \item É preciso fazer entrevistas ou observações em grandes áreas
+    geográficas;
+  \item O custo de obtenção dos dados cresce com o aumento da distância
+    entre os elementos;
+  \end{itemize}
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem por Conglomerado}
+
+  \begin{block}{Procedimento para a obtenção de uma amostra por
+      conglomerado}
+    É uma amostra aleatória simples na qual cada unidade de amostragem é
+    um grupo de elementos, chamado conglomerado.
+    \begin{enumerate}
+    \item Definir conglomerado
+    \item Selecionar amostras aleatórias simples de grupos
+      (conglomerados)
+    \item Todos os elementos dentro do grupo selecionado constituirão a
+      amostra.
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Sistemática}
+
+  \begin{block}{Procedimento para a obteção de uma amostra sistemática
+      (1 em cada $k$ elementos)}
+    \begin{enumerate}[1.]
+    \item Definir a porcentagem $P\%$ de elementos da população que
+      farão parte da amostra
+    \item Obter o valor de $k$, inteiro, dado por:
+      $$k \approx \frac{1}{P}\times 100$$
+    \item Sortear um número $r$ inteiro entre 1 e $k$
+    \item A amostra será composta pelos elementos de ordem
+      $$r, r+k, r+2k, r+3k, \ldots$$
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem Sistemática}
+
+  {\bf Exemplo}: Um restaurante deseja conhecer melhor o perfil de seus
+  clientes e tem condições para entrevistar aproximadamente 15\% dos
+  mesmos.
+
+  Os clientes que visitaram o restaurante num certo dia, por ordem de
+  chegada, foram:
+
+  \begin{center}
+    \begin{tabular}{ccccc}
+      JJ & MR & SSZ & RA & RMA \\
+      CRG & CGB & DB & JEC & AAS \\
+      TZC & CTD & SMP & EM & DF \\
+      LB & SS & ROS & GS & SMC \\
+      MCN & JB & AFI & VFC & RSM \\
+      CF & MHT & PHA & MAP & AO \\
+      ...
+    \end{tabular}
+  \end{center}
+
+  Como você faria essa amostragem?
+\end{frame}
+
+\end{document}
