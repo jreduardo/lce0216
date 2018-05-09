@@ -1,0 +1,335 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático 6 - Amostragem\\
+    08 de maio de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+\begin{document}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    # fig.align = "center",
+    fig.pos = "H",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.} Para saber a produção (madeira para serraria) de uma
+floresta nativa de 5000 ha um engenheiro florestal mediu o volume de
+madeira (m$^3$/ha) em 52 parcelas de 1 ha.
+
+Identifique:
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item	A população;
+\item	A unidade amostral;
+\item	A variável de interesse;
+\item	A amostra;
+\item	Um parâmetro de interesse;
+\item	Um estimador para esse parâmetro.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} Considere o talhão de {\it Eucalyptus grandis} representado
+pela figura abaixo:
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{images/aas}
+\end{figure}
+Sabe-se que 36\% dessas árvores encontram-se em uma região de solo
+arenoso e as demais em solo argiloso. Para avaliar a quantidade de
+madeira produzida deseja-se fazer uma amostra de tamanho 20. Como deve
+ser realizado o procedimento de amostragem?
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.} Um restaurante deseja conhecer melhor o perfil de seus
+clientes e tem condições para entrevistar aproximadamente 10\% dos
+mesmos.
+
+Os clientes que visitaram o restaurante num certo dia, por ordem de
+chegada (ordenado por linha), foram:
+\begin{center}
+  \begin{tabular}{ccccc}
+    JJ & MR & SSZ & RA & RMA \\
+    CRG & CGB & DB & JEC & AAS \\
+    TZC & CTD & SMP & EM & DF \\
+    LB & SS & ROS & GS & SMC \\
+    MCN & JB & AFI & VFC & RSM \\
+    CF & MHT & PHA & MAP & AO \\
+  \end{tabular}
+\end{center}
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Como pode ser realizado o procedimento de amostragem para esta
+  situação? Indique quais clientes devem ser entrevistados.
+\item Se o restaurante tivesse condições de entrevistar 30\% dos seus
+  clientes, seriam considerados os mesmos clientes do item (a)?
+  Justifique sua resposta.
+\end{enumerate}
+\vspace{0.5cm}
+\pagebreak
+
+\noindent
+\textbf{4.} Se vamos extrair amostras de $n=100$ observações de uma
+população muito grande, em que a proporção populacional é $0,20$, que
+porcentagem de proporções amostrais poderemos esperar nos intervalos:
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Entre 0,16 e 0,24?
+\item Maior que 0,24?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} A proporção de estômatos da epiderme abaxial da folha de
+macieira da variedade M-9, com tamanho acima de um determinado valor, é
+$\pi=0,12$. Extraída uma amostra de 35 folhas, qual a probabilidade de
+que a proporção amostral esteja entre 0,08 e 0,13?
+\vspace{0.5cm}
+
+\noindent
+\textbf{6.} Sabe-se que 46\% de peixes {\it Xenomelaniris brasiliensis},
+na localidade da praia da Barra da Lagoa, Florianópolis, apresentam
+comprimento total acima de 50 mm. Qual é a probabilidade de uma amostra
+aleatória de 35 peixes apresentar mais que 53\% ou menos que 40\% de
+peixes com comprimento total acima de 50 mm?
+\vspace{0.5cm}
+
+\noindent
+\textbf{7.} Um distribuidor de sementes determina, através de testes,
+que 5\% das sementes não germinam. Ele vende pacotes de 200 sementes com
+garantia de 90\% de germinação. Qual a probabilidade de um pacote não
+satisfazer a garantia?
+\vspace{0.5cm}
+
+\noindent
+\textbf{8.} Os níveis de glutationa na região do cerebelo em ratos
+apresentam média de 1,7 $\mu M$ e desvio padrão de 0,4 $\mu M$. Os
+níveis de glutationa de uma amostra de oito ratos foram mensurados. A
+média da amostra é usada para decidir se os ratos estão
+estressados. Aplica-se a seguinte regra de decisão: se o nível de
+glutamina, média, da amostra de oito ratos for igual ou maior do que 2,0
+$\mu M$ os ratos são considerados estressados. Qual a probabilidade de
+se considerar os ratos como estressados, sabendo-se que eles não o são,
+já que $\mu$ é menor do que 2?
+\vspace{0.5cm}
+
+\noindent
+\textbf{9.} Suponha que o rendimento de milho, em kg/ha, no oeste
+catarinense, é uma variável normalmente distribuída, com média de 7069
+kg/ha e desvio padrão de 593,15 kg/ha.
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Que valores espera-se encontrar para a média e o desvio padrão da
+  distribuição amostral das médias, na hipótese de se utilizarem
+  amostras de tamanho $n=36$?
+\item Qual é a probabilidade da média de uma amostra desse tamanho se
+  encontrar:
+  \begin{enumerate}[label=b\arabic*)]
+  \item Entre 6809 e 7395 kg/ha;
+  \item Abaixo de 6816 kg/ha;
+  \item Acima de 7389 kg/ha.
+  \end{enumerate}
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{10.} O número de hemócitos/$\mu l$ de hemolinfa (TCH) em fêmeas
+de camarão {\it Macrobrachium rosemberguii} é normalmente distribuído
+com média de 18000 hemócitos/$\mu l$ e desvio padrão 5125 $\mu l$. Em
+uma amostra aleatória de $n=30$ fêmeas, qua a probabilidade de que o
+número médio de hemócitos/$\mu l$ de hemolinfa (TCH) seja maior do que
+19000 hemócitos/$\mu l$?
+\vspace{0.5cm}
+
+\noindent
+\textbf{11.} O número de estômatos da epiderme abaxial em áreas
+aleatórias de 0,24 mm$^2$ de macieira da variedade M-9 é normalmente
+distribuído com média $\mu = 159,8$ e desvio padrão $\sigma = 34,6$. Em
+uma amostra aleatória de $n=35$ folhas, qual é a probabilidade de que o
+número médio de estômatos por área de 0,24 mm$^2$ seja menor do que 140?
+\vspace{0.5cm}
+
+\noindent
+\textbf{12.} Uma variável aleatória $X$ tem distribuição normal com
+média 100 e desvio padrão 10. Se $\bar{X}$ é a média de uma amostra de
+$n$ elementos retirados dessa população, calcule $P(90<\bar{X}<110)$
+para:
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item $n=1$
+\item $n=4$
+\item $n=16$
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{13.} A proporção esperada de filhotes machos de tartaruga
+$Caretta caretta$, conhecida como cabeçuda, é de 0,50. Uma fêmea dessa
+espécie bota 200 ovos numa determinada praia.
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Qual a probabilidade de a proporção amostral de machos, nessa
+  ninhada, estar entre 0,48 e 0,53?
+\item Qual a probabilidade de a proporção amostral de machos, nessa
+  ninhada, ser maior do que 0,60?
+\item Dado que foi observado nesta ninhada uma proporção de nascimentos
+  de machos superior a 0,60, baseado no resultado do item anterior,
+  pode-se indicar algum desequilíbrio ambiental, como por exemplo,
+  sombreamento na praia?
+\end{enumerate}
+\vspace{0.5cm}
+
+\pagebreak
+
+\section*{Respostas}
+
+\noindent
+\textbf{1.}
+a) Floresta nativa;\quad
+b) Árvores dentro das parcelas;\quad
+c) Volume de madeira; \quad
+d) 52 parcelas de 1 ha; \quad
+e) Volume médio $(\mu)$;\quad
+f) $\bar{x}=\sum_{i=1}^{n}x_i/n$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} Deve ser realizada uma amostragem estratificada por tipo de
+solo. Serão amostradas 7 árvores na região de solo arenoso e 13 árvores
+no solo argiloso.
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.}
+a) Pode ser utilizada uma amostragem sistemática. Se
+tomarmos $r=8$ serão amostrados os clientes DB, ROS, PHA;\quad
+b) Não serão considerados os mesmos clientes, no entanto, alguns podem
+ser amostrados durante o processo. Se tomarmos $r=2$ os clientes
+sorteados serão MR, RMA, DB, TZC, EM, SS, SMC, AFI, CF e MAP. Portanto,
+o cliente DB também será selecionado.  \vspace{0.5cm}
+
+\noindent
+\textbf{4.} a) 0,682;\quad b) 0,159.
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} 0,3387.
+\vspace{0.5cm}
+
+\noindent
+\textbf{6.} 0,4422.
+\vspace{0.5cm}
+
+\noindent
+\textbf{7.} 0,0006.
+\vspace{0.5cm}
+
+\noindent
+\textbf{8.} 0,017.
+\vspace{0.5cm}
+
+\noindent
+\textbf{9.}
+a) 98,86;\quad
+b1) 0,995;\quad
+b2) 0,0052;\quad
+b3) 0,0006.
+\vspace{0.5cm}
+
+\noindent
+\textbf{10.} 0,1423.
+\vspace{0.5cm}
+
+\noindent
+\textbf{11.} 0,00036.
+\vspace{0.5cm}
+
+\noindent
+\textbf{12.} a) 0,6826;\quad b)0,9554;\quad c)0,9999.
+\vspace{0.5cm}
+
+\noindent
+\textbf{13.} a) 0,5180;\quad b) 0,0023;\quad c) Sim, provavelmente há um
+desiquilíbrio ambiental pois a probabilidade de ocorrência é remota.
+\vspace{0.5cm}
+
+\end{document}
