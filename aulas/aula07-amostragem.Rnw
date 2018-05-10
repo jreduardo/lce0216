@@ -85,8 +85,8 @@ library(tidyr)
   \frametitle{Conceitos iniciais}
 
   \begin{block}{População}
-    É o conjunto de indivíduos, ou objetos, tendo pelo menos uma variável
-    em comum observável.
+    É o conjunto de indivíduos, ou objetos, tendo pelo menos uma
+    variável observável em comum.
   \end{block}
 
   \begin{block}{Unidade Amostral}
@@ -95,7 +95,7 @@ library(tidyr)
 
   \begin{block}{Amostra}
     É qualquer subconjunto de elementos da população. Em geral, no
-    entanto, trabalhamos apenas com amostras aleatórias, onde todos os
+    entanto, trabalhamos apenas com amostras aleatórias, em que todos os
     elementos da população têm a mesma probabilidade de serem
     escolhidos.
   \end{block}
@@ -126,12 +126,13 @@ library(tidyr)
   \vspace{0.5cm}
 
   \begin{tabular}{l}
-    População: \\
-    Unidade Amostral:\\
-    Variável:\\
-    Amostra:\\
-    Parâmetro: \\
-    Estimador:\\
+    População: \uncover<2->{Floresta de \textit{E. saligna};}\\
+    Unidade Amostral: \uncover<3->{Árvore;} \\
+    Variável: \uncover<4->{Ocorrência do seca-do-ponteiro;} \\
+    Amostra: \uncover<5->{Levantamento florestal;} \\
+    Parâmetro: \uncover<6->{Média;} \\
+    Estimador:\uncover<7->{$\;\bar{X} = \sum_{i=1}^n X_i/n$ (média
+    aritmética).} \\
   \end{tabular}
 \end{frame}
 
@@ -166,19 +167,35 @@ library(tidyr)
     amostra seja perfeitamente representativa da população,
     independentemente do tamanho da amostra.
   \end{block}
+  \vspace{0.4cm}
+
+  Vários tipos de vieses podem ocorrer no processo de amostragem, como
+  \textbf{viés de seleção}, \textbf{viés de não resposta} e \textbf{viés
+    de resposta}, como será visto a seguir.
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Amostragem: conceitos iniciais}
 
   \begin{itemize}
   \item {\bf \textcolor{red}{Viés de seleção:}} Tendência sistemática de
-    subrepresentar ou excluir da amostra um certo tipo de unidade;
+    subrepresentar ou excluir da amostra um certo tipo de unidade;\\
+    Ex.: Pesquisa de opinião por telefone.\\[0.3cm]
   \item {\bf \textcolor{red}{Viés de não resposta:}} Numa pesquisa de
     opinião, o resultado de pessoas não responderem às questões do
-    entrevistador;
+    entrevistador;\\
+    Ex.: Pesquisa de opinião por correio.\\[0.3cm]
   \item {\bf \textcolor{red}{Viés de resposta:}} Numa pesquisa de
     opinião, a forma de apresentação das questões e a atitude do
-    entrevistador podem influenciar a resposta.
+    entrevistador podem influenciar a resposta.\\
+    Ex.: Ordem do nome dos candidatos numa pesquisa de intenção de
+    votos.
   \end{itemize}
 \end{frame}
 
+%-------------------------------------------
 \begin{frame}
   \frametitle{Conceitos iniciais}
 
@@ -275,8 +292,8 @@ Alguns métodos mais comuns de extração da amostra:
 
   \begin{block}{}
     É um método de selecionar, sem reposição, $n$ elementos de uma
-    população de tamanho $N$, conhecido e finito, onde cada elemento tem
-    a mesma chance de ser selecionado.
+    população de tamanho $N$, conhecido e finito, em que cada elemento
+    tem a mesma chance de ser selecionado.
   \end{block}
   \vspace{0.5cm}
 
@@ -317,7 +334,7 @@ Alguns métodos mais comuns de extração da amostra:
 \begin{frame}
   \frametitle{Amostragem Estratificada}
 
-  {\bf Exemplo}: Seja uma área florestal, onde, através de técnicas de
+  {\bf Exemplo}: Seja uma área florestal, onde, por meio de técnicas de
   interpretação de imagens fotográficas, foram detectados três estratos:
   Estrato I (floresta alta sem babaçu), Estrato II (floresta alta com
   babaçu), Estrato III (floresta baixa cipoálica).
@@ -341,14 +358,13 @@ Alguns métodos mais comuns de extração da amostra:
 
   Na {\bf amostragem estratificada} a população de tamanho $N$ é
   dividida em $L$ subpopulações disjuntas, denominadas estratos de
-  tamanho $N_1, N_2, \ldots, N_L$. Em seguida é realizada uma amostragem
-  aleatória simples dentro de cada estrato.
-  \vspace{1cm}
+  tamanho $N_1, N_2, \ldots, N_L$. Em seguida, é realizada uma
+  amostragem aleatória simples dentro de cada estrato.  \vspace{1cm}
 
   \begin{block}{Amostragem estratificada proporcional}
-    É uma amostragem estratificada onde o número $n_i$ de elementos
-    amostrados em cada estrato é proporcional ao tamanho $N_i$ e cada um
-    dos estratos $(i=1,2,,\ldots, L)$.
+    É uma amostragem estratificada em que o número $n_i$ de elementos
+    amostrados em cada estrato é proporcional ao tamanho $N_i$ de cada
+    um dos estratos $(i=1,2,,\ldots, L)$.
   \end{block}
 \end{frame}
 
@@ -384,7 +400,7 @@ Alguns métodos mais comuns de extração da amostra:
   \begin{block}{Cálculo da média}
     $$\bar{x}_{AE} = \frac{N_1\bar{x}_1 + N_2\bar{x}_2 + \ldots +
       N_L\bar{x}_L}{N},$$
-    onde $\bar{x}_i$ corresponde a média aritmética simples dos $n_i$
+    em que $\bar{x}_i$ corresponde à média aritmética simples dos $n_i$
     elementos amostrados do estrato $i$.
   \end{block}
   \vspace{1cm}
