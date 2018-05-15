@@ -43,7 +43,7 @@
     \vspace{0.1cm}
     LCE0216 - Introdução à Bioestatística Florestal\\
     Profª Clarice Garcia Borges Demétrio\\
-    Exercício prático 6 - Amostragem\\
+    Exercício prático 6 - Amostragem e distribuições amostrais\\
     08 de maio de 2018\\
   \end{minipage}
   \hfill

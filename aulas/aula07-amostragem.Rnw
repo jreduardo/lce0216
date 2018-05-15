@@ -35,7 +35,7 @@
   7. Noções de Amostragem}
 \author[Demétrio C. G. B.]{
   Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
-  Monitores: Eduardo E. R. Junior
+  Monitor: Eduardo E. R. Junior
 }
 \institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
   Universidade de São Paulo}
@@ -419,7 +419,7 @@ Alguns métodos mais comuns de extração da amostra:
       seleciona-se um grupo (famílias, organizações e quarteirões) ou
       seja, a unidade a ser sorteada inicialmente é um conglomerado o
       qual é formado por elementos (pessoas). De cada um desses
-      conglomerados observa-se todos os seus elementos.
+      conglomerados observam-se todos os seus elementos.
     \item O número de elementos de um conglomerado deve ser pequeno e o
       número de conglomerados razoavelmente grande.
     \end{itemize}

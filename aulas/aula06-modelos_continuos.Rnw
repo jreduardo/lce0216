@@ -35,7 +35,7 @@
   6. Principais Modelos Contínuos}
 \author[Demétrio C. G. B.]{
   Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
-  Monitores: Eduardo E. R. Junior
+  Monitor: Eduardo E. R. Junior
 }
 \institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
   Universidade de São Paulo}
