@@ -1,0 +1,451 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  9. Estimação pontual e intevalar}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitor: Eduardo E. R. Junior
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 15 de maio de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+library(tidyr)
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Estimação dos parâmetros}
+
+  \begin{block}{}
+    \centering
+    Avaliar características da população com base em informações da amostra\\
+    $\Downarrow$\\
+    Estimar os parâmetros
+  \end{block}
+  \vspace{0.3cm}
+
+  Alguns parâmetros de interesse:
+  \begin{itemize}
+  \item Média ($\mu$)
+  \item Proporção ($\pi$)
+  \item Variância ($\sigma^2$)
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Estimação dos parâmetros}
+
+  {\bf Exemplos}:
+  \begin{itemize}
+  \item Produção média de determinada cultura;
+  \item Proporção média de área foliar atacada por uma praga;
+  \item Parâmetros estatísticos genéticos (variância genética, ambiental
+    e fenotípica)...
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Estimadores}
+
+  \begin{block}{}
+    \begin{itemize}
+    \item Um \textbf{estimador} $\hat{\theta}$ do parâmetro $\theta$ é
+      qualquer função dos elementos da amostra, ou seja,
+      $\hat{\theta} = g(X_1, X_2, \ldots, X_n)$.
+    \item Uma \textbf{estimativa} $\hat{\bf{\theta}}$ do parâmetro
+      $\theta$, é o valor assumido pelo estimador quado aplicado aos
+      valores observados na amostra, ou seja, $\hat{\theta} =
+      \hat{\theta}(x_1, x_2, \ldots, x_n)$.
+    \item A notação para estimador e estimativa, geralmente, é a mesma
+      $\hat{\theta}$.
+    \end{itemize}
+  \end{block}
+  \vspace{0.2cm}
+
+  Exemplos de estimadores:
+  \begin{itemize}
+  \item Para a média: $\bar{X} = \frac{\sum_{i=1}^n X_i}{n}$
+  \item Para a proporção: $P = \frac{\mbox{número de sucessos}}{n}$
+  \item Para a variância: $S^2 = \frac{\sum_{i=1}^n(X_i-\bar{X})^2}{n-1}$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Propriedades dos estimadores}
+
+  \begin{block}{}
+    \begin{itemize}
+    \item {\bf \textcolor[rgb]{1.00,0.00,0.00}{não viesado}}: média da
+      distribuição amostral igual ao parâmetro
+    \item {\bf \textcolor[rgb]{1.00,0.00,0.00}{preciso}:} variância
+      amostral pequena
+    \item {\bf \textcolor[rgb]{1.00,0.00,0.00}{acurado}:} erro amostral
+      pequeno
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Propriedades dos estimadores}
+  \begin{figure}[b]
+    \includegraphics[width=\textwidth]{images/rifles2.pdf} %
+  \end{figure}
+  \vspace{0.5cm}
+
+{\footnotesize
+  {\bf A}: não viesado, pouca precisão e pouca acurácia;\\
+  {\bf B}: viesado, pouca precisão e pouca acurácia;\\
+  {\bf C}: viesado, boa precisão e baixa acurácia;\\
+  {\bf D}: não viesado, boa precisão e boa acurácia.\\}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Estimativas pontuais}
+
+  Valor numérico assumido pelo estimador quando aplicado aos valores
+  observados de uma amostra.
+
+  \begin{itemize}
+  \item Média: $\bar{x} = \frac{\sum_{i=1}^n x_i}{n}$;
+  \item Proporção: $p = \frac{\mbox{número de sucessos}}{n}$;
+  \item Variância: $s^2 = \frac{\sum_{i=1}^n(x_i-\bar{x})^2}{n-1}$.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Estimativas intervalares}
+
+  \begin{block}{Intervalo de confiança}
+    Seja ($X_1, X_2, \ldots, X_n$) uma amostra aleatória de tamanho $n$
+    de uma população e $\theta$ o parâmetro de interesse. Sejam
+    $\hat{\theta}_1$ e $\hat{\theta}_2$ estatísticas tais que:
+    $$P(\hat{\theta}_1 < \theta < \hat{\theta}_2) = 1-\alpha.$$
+    Então o intervalo $(\hat{\theta}_1; \hat{\theta}_2)$ é chamado
+    intervalo de {\bf 100(1-$\alpha$)\% de confiança} para o parâmetro
+    $\theta$.\\
+    Usualmente toma-se $1-\alpha=0,95$ ou 0,99.
+  \end{block}
+  \vspace{0.3cm}
+
+  {\bf \textcolor[rgb]{1.00,0.00,0.00}{Interpretação}:} De todos os
+  possíveis intervalos que possam ser construídos, espera-se que
+  $100(1-\alpha)\%$ deles contenham o verdadeiro valor do parâmetro
+  $\theta$.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Estimativas intervalares}
+
+  {\bf Intervalos de confiança para média populacional}
+
+  \begin{block}{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{Casos}}}
+    \begin{itemize}
+    \item População normal e variância da população conhecida;
+    \item População normal e variância da população desconhecida;
+    \item População não normal, grandes amostras (n>30).
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para média}
+
+  \begin{itemize}
+  \item \textcolor[rgb]{1.00,0.00,0.00}{\textbf{População normal e
+        variância populacional conhecida}}
+  \end{itemize}
+  \begin{center}
+    $X \sim N(\mu, \sigma^2)$ $\Rightarrow$ $\bar{X} \sim
+    N\big(\mu, \frac{\sigma^2}{n} \big)$ $\Rightarrow$
+    $Z = \frac{\bar{X}-\mu}{\sqrt{\frac{\sigma^2}{n}}} \sim N(0,1)$
+\end{center}
+
+$$P\Bigg( -z_T < \frac{\bar{X}-\mu}{\sqrt{\frac{\sigma^2}{n}}}
+  < z_T\Bigg) = 1-\alpha$$
+$$\ldots$$
+$$P\Bigg( \bar{X}-z_T\sqrt{\frac{\sigma^2}{n}}
+< \mu< \bar{X} + z_T\sqrt{\frac{\sigma^2}{n}}\Bigg) = 1-\alpha$$
+
+\begin{block}{}
+  \bfseries
+  $${IC(\mu)_{1-\alpha} =
+    \Bigg(\bar{X}-z_T\sqrt{\frac{\sigma^2}{n}};
+    \bar{X}+z_T\sqrt{\frac{\sigma^2}{n}} \Bigg)}$$
+\end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para média}
+  \begin{itemize}
+  \item \textcolor[rgb]{1.00,0.00,0.00}{\textbf{População normal e
+        variância populacional conhecida}}
+  \end{itemize}
+
+  {\bf Exemplo:} A distribuição dos pesos de pacotes de determinadas
+  sementes, enchidos automaticamente por uma certa máquina, é normal,
+  com desvio padrão ($\sigma$) conhecido e igual a 0,20 kg. Uma amostra
+  de 15 pacotes retirada ao acaso apresentou os seguintes pesos, em kg:
+  \begin{center}
+    \begin{tabular}{cccccccc} \hline
+      20,05 & 20,10 & 20,25 & 19,78 & 19,69 & 19,90 & 20,20 & 19,89 \\
+      19,70 & 20,30 & 19,93 & 20,25 & 20,18 & 20,01 & 20,09 \\ \hline
+    \end{tabular}
+  \end{center}
+
+  Construir os intervalos de confiança de 95\% e 99\% para o peso médio
+  dos pacotes de sementes.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para média}
+  \begin{itemize}
+  \item \textcolor[rgb]{1.00,0.00,0.00}{\textbf{População normal e
+        variância populacional desconhecida}}
+  \end{itemize}
+
+  Nova estatística:
+  $$T = \frac{\bar{X} - \mu}{\sqrt{\frac{S^2}{n}}} \sim  t_{(n-1)}$$
+
+    \begin{block}{}
+      \bfseries
+    $${IC(\mu)_{1-\alpha} =
+      \Bigg(\bar{X}-t_T\sqrt{\frac{S^2}{n}};
+      \bar{X}+t_T\sqrt{\frac{S^2}{n}} \Bigg)}$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para média}
+
+  \begin{block}{Distribuição t de Student}
+    \small
+    \begin{itemize}
+    \item Simétrica em relação ao zero;
+    \item Semelhante à distribuição normal padrão, porém com ``caudas
+      mais grossas'';
+    \item Para $n\rightarrow\infty$ ($n\geq 30$) a distribuição $t$
+      tende para a normal padrão
+    \end{itemize}
+
+<<echo=FALSE, out.width=".7\\textwidth", fig.width=6, fig.height=4>>=
+
+dists <- list("dn" = dnorm,
+              "dt1" = purrr::partial(dt, df = 1),
+              "dt3" = purrr::partial(dt, df = 5))
+fl <- expression("Normal",
+                 t[(nu==1)],
+                 t[(nu==3)])
+
+x <- seq(-4, 4, length = 100)
+da <- purrr::map_dfr(dists, .id = "dist",
+                     function(f) data.frame(x = x,  fx = f(x))) %>%
+    transform(dist = forcats::fct_inorder(factor(dist)))
+
+xyplot(fx ~ x,
+       groups = dist,
+       type = "l",
+       grid = TRUE,
+       ylab = expression(f[X](x)),
+       lwd = 2,
+       auto.key = list(
+           column = 3,
+           points = FALSE,
+           lines = TRUE,
+           text = fl,
+           cex = 1.2
+       ),
+       data = da)
+
+@
+
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para média}
+
+  \begin{itemize}
+  \item \textcolor[rgb]{1.00,0.00,0.00}{\textbf{População normal e
+        variância populacional desconhecida}}
+  \end{itemize}
+
+  {\bf Exemplo:}
+  \small
+
+  Para estudar a maturidade de certo reflorestamento um comprador tomou
+  uma amostra aleatória simples de 16 árvores, obtendo os dados a
+  seguir:
+  \begin{center}
+    \begin{tabular}{cccccccc} \hline
+      16,6 & 23,2 & 17,0 & 21,3 & 19,2 & 20,3 & 20,4 & 21,5 \\
+      17,1 & 19,3 & 20,4 & 22,0 & 19,6 & 18,2 & 19,9 & 18,7 \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  Supondo que a distribuição dos dados de D.A.P. é aproximadamente
+  normal,
+  \begin{enumerate}[(a)]
+  \item Determinar estimativas por ponto para a média e para a variância
+    dos D.A.P.s desse reflorestamento;
+  \item Construir um intervalo de 95\% de confiança para $\mu$;
+  \item Calcule o tamanho de $n$ da amostra necessária para que se
+    obtenha um intervalo de confiança com semi-amplitude $d$=0,5 cm, ao
+    nível de significância $\alpha=0,05$.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para média}
+  \begin{itemize}
+  \item \textcolor[rgb]{1.00,0.00,0.00}{\textbf{População não normal,
+        grandes amostras (n > 30)}}
+  \end{itemize}
+
+  Pelo Teorema Central do Limite, se $n$ for razoavelmente grande
+  ($n> 3 0$), então
+  $$\frac{\bar{X} - \mu}{\sqrt{\frac{S^2}{n}}} \sim N(0,1)$$
+  e o intervalo de $100(1-\alpha)\%$ de confiança para a média $\mu$ da
+  população é dada por:
+  \begin{block}{}
+    \bfseries
+    $$IC(\mu)_{1-\alpha} = \Bigg(\bar{X} - z_T\sqrt{\frac{s^2}{n}};
+      \bar{X} + z_T\sqrt{\frac{s^2}{n}} \bigg)$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para média}
+
+  \begin{itemize}
+  \item \textcolor[rgb]{1.00,0.00,0.00}{\textbf{População não normal,
+        grandes amostras (n > 30)}}
+  \end{itemize}
+
+  \noindent{ \bf Exemplo:} Para se avaliar o número médio de árvores de
+  uma certa espécie por ha, numa determinada área, foram observadas 32
+  unidades amostrais de 1 ha, obtendo-se uma média de 3,3 árvores por ha
+  e variância 3,2 (árvores por ha)$^2$. Construir os intervalos de 95\%
+  e 99\% de confiança para o número médio de lagartas na área total.
+
+  \begin{itemize}
+  \item Calcular o tamanho $n$ da amostra necessária para que se obtenha
+    um intervalo de 95\% de confiança com precisão $d=0,4$ árvores por
+    ha.
+  \item Calcular o tamanho $n$ da amostra necessária para que se obtenha
+    um intervalo de 99\% de confiança com precisão $d=0,4$ árvores por
+    ha.
+\end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Intervalo de confiança para proporção}
+
+  \begin{block}{}
+    \bfseries
+  $$IC(\pi)_{1-\alpha} = \Bigg(\hat{\pi}-z_T
+  \sqrt{\frac{\hat{\pi}(1-\hat{\pi})}{n}};
+  \hat{\pi}+z_T\sqrt{\frac{\hat{\pi}(1-\hat{\pi})}{n}}\Bigg)$$
+  \end{block}
+  \small
+
+  \noindent{ \bf \textcolor[rgb]{1.00,0.00,0.00}{Exemplo:}} Coletou-se
+  uma amostra de 35 peixes da espécie {\it Xenomelaniris brasiliensis},
+  na localidade da praia da Barra da Lagoa, Florianópolis, SC, a qual
+  apresentou 45,7\% de peixes com comprimento total acima de 50
+  mm.
+
+  \begin{itemize}
+  \item Encontre um intervalo com 95\% de confiança, dentro do qual deve
+    estar a verdadeira proporção de peixes dessa espécie com comprimento
+    acima de 50 mm.
+  \item Qual o tamanho da amostra necessário para que tenhamos 95\% de
+    confiança de que o erro de nossa estimativa não seja superior a
+    cinco pontos percentuais (0,05)?
+  \end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,596 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  8. Distribuições amostrais}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitor: Eduardo E. R. Junior
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 15 de maio de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+library(tidyr)
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuições amostrais}
+
+  \begin{block}{}
+    \begin{itemize}
+    \item Estimadores são funções de variáveis aleatórias, portanto
+      também são variáveis aleatórias;
+    \item Sendo assim, \textbf{estimadores também são variáveis
+        aleatórias} que seguem algum modelo de probabilidades;
+    \item Nesse tópico, serão apresentadas as distribuições de alguns
+      dos principais estimadores.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuições amostrais}
+
+  {\bf Exemplo}: Seja uma população composta por quatro árvores dada na
+  tabela a seguir:
+
+  \begin{center}
+    \begin{tabular}{cc}\hline
+      Árvore & Diâmetro (cm)\\ \hline
+      A       & 8,0 \\
+      B       & 20,0 \\
+      C       & 24,0 \\
+      D       & 27,0 \\ \hline
+    \end{tabular}
+  \end{center}
+  \vspace{0.3cm}
+
+  A proporção de árvores com diâmetro inferior a 20cm,
+  $$\pi = \frac{1}{4} = 0,25.$$
+
+  O diâmetro médio ($\mu$):
+  $$\mu = \frac{\sum_{i=1}^4x_i}{4} = 19,75 \; \mbox{cm}.$$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuições amostrais}
+
+  {\bf Exemplo}: Seja uma população composta por quatro árvores dada na
+  tabela a seguir:
+
+  \begin{center}
+    \begin{tabular}{cc}\hline
+      Árvore & Diâmetro (cm)\\ \hline
+      A       & 8,0 \\
+      B       & 20,0 \\
+      C       & 24,0 \\
+      D       & 27,0 \\ \hline
+    \end{tabular}
+  \end{center}
+  % \vspace{-0.1cm}
+
+  A variância ($\sigma^2$):
+  $$\sigma^2 = \frac{\sum_{i=1}^4(x_i-\mu)^2}{4} =
+  \frac{208,75}{4} = 52,1875 \mbox{ cm}^2.$$
+
+  O desvio padrão ($\sigma$):
+  $$\sigma = \sqrt{\sigma^2} = \sqrt{52,1875} =
+  7,2241 \mbox{ cm}.$$
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuições amostrais}
+
+  \begin{center}
+    \small
+    \begin{tabular}{cccrr}
+      \hline
+      Amostra & Elementos & $\hat{\pi}$ & $\hat{\mu}$ & $\hat{\sigma^2}$ \\
+      \hline
+      1 & A,B & 0,50 & 14,0 & 72,0\\
+      2 & A,C & 0,50 & 16,0 & 128,0  \\
+      3 & A,D & 0,50 & 17,5 & 180,5  \\
+      4 & B,C & 0,00 & 22,0 & 8,0   \\
+      5 & B,D & 0,00 & 23,5 & 24,5   \\
+      6 & C,D & 0,00 & 25,5 & 4,5   \\
+      7 & B,A & 0,50 & 14,0 & 72,0  \\
+      8 & C,A & 0,50 & 16,0 & 128,5   \\
+      9 & D,A & 0,50 & 17,5 & 180,0   \\
+      10 & C,B & 0,00 & 22,0 & 8,0   \\
+      11 & D,B & 0,00 & 23,5 & 24,5   \\
+      12 & D,C & 0,00 & 25,5 & 4,5   \\
+      13 & A,A & 1,00 & 8,0 & 0,0   \\
+      14 & B,B & 0,00 & 20,0 & 0,0   \\
+      15 & C,C & 0,00 & 24,0 & 0,0   \\
+      16 & D,D & 0,00 & 27,0 & 0,0   \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral do estimador $P$}
+
+  Vamos supor que uma árvore com menos de 20 cm de diâmetro não seja
+  interessante para o mercado.\\[0.3cm]
+  \begin{itemize}
+  \item Existe apenas uma árvore na população com determinada
+    característica $\Rightarrow$ $\pi = 1/4=0,25$.
+  \item Estimar tal proporção observando árvores dessa população\\
+    \begin{center}
+      $\Downarrow$\\
+      Observar uma amostra de tamanho dois, com reposição\\
+      $\Downarrow$\\
+      Estimar $\pi$ por meio da estatística
+      $$P=\frac{\mbox{número de casos favoráveis
+          (sucessos)}}{\mbox{tamanho da amostra}}$$
+    \end{center}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral do estimador $P$}
+
+  Perguntas:
+  \begin{enumerate}
+  \item Quais proporções amostrais podem ser obtidas?
+  \item Qual a probabilidade associada a cada uma?
+  \item Qual a forma da distribuição das proporções amostrais?
+  \item Qual a média da distribuição amostral dessas proporções?
+  \item Qual a variância da distribuição amostral dessas proporções?
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da estatística $P$}
+
+  Distribuição amostral da proporção:
+  \begin{center}
+    \begin{tabular}{cccc}
+      \hline
+      $y_i$ & 0 & 1 & 2 \\ \hline
+      $\hat{p} = y_i/2$ & 0 & 0,5 & 1 \\ \hline
+      P($P=\hat{p}$) & 9/16=0,5625 & 6/16=0,3750 & 1/16=0,0625\\
+      \hline
+    \end{tabular}
+  \end{center}
+
+<<echo=FALSE, fig.width=5, fig.height=3, out.width="0.9\\textwidth">>=
+
+x <- c(0, 1, 2)/2
+px <- c(9, 6, 1)/16
+xyplot(px ~ x, type = "h", lwd = 4,
+       ylim = extendrange(c(0, max(px))),
+       xlab = "Proporções amostrais",
+       ylab = "Probabilidade") +
+    layer(panel.points(x = 0.25, y = 0, pch = 19,
+                       col = "red", cex = 1.2))
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da estatística $P$}
+
+  Distribuição amostral da proporção:
+  \begin{center}
+    \begin{tabular}{cccc} \hline
+      $y_i$ & 0 & 1 & 2 \\ \hline
+      $\hat{p} = y_i/2$ & 0 & 0,5 & 1 \\ \hline
+      P($P=\hat{p}$) & 9/16=0,5625 & 6/16=0,3750 & 1/16=0,0625\\ \hline
+    \end{tabular}
+  \end{center}
+
+  \begin{itemize}
+  \item Média:
+    $$\mu_P = 0\times0,5625 + 0,50\times0,3750 +
+    1\times 0,0625 = 0,25 = \pi$$
+  \item Variância:
+    $$
+    \begin{aligned}
+      \sigma^2_P &= (0-0,25)^2\times0,5625 +
+      (0,50-0,25)^2\times0,3750 + \\
+      &\qquad + (1-0,25)^2\times0,0625 \\
+      &= 0,09375 = \pi(1-\pi)/n
+    \end{aligned}
+    $$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da estatística $P$}
+
+  $Y$: número de árvores com diâmetro inferior a 20 cm
+  $$\mbox{Se  }Y \sim Bin(n, \pi).$$
+  Então,
+  \begin{center}
+    $\mu_Y = \text{E}(Y) = n\pi$ \qquad e \qquad
+    $\sigma_Y^2=\text{Var}(Y) = n\pi(1-\pi)$.
+  \end{center}
+  Seja $P = $ proporção das árvores com diâmetro inferior a 20 cm. A
+  distribuição amostral de $P$ poderá ser aproximada
+  por uma distribuição normal com parâmetros:
+  \begin{center}
+    $\mu_P  = \text{E}(P) = \frac{\mu_Y}{n} = \pi$ \qquad e \qquad
+    $\sigma^2_P = \text{Var}(P) = \frac{\sigma_y}{n} =
+      \frac{\pi(1-\pi)}{n}$.
+  \end{center}
+
+  $$P\sim N(\mu_P, \sigma_P^2) \quad \Longrightarrow \quad
+  Z = \frac{p - \mu_P}{\sigma_P} \sim N(0, 1)$$
+
+  {\bf Observação}: Quando são utilizadas amostras sem reposição,
+  deve-se fazer uma correção na variância.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da estatística $P$}
+
+  {\bf Exemplo}: Uma proporção de 37\% dos visitantes de um parque
+  favorecem a cobrança de taxas de entrada. Uma amostra aleatória de 200
+  visitantes foi tomada.
+  \begin{enumerate}[(a)]
+  \item Qual é a probabilidade que na amostra de 200 visitantes pelo
+    menos 40\% favoreçam a cobrança de taxas?
+  \item Qual é a probabilidade que na amostra de 200 visitantes, a
+    proporção dos que favorecem a cobrança de taxas fique entre 35\% e
+    39\%?
+  \item Uma nova amostra de 10 visitantes foi tomada. Qual a
+    probabilidade de que pelo menos 50\% dos visitantes na amostra
+    favoreçam a cobrança de taxas? É válido utilizar o mesmo método
+    utilizado anteriormente? Qual método deveria ser utilizado nesse
+    caso?
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da média}
+
+  \begin{block}{Estimador $\bar{X}$}
+    $$\bar{X} = \frac{1}{n}\sum_{i=1}^{n}X_i.$$
+  \end{block}
+  \vspace{0.3cm}
+  Sem dúvidas, o estimador mais utilizado na estatística aplicada.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da média}
+
+  Considerando-se o exemplo de diâmetro das árvores. Agora o interesse é
+  estimar o diâmetro médio ($\mu$).
+
+  \begin{center}
+    \tiny
+    \begin{tabular}{ccccr}
+      \hline
+      Amostra & Elementos & $\hat{\pi}$ & $\hat{\mu}$ & $\hat{\sigma^2}$ \\
+      \hline
+      1 & A,B & 0,50 & 14,0 & 72,0\\
+      2 & A,C & 0,50 & 16,0 & 128,0  \\
+      3 & A,D & 0,50 & 17,5 & 180,5  \\
+      4 & B,C & 0,00 & 22,0 & 8,0   \\
+      5 & B,D & 0,00 & 23,5 & 24,5   \\
+      6 & C,D & 0,00 & 25,5 & 4,5   \\
+      7 & B,A & 0,50 & 14,0 & 72,0  \\
+      8 & C,A & 0,50 & 16,0 & 128,5   \\
+      9 & D,A & 0,50 & 17,5 & 180,0   \\
+      10 & C,B & 0,00 & 22,0 & 8,0   \\
+      11 & D,B & 0,00 & 23,5 & 24,5   \\
+      12 & D,C & 0,00 & 25,5 & 4,5   \\
+      13 & A,A & 1,00 & 8,0 & 0,0   \\
+      14 & B,B & 0,00 & 20,0 & 0,0   \\
+      15 & C,C & 0,00 & 24, & 0,0   \\
+      16 & D,D & 0,00 & 27,0 & 0,0   \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da média}
+  \begin{enumerate}
+  \item Qual a forma da distribuição das médias amostrais?
+  \item Qual a média da distribuição amostral dessas médias?
+  \item Qual a variância da distribuição amostral dessas médias?
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da média}
+  \small
+
+<<echo=FALSE, fig.width=5, fig.height=3, out.width="0.7\\textwidth">>=
+
+diametro <- tibble::tribble(
+  ~amo, ~ele, ~pi, ~mu, ~sigma,
+  1, "A.B", 0.50, 14.0, 72.0,
+  2, "A.C", 0.50, 16.0, 128.0,
+  3, "A.D", 0.50, 17.5, 180.5,
+  4, "B.C", 0.00, 22.0, 8.0,
+  5, "B.D", 0.00, 23.5, 24.5,
+  6, "C.D", 0.00, 25.5, 4.5,
+  7, "B.A", 0.50, 14.0, 72.0  ,
+  8, "C.A", 0.50, 16.0, 128.5,
+  9, "D.A", 0.50, 17.5, 180.0,
+  10, "C.B", 0.00, 22.0, 8.0,
+  11, "D.B", 0.00, 23.5, 24.5,
+  12, "D.C", 0.00, 25.5, 4.5,
+  13, "A.A", 1.00, 8.0, 0.0,
+  14, "B.B", 0.00, 20.0, 0.0,
+  15, "C.C", 0.00, 24., 0.0,
+  16, "D.D", 0.00, 27.0, 0.0
+  )
+
+histogram(~mu,
+          type = "density",
+          breaks = seq(0, 35, 5),
+          data = diametro,
+          ylim = c(-0.003, 0.08),
+          origin = 0,
+          ylab = "Desnidade",
+          xlab = "Médias amostrais",
+          panel = function(x, ...) {
+              panel.histogram(x, ...)
+              pars <- list(mean = mean(x), sd = sd(x))
+              panel.histogram(x, col = "gray70",
+                              border = "white", ...)
+              panel.mathdensity(dnorm, args = pars,
+                                col = 1, n = 100)
+          })
+
+@
+
+  \begin{itemize}
+  \item Forma: distribuição simétrica
+  \item Média:
+   $$\frac{14,0 + 16,0 + \ldots + 27,0}{16} =  19,75\mbox{cm} = \mu$$
+ \item Variância: {\footnotesize
+     $$\frac{(14 - 19,75)^2 + (16-19,75)^2 +
+       \ldots + (27-19,75)^2}{16}= 26,09 \mbox{ kg}^2 =
+     \frac{\sigma^2}{n}.$$
+   }
+ \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Distribuição amostral da média}
+
+    $Y$: média do diâmetro das árvores (cm)
+    $$\mbox{Se  }X \sim N(\mu, \sigma^2).$$
+    Seja $\bar{X} = $ a média amostral do diâmetro de $n$ árvores.
+    A distribuição amostral de $\bar{X}$ terá distribuição normal com
+    parâmetros:
+    \begin{center}
+      $\mu_{\bar{x}} = \text{E}(\bar{X}) = \mu$ \qquad e \qquad
+      $\sigma^2_{\bar{x}} = \text{Var}(\bar{X}) = \frac{\sigma^2}{n}$.
+    \end{center}
+
+    $$\bar{X} \sim N(\mu_{\bar{X}}, \sigma_{\bar{X}}^2)
+    \quad \Longrightarrow \quad
+    Z = \frac{\bar{X} - \mu_{\bar{X}}}{\sigma_{\bar{X}}} \sim N(0, 1)
+    $$
+
+    {\bf Observação}: Quando são utilizadas amostras sem reposição,
+    deve-se fazer uma correção na variância.
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Teorema Central do Limite}
+
+  \begin{block}{Teorema Central do Limite}
+    Se a população original tem uma distribuição qualquer com média
+    $\mu$ e variância $\sigma^2$, para $n$ ``suficientemente grande''
+    (na prática, quando $n\geq 30$), $\bar{X}$ tem distribuição {\bf
+      aproximadamente} normal:
+    $$\left.
+      \begin{array}{l}
+        \mbox{E}(X) = \mu\\
+        \mbox{Var}(X) = \sigma^2
+      \end{array}\right\}
+    \quad \Rightarrow \quad
+    \bar{X} \sim N\Bigg(\mu, \frac{\sigma^2}{n} \Bigg).$$
+  \end{block}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Teorema Central do Limite}
+
+<<echo=FALSE, fig.width=10, fig.height=6.5, out.width="1.05\\textwidth">>=
+
+rbimodal <- function(n, mu1, mu2, sd1, sd2 = sd1) {
+    ind <- as.logical(rbinom(n, 1, 0.5))
+    x1 <- rnorm(n, mu1, sd1)
+    x2 <- rnorm(n, mu2, sd2)
+    x <- c(x1[ind], x2[!ind])
+    return(x)
+}
+
+par(mfrow = c(3, 4), mar = c(2.8, 2.8, 2.5, 0.5), mgp = c(1.6, 0.6, 0))
+set.seed(2018)
+ns <- c(1, 2, 5, 30)
+B <- 1000
+purrr::walk(ns, function(n) {
+    meds <- vapply(1:B, function(i) mean(rpois(n, 2.5)), double(1))
+    main <- if(n != 1) {
+                parse(text = sprintf("n==%s", n))
+            } else {
+                expression("Poisson("*lambda==2.5*")")
+            }
+    hist(meds,
+         main = main,
+         col = "gray80",
+         ylab = "",
+         xlab = "",
+         border = "white",
+         probability = TRUE)
+    rug(meds)
+    if (n != 1) {
+        curve(dnorm(x, mean(meds), sd(meds)),
+              n = 200,
+              lwd = 2,
+              add = TRUE)
+    }
+})
+
+purrr::walk(ns, function(n) {
+    meds <- vapply(1:B, function(i) mean(runif(n, 0, 300)), double(1))
+    main <- if(n != 1) {
+                parse(text = sprintf("n==%s", n))
+            } else {
+                expression("Uniforme("*a==0*","~b==30*")")
+            }
+    hist(meds,
+         main = main,
+         col = "gray80",
+         border = "white",
+         ylab = "",
+         xlab = "",
+         probability = TRUE)
+    rug(meds)
+    if (n != 1) {
+        curve(dnorm(x, mean(meds), sd(meds)),
+              n = 200,
+              lwd = 2,
+              add = TRUE)
+    }
+})
+
+purrr::walk(ns, function(n) {
+    meds <- vapply(1:B, function(i) {
+        mean(rbimodal(n, 2, 15, 3, 2.5))
+    }, double(1))
+    main <- if(n != 1) {
+                parse(text = sprintf("n==%s", n))
+            } else {
+                expression("Mistura de normais")
+            }
+    hist(meds,
+         main = main,
+         col = "gray80",
+         border = "white",
+         ylab = "",
+         xlab = "",
+         probability = TRUE)
+    rug(meds)
+    if (n != 1) {
+        curve(dnorm(x, mean(meds), sd(meds)),
+              n = 200,
+              lwd = 2,
+              add = TRUE)
+    }
+})
+
+@
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Distribuição amostral da média}
+
+  {\bf Exemplo}: Seja $X$ a produção anual de resina de árvores de {\it
+    Pinus elliotti}. Suponha que $X$ segue uma distribuição normal com
+  média 2,3 kg e desvio padrão 0,7 kg.
+
+  \begin{enumerate}[(a)]
+  \item Faça um esboço da distribuição de X.
+  \item Foi tomada uma amostra aleatória de 16 árvores. Qual é a
+    probabilidade de que a produção média das 16 árvores amostradas seja
+    maior do que 2,8 kg?
+  \item Uma amostra aleatória de 49 árvores foi tomada. Qual é a
+    probabilidade de que a produção média das 49 árvores amostradas seja
+    maior do que 2,8 kg?
+  \item Uma amostra aleatória de 25 árvores foi tomada. Obter $\bar{x}$
+    tal que:
+    \begin{itemize}
+    \item $P(\bar{X}< \bar{x}) = 0,985$
+    \item $P(\bar{X}< \bar{x}) = 0,975$
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+\end{document}
