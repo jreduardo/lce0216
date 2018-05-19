@@ -1,0 +1,220 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático 7 - Estimação pontual e intervalar\\
+    08 de maio de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+\begin{document}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    # fig.align = "center",
+    fig.pos = "H",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.} Uma máquina enche pacotes de café com um desvio padrão igual
+a 10 g. Ela estava regulada para enchê-los com 500g, em média. Agora ela
+está desregulada e queremos saber qual a nova média verdadeira
+(populacional). Uma amostra de 25 pacotes apresentou média igual a 485
+g.
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Construir intervalos de confiança de 95\% e 99\% para a média
+  verdadeira. Interpretar os intervalos de confiança.
+\item Que tamanho de amostra será necessário para produzir um intervalo
+  de confiança para a verdadeira média populacional, com uma precisão de
+  3,5 g de café para mais e para menos? Use um grau de confiança de
+  99\%?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} De um povoamento de eucaliptos, sortearam-se 30 árvores e
+determinaram-se os diâmetros, em cm, com a finalidade de estimar o
+diâmetro médio do povoamento. Esses diâmetros foram:
+\begin{center}
+  \begin{tabular}{cccccccc}\hline
+    10,1 & 15,8 & 18,5 & 22,3 & 23,5 & 17,2 & 17,8 & 18,7 \\
+    16,7 & 29,1 & 28,0 & 30,3 & 26,8 & 28,0 & 17,8 & 18,9 \\
+    28,9 & 27,9 & 22,5 & 32,9 & 29,5 & 28,3 & 34,2 & 38,5 \\
+    38,5 & 35,5 & 34,2 & 31,8 & 32,5 & 41,8 \\ \hline
+  \end{tabular}
+\end{center}
+Com base nessa amostra, calcule:
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Intervalos com graus de confiança de 95\% e 99\%;
+\item O tamanho da amostra necessário para estimar o diâmetro médio de
+  plantas com um erro máximo de 5\% da média para um grau de confiança
+  de 95\%.
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.} De 1000 lavouras de arroz, foi levantada uma amostra de 25
+lavouras e a informação a respeito da produtividade permitiu o calculo
+do rendimento médio, por hectare, que foi de 3400 kg com desvio padrão
+de 150 kg.
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Determine intervalos com grau de confiança de 95\% e 99\% para o
+  verdadeiro rendimento médio.
+\item Que tamanho deve ter a amostra para que seja de 95\% o grau de
+  confiança na estimativa intervalar 3400$\pm$100?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{4.} Em uma população de homens com mais de 55 anos de
+determinado município, constatou-se em uma amostra aleatória de 20
+homens que 30\% apresentaram pressão arterial fora do intervalo
+apropriado para essa faixa etária. Um ano após a implementação de um
+programa de exercícios físicos, observou-se em uma nova amostra de 20
+homens que 18\% apresentaram pressão arterial fora do referido
+intervalo.
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Deseja-se saber entre que limites esteve a verdadeira proporção de
+  homens com pressão arterial fora do intervalo apropriado, antes e após
+  a implementação do programa de exercícios. Utilize um grau de
+  confiança de 95\%.
+\item Num trabalho futuro, qual seria o tamanho da amostra necessário
+  para obter um intervalo de 95\% de confiança para a proporção de
+  homens com pressão arterial fora do intervalo apropriado, com um erro
+  amostral máximo de 5 pontos percentuais, considerando a última
+  estimativa obtida para o parâmetro $\pi$?
+\end{enumerate}
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} Um agrônomo realizou um levantamento para estudar o
+desenvolvimento de duas espécies de árvores, a Bracatinga e a
+Canafístula. Para essa finalidade foram coletadas as duas amostras de
+tamanhos iguais a 10 árvores. Os resultados para altura, em metros,
+estão descritos a seguir para as duas amostras:
+\begin{center}
+  \begin{tabular}{ccccc|ccccc} \hline
+    \multicolumn{5}{c}{Bracatinga} & \multicolumn{5}{c}{Canafístula} \\ \hline
+    6,5 & 6,9 & 6,9 & 8,6 & 8,7 & 8,2 & 10,0 & 10,3 & 13,4 & 14,4 \\
+    9,3 & 10,1 & 11,4 & 15,2 & 17,2 & 14,8 & 15,9 & 20,6 & 21,9 & 23,8 \\ \hline
+  \end{tabular}
+\end{center}
+Para verificar a hipótese de que as duas alturas das duas espécies são
+diferentes, o agrônomo adotou o seguinte critério: construir um
+intervalo com 95\% de confiança para cada uma das espécies; se os
+intervalos se sobrepuserem (se interceptarem) concluir que não há
+diferenças entre elas. Baseado nesse critério, qual deveria ser a
+conclusão do agrônomo?
+\vspace{0.5cm}
+
+\vspace{13cm}
+\section*{Respostas}
+
+\noindent
+\textbf{1.} a) [481; 489], [479; 490]. Como os intervalos com 95 e 99\%
+de confiança não contém o valor de 500g, pode-se concluir que a máquina
+esta desregulada; \quad b) 55 pacotes.
+\vspace{0.5cm}
+
+\noindent
+\textbf{2.} a) [23,6; 29,5], [22,6; 30,5]; \quad b)$n = 149$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{3.} a) [3338; 3462] e [3316; 3483]; \quad  b) $n=10$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{4.} a) Antes do programa: [0,1; 0,5], após o programa: [0,01;
+0,35]; \quad b) $n=227$.
+\vspace{0.5cm}
+
+\noindent
+\textbf{5.} $7,51\leq \mu_{Bra} \leq12,65$, $11,54\leq \mu_{Can} \leq
+19,12$. Conclui-se que não há diferença significativa entre as duas
+espécies pois os intervalos de confiança se sobrepuseram.
+\vspace{0.5cm}
+
+\end{document}
