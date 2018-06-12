@@ -1,0 +1,857 @@
+\documentclass{beamer}
+
+%-------------------------------------------
+% Configuração de tema
+\usecolortheme[named=teal]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+%-------------------------------------------
+% Configuração de fonte
+\usepackage{mathpazo}
+\usepackage{inconsolata}
+\usepackage{verbatim}
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+%-------------------------------------------
+% Pacotes de propósitos gerais
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{booktabs}
+
+%-------------------------------------------
+% Usado para seções
+\AtBeginSection[]{
+  \begin{frame}[c, allowframebreaks, noframenumbering]
+    \begin{center}
+      \textcolor{teal}{\thesection} \\ \vspace{0.3cm}
+      \parbox{0.6\textwidth}{
+        \centering \textcolor{teal}{\LARGE \bf \insertsection}}\\
+    \end{center}
+  \end{frame}
+}
+
+%-------------------------------------------
+\title[LCE0216]{LCE0216 \\[-0.1cm]
+  Introdução à Bioestatística Florestal \\[0.2cm]
+  10. Teste de hipóteses}
+\author[Demétrio C. G. B.]{
+  Profa. Dra. Clarice Garcia Borges Demétrio \\[0.2cm]
+  Monitor: Eduardo E. R. Junior
+}
+\institute[USP]{Escola Superior de Agricultura ``Luiz de Queiroz''\\
+  Universidade de São Paulo}
+\date{Piracicaba, 05 de junho de 2018}
+
+%-------------------------------------------
+% Inicia os slides
+
+<<setup, include=FALSE>>=
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+library(knitr)
+library(xtable)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    size = "scriptsize",
+    tidy = FALSE,
+    fig.width = 7,
+    fig.height = 4,
+    out.width = "1\\textwidth",
+    fig.align = "center",
+    fig.pos = "h",
+    dev.args = list(family = "Palatino")
+)
+
+options(OutDec = ",")
+library(tidyr)
+
+@
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Inferência estatística}
+
+  Dado a caracterização da população por meio de uma distribuição de
+  probabilidades, há dois principais objetivos:
+  \vspace{0.2cm}
+  \begin{itemize}
+    \item \textbf{Estimar} os parâmetros dessa população;
+    \item \textbf{Testar} hipóteses (afirmações) sobre esses parâmetros.
+  \end{itemize}
+  \vspace{0.2cm}
+  \begin{center}
+    \includegraphics[width=7cm]{images/pop_amost}
+  \end{center}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Testes de hipóteses}
+
+  \begin{block}{}
+    $$
+    \begin{gathered}
+      X \sim \text{Distribuição}(\theta) \\
+      \begin{cases}
+        \text{H}_0\text{:}\; \theta = \theta_0 & \text{(hipótese nula)}\\
+        \text{H}_a\text{:}\; \theta \overset{<}{\underset{>}{\neq}}
+        \theta_0 & \text{(hipótese alternativa)}\\
+      \end{cases}
+    \end{gathered}
+    $$
+  \end{block}
+
+  Tipos de erro:
+  \begin{itemize}
+  \item Rejeitar $H_0$, quando $H_0$ é verdadeira (erro tipo I);
+  \item Não rejeitar $H_0$, quando $H_0$ é falsa (erro tipo II).
+  \end{itemize}
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{r|cc}
+      \hline
+      & \textbf{$H_o$ verdadeira} & \textbf{$H_o$ falsa} \\
+      \hline
+      \textbf{Não rejeitar $H_0$} & Decisão correta & Erro tipo II ($\beta$)\\
+      \textbf{Rejeitar $H_0$} & Erro tipo I ($\alpha$) & Decisão correta\\
+      \hline
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Exemplo}
+
+  Hoje a noite você vai a uma festa. A previsão do tempo diz que há 80\%
+  de probabilidade de chuva. Você leva guarda-chuva?
+  $$
+  \left\{
+    \begin{array}{l}
+      \text{H}_0: \; \mbox{vai chover hoje a noite}\\
+      \text{H}_a: \; \mbox{Não vai chover hoje a noite}
+    \end{array}\right.
+  $$
+
+  \begin{enumerate}[]
+  \item \textcolor{red}{\bf Erro tipo I:} Você rejeita $H_0$, acredita
+    que não vai chover, foi sem guarda-chuva e se molha.
+    \vspace{0.2cm}
+  \item \textcolor{red}{\bf Erro tipo II:} Você não rejeita $H_0$,
+    acredita que vai chover, leva guarda-chuva e passa a noite toda
+    carregando um guarda-chuva sem usá-lo.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Conceitos}
+
+  \begin{itemize}
+  \item {\bf Hipóteses:} Estabelecem as crenças (afirmações) a serem
+    testadas. São definidas a partir do conhecimento do problema e podem
+    ser do tipo simples ou composta;
+    \vspace{0.1cm}
+
+  \item {\bf Nível de significância ($\alpha$):} associado a regra de
+    decisão. É a probabilidade de se cometer erro tipo I,
+    $P(\text{rejeitar H}_0 \mid \text{H}_0 \text{ é verdadeira})$;
+    \vspace{0.1cm}
+
+  \item {\bf Estatística do teste:} Uma estatística que depende do
+    parâmetro de interesse, mas que sua distribuição seja conhecida e
+    independa desse parâmetro;
+    \vspace{0.1cm}
+
+  \item {\bf Regra da decisão:} Regra que estabelece, com base nos dados
+    obtidos e no nível de significância, quando $H_0$ será rejeitada;
+    \vspace{0.1cm}
+
+  \item {\bf Nível descritivo (p-valor):} Probabilidade de se obter
+    estatísticas mais extremas para rejeição de H$_0$ do que aquela
+    fornecida pela amostra.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Tipos de hipóteses}
+
+  \begin{itemize}
+  \item Hipóteses simples:\\
+    H$_0$: $\theta = \theta_0$ versus H$_a$: $\theta = \theta_a$;
+    \vspace{0.4cm}
+  \item Hipóteses compostas:
+    \begin{itemize}
+    \item Unilateral (à esquerda):\quad
+      H$_0$: $\theta = \theta_0$ versus H$_a$: $\theta < \theta_0$;
+    \item Unilateral (à direita):\hspace{0.65cm}
+      H$_0$: $\theta = \theta_0$ versus H$_a$: $\theta > \theta_0$;
+    \item Bilateral:\hspace{2.52cm}
+      H$_0$: $\theta = \theta_0$ versus H$_a$: $\theta \neq \theta_0$;
+    \end{itemize}
+  \end{itemize}
+  \vspace{0.3cm}
+
+<<fig.width=7, fig.height=2, echo=FALSE>>=
+
+par(mfrow = c(1, 3), mar = c(2, 0, 2, 0))
+
+x <- seq(-3.5, 3.5, length.out = 500)
+fx <- dnorm(x)
+plot(fx ~ x,
+     type = "l",
+     lwd = 1.5,
+     xaxt = "n",
+     yaxt = "n",
+     bty = "n",
+     main = "Unilateral (à esquerda)")
+axis(side = 1,
+     at = c(-1.5),
+     labels = expression(z[tab]))
+axis(side = 1,
+     at = c(-3.5, 3.5),
+     labels = rep("", 2))
+ind <- x < -1.5
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+
+plot(fx ~ x,
+     type = "l",
+     lwd = 1.5,
+     xaxt = "n",
+     yaxt = "n",
+     bty = "n",
+     main = "Unilateral (à direita)")
+axis(side = 1,
+     at = c(1.5),
+     labels = expression(z[tab]))
+axis(side = 1,
+     at = c(-3.5, 3.5),
+     labels = rep("", 2))
+ind <- x > 1.5
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+
+plot(fx ~ x,
+     type = "l",
+     lwd = 1.5,
+     xaxt = "n",
+     yaxt = "n",
+     bty = "n",
+     main = "Bilateral")
+axis(side = 1,
+     at = c(-1.5, 1.5),
+     labels = expression(-z[tab], z[tab]))
+axis(side = 1,
+     at = c(-3.5, 3.5),
+     labels = rep("", 2))
+ind <- x > 1.5
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+ind <- x < -1.5
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Passos para construção de um teste de hipósteses}
+
+  \begin{enumerate}
+  \item Formule as hipóteses, nula (H$_0$) e alternativa (H$_a$);
+    \vspace{0.1cm}
+
+  \item Identifique a estatística (estimador) adequada. Conhecer, ao
+    menos assintoticamente, a distribuição amostral desse estimador;
+    \vspace{0.1cm}
+
+  \item Fixe o nível de significância ($\alpha$), probabilidade do erro
+    tipo I e construa a regra de decisão;
+    \vspace{0.1cm}
+
+  \item Use as observações da amostra para calcular o valor da
+    estatística do teste;
+    \vspace{0.1cm}
+
+  \item Compare o valor da estatística calculado na amostra com as
+    regiões da regra de decisão, para rejeitar ou não a hipótese nula.
+  \end{enumerate}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}
+  \frametitle{Tipos de testes de hipóteses}
+
+  Nesse curso serão apresentados os procedimentos para testar hipóteses
+  relacionadas a:
+
+  \begin{itemize}
+    \item Testes para proporção;
+    \item Testes para média:
+      \begin{itemize}
+        \item com variância conhecida;
+        \item com variância desconhecida;
+      \end{itemize}
+    \item Testes para comparação de variâncias;
+    \item Testes para comparação de médias:
+      \begin{itemize}
+        \item dados pareados (dependentes);
+        \item dados não-pareados (independentes);
+      \end{itemize}
+    \item Testes para tabelas de contigência.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\section{Testes para proporção}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste}
+  \small
+
+  \begin{itemize}
+    \item População:
+      $X = \{0 (\text{fracasso}), 1 (\text{sucesso})\}$;
+      $X \sim \text{Bernoulli}(\pi)$;
+      \item Hipóteses:
+        \vspace{-0.3cm}
+        $$
+         \begin{cases}
+           \text{H}_0\text{:}\; \pi = \pi_0 &
+           \text{(hipótese nula)}\\
+           \text{H}_a\text{:}\; \pi \overset{<}{\underset{>}{\neq}}
+           \pi_0 & \text{(hipótese alternativa)}\\
+         \end{cases}
+        $$
+      \item Com base em uma amostra de tamanho $n$, $n \to \infty$,
+        sob H$_0$, sabe-se que
+        $$
+        \begin{gathered}
+        \hat{P} \sim N(\pi_0, \pi_0 (1-\pi_0)/n);\\
+        Z = \frac{\hat{P} - \pi_0}{\sqrt{\pi_0 (1-\pi_0)/n}}
+        \sim N(0, 1)
+        \end{gathered}
+        $$
+      \item Compara-se a estatística do teste
+        $$z_{calc} = \frac{\hat{p} - \pi_0}{\sqrt{\pi_0 (1-\pi_0)/n}}$$
+          com um quantil $z_{tab}$ da distribuição normal padrão, que
+          represente o indicado pela hipótese alternativa.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplos}
+
+  \textbf{Exemplo 1:} Um produtor precisa decidir pela compra ou não de
+  sementes fornecidas por um distribuidor, que afirma que a proporção de
+  germinação de sementes é $\pi = 0,94$. Para tanto ele observou a
+  proporção de germinação de uma amostra aleatória simples de 100
+  sementes e encontrou o valor $\hat{p}=0,93$. Com base nesse resultado
+  o produtor poderia discordar do distribuidor?
+
+  \begin{itemize}
+    \item Assuma um nível de significância de 5\%;
+    \item Teste a desigualdade ($\neq$) e se o distribuidor está sendo
+      muito otimista ($<$);
+    \item Determine em regras de decisão em termos das proporções
+      amostrais e calcule o valores de $p$.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Exemplos}
+
+  \textbf{Exemplo 2:} Após vários anos de acompanhamento de parcelas
+  permanentes, uma engenheira florestal concluiu que, das árvores que
+  morrem num fragmento florestal, 75\% são devido ao abafamento da copa
+  por cipós. No ano seguinte ocorreu um período prolongado de intensa
+  seca e 30 árvores morreram durante o ano, das quais 24 mortes podem
+  ser atribuídas ao efeito dos cipós. A engenheira florestal afirma que
+  a proporção de árvores que morreram devido aos cipós ($p$) foi maior
+  neste ano de seca intensa do que nos anos anteriores. Verifique a
+  afirmação utilizando o nível de 5\% de significância.
+\end{frame}
+
+%-------------------------------------------
+\section{Teste para média}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste (variância conhecida)}
+  \small
+
+  \begin{itemize}
+    \item População:
+      $X \sim N(\mu, \sigma^2)$, $\sigma^2$ conhecido;
+      \item Hipóteses:
+        \vspace{-0.3cm}
+        $$
+         \begin{cases}
+           \text{H}_0\text{:}\; \mu = \mu_0 &
+           \text{(hipótese nula)}\\
+           \text{H}_a\text{:}\; \mu \overset{<}{\underset{>}{\neq}}
+           \mu_0 & \text{(hipótese alternativa)}\\
+         \end{cases}
+        $$
+      \item Com base em uma amostra de tamanho $n$,
+        sob H$_0$, sabe-se que
+        $$
+        \begin{gathered}
+        \bar{X} \sim N(\mu_0, \sigma^2/n);\\
+        Z = \frac{\bar{X} - \mu_0}{\sqrt{\sigma^2/n}}
+        \sim N(0, 1)
+        \end{gathered}
+        $$
+      \item Compara-se a estatística do teste
+        $$z_{calc} = \frac{\bar{x} - \mu_0}{\sqrt{\sigma^2/n}}$$
+        com um quantil $z_{tab}$ da distribuição normal padrão, que
+        represente o indicado pela hipótese alternativa.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplos}
+
+  \textbf{Exemplo 3:} Uma balança para encher pacotes de sementes
+  automaticamente está programada para produzir pacotes com peso médio
+  de 20 kg e desvio padrão de 0,20 kg. \\[0.1cm] Periodicamente é feita
+  uma inspeção para verificar se o peso médio está sob controle. Para
+  este fim, foi selecionada uma amostra de 8 pacotes de sementes, cujos
+  resultados foram:
+  \begin{center}
+    \begin{tabular}{cccccccc} \hline
+      20,3 & 19,8 & 20,3 & 19,7 & 19,8 &
+      19,7 & 19,8 & 19,8 \\ \hline
+    \end{tabular}
+  \end{center}
+  \vspace{0.3cm}
+  Teste a hipótese que a a balança se desregulou e está produzindo um
+  peso médio inferior a 20 kg, assumindo que a variância permanece
+  inalterada. Use o nível de significância de 5\%.
+\end{frame}
+
+\begin{frame}{Construção do teste (variância desconhecida)}
+  \small
+
+  \begin{itemize}
+    \item População:
+      $X \sim N(\mu, \sigma^2)$;
+      \item Hipóteses:
+        \vspace{-0.3cm}
+        $$
+         \begin{cases}
+           \text{H}_0\text{:}\; \mu = \mu_0 &
+           \text{(hipótese nula)}\\
+           \text{H}_a\text{:}\; \mu \overset{<}{\underset{>}{\neq}}
+           \mu_0 & \text{(hipótese alternativa)}\\
+         \end{cases}
+        $$
+      \item Com base em uma amostra de tamanho $n$,
+        sob H$_0$, sabe-se que
+        $$
+        \begin{gathered}
+        \bar{X} \sim N(\mu_0, \sigma^2/n);
+        \text{e como }\, \sigma^2\, \text{ é desconhecido}, \\
+        T = \frac{\bar{X} - \mu_0}{\sqrt{S^2/n}}
+        \sim t_{(n-1)}, \quad
+        S^2 = \frac{\sum_{i=1}^n X_i^2 - (\sum_{i=1}^n X_i)^2/n}{n-1}
+        \end{gathered}
+        $$
+      \item Compara-se a estatística do teste
+        $$t_{calc} = \frac{\bar{x} - \mu_0}{\sqrt{s^2/n}}$$
+        com um quantil $t_{tab}$ da distribuição $t$ de Student com
+        $n-1$ graus de liberdade, que represente o indicado pela
+        hipótese alternativa.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplos}
+
+  \textbf{Exemplo 3 (revisitado):} Uma balança para encher pacotes de
+  sementes automaticamente está programada para produzir pacotes com
+  peso médio de 20 kg e desvio padrão de 0,20 kg. \\[0.1cm]
+  Periodicamente é feita uma inspeção para verificar se o peso médio
+  está sob controle. Para este fim, foi selecionada uma amostra de 8
+  pacotes de sementes, cujos resultados foram:
+  \begin{center}
+    \begin{tabular}{cccccccc} \hline
+      20,3 & 19,8 & 20,3 & 19,7 & 19,8 &
+      19,7 & 19,8 & 19,8 \\ \hline
+    \end{tabular}
+  \end{center}
+  \vspace{0.3cm}
+  Teste a hipótese que a a balança se desregulou e está produzindo um
+  peso médio inferior a 20 kg. Use o nível de significância de 5\%.
+\end{frame}
+
+\begin{frame}{Exemplos}
+
+  \textbf{Exemplo 4}: Um cientista deseja saber se o pH de um solo é
+  ácido. Ele toma uma amostra de 10 unidades e obteve os valores de pH:
+  \begin{center}
+    \begin{tabular}{ccccc} \hline
+      5,8 & 6,0 & 7,0 & 6,2 & 6,2 \\
+      7,1 & 6,4 & 5,5 & 5,8 & 5,9 \\ \hline
+    \end{tabular}
+  \end{center}
+  Tire uma conclusão supondo nível de significância de 5\%.
+  \vspace{0.8cm}\pause
+
+  {\bf Observação:} A escala de pH vai do 1 ao 14, sendo 7 a
+  neutralidade, abaixo de 7 a acidez e acima de 7 a alcalinidade.
+\end{frame}
+
+  \begin{frame}[c, allowframebreaks, noframenumbering]
+    \begin{center}
+      \parbox{0.6\textwidth}{
+        \centering \textcolor{teal}{\LARGE \bf
+          Inferência para duas populações
+        }}\\
+    \end{center}
+  \end{frame}
+
+
+%-------------------------------------------
+\begin{frame}{Conceitos iniciais}
+  \begin{block}{Interesse}
+    Dadas duas populações, caracterizadas em uma mesma família de
+    distribuições, o objetivo nesse caso é \textbf{testar afirmações
+      comparativas sobre os parâmetros das duas populações}.
+  \end{block}
+  \begin{itemize}
+    \item Descrição das populações,
+      $$
+      \begin{gathered}
+        X_1 \sim \text{Distribuição}(\theta_1) \\
+        X_2 \sim \text{Distribuição}(\theta_2)
+      \end{gathered}
+      $$
+    \item Hipóteses de interesse,
+      $$
+      \begin{cases}
+        \text{H}_0\text{:}\; \theta_1 = \theta_2 & \text{(hipótese nula)}\\
+        \text{H}_a\text{:}\; \theta_1 \overset{<}{\underset{>}{\neq}}
+        \theta_2 & \text{(hipótese alternativa)}\\
+      \end{cases}
+    $$
+    \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Conceitos iniciais}
+
+<<echo=FALSE, fig.width=7, fig.height=5>>=
+
+myplot <- function(formula, let = "", ...) {
+    plot(formula,
+         type = "l",
+         lwd = 1.5,
+         xaxt = "n",
+         yaxt = "n",
+         bty = "n")
+    axis(1, labels = FALSE, tick = FALSE)
+    ps <- par("usr")
+    arrows(ps[1], ps[3], ps[2], ps[3], code = 2,
+           length = 0.1, xpd = TRUE)
+    text(x = -4, y = extendrange(ps[3:4], f = -0.1)[2],
+         labels = let, cex = 1.2)
+}
+
+par(mfrow = c(2, 2), mar = c(2, 1, 0, 1))
+x <- seq(-4, 4, length.out = 500)
+
+myplot(dnorm(x) ~ x, let = "a)")
+curve(dnorm(x)-0.005, lwd = 1.5, add = TRUE)
+
+
+myplot(dnorm(x) ~ x, let = "b)")
+curve(dnorm(x, sd = 1.5), lwd = 1.5, add = TRUE)
+
+myplot(dnorm(x) ~ x, let = "c)")
+curve(dnorm(x, mean = 1.2), lwd = 1.5, add = TRUE)
+
+myplot(dnorm(x, mean = 1.2) ~ x, let = "d)")
+curve(dnorm(x, sd = 1.5), lwd = 1.5, add = TRUE)
+
+@
+
+  \vspace{-0.2cm}
+  \begin{itemize}
+    \small
+    \item Com relação a alguma variável contínua, podemos considerar que
+      as populações são iguais?
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\section{Teste para comparação de variâncias}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste}
+  \small
+  \begin{itemize}
+    \item População:
+      $$
+      \begin{gathered}
+      X_1 \sim N(\mu_1, \sigma_1^2)\\
+      X_2 \sim N(\mu_2, \sigma_2^2);
+      \end{gathered}
+      $$
+      %\vspace{0.3cm}
+      \item Hipóteses:
+        \vspace{-0.1cm}
+        $$
+         \begin{cases}
+           \text{H}_0\text{:}\; \sigma_1 = \sigma_2
+           \: \Rightarrow \: \frac{\sigma_1}{\sigma_2} = 1 &
+           \text{(hipótese nula)}\\
+           \text{H}_a\text{:}\; \sigma_1 \overset{<}{\underset{>}{\neq}}
+           \sigma_2 \: \Rightarrow \: \frac{\sigma_1}{\sigma_2}
+           \overset{<}{\underset{>}{\neq}} 1
+           & \text{(hipótese alternativa)}\\
+         \end{cases}
+        $$
+  \end{itemize}
+
+  <<fig.width=8, fig.height=3, echo=FALSE>>=
+
+par(mfrow = c(1, 2), mar = c(2, 1, 2, 0))
+x <- seq(0, 4, length.out = 500)
+fx <- df(x, 10, 8)
+
+# Unilateral
+qa <- qf(0.1, 10, 8, lower.tail = FALSE)
+plot(fx ~ x,
+     type = "l",
+     lwd = 1.5,
+     xaxt = "n",
+     yaxt = "n",
+     bty = "n",
+     main = "Unilateral (à direita)")
+axis(side = 1,
+     at = qa,
+     labels = expression(F[tab]))
+axis(side = 1,
+     at = c(-0.5, 4.5),
+     labels = rep("", 2))
+ind <- x > qa
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+
+# Bilateral
+qa <- qf(0.05, 10, 8, lower.tail = TRUE)
+qb <- qf(0.05, 10, 8, lower.tail = FALSE)
+plot(fx ~ x,
+     type = "l",
+     lwd = 1.5,
+     xaxt = "n",
+     yaxt = "n",
+     bty = "n",
+     main = "Bilateral")
+axis(side = 1,
+     at = c(qa, qb),
+     labels = expression(F[1~tab], F[2~tab]))
+axis(side = 1,
+     at = c(-0.5, 4.5),
+     labels = rep("", 2))
+ind <- x > qb
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+ind <- x < qa
+polygon(x = c(x[ind], rev(x[ind])),
+        y = c(fx[ind], rep(0, sum(ind))),
+        col = rgb(.8, .8, .8, 1),
+        density = NULL,
+        angle = 45)
+
+@
+
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste}
+  \small
+  \begin{itemize}
+      \item Considerando amostras aleatórias de $X_1$ e $X_2$
+        independentes, de tamanho $n_1$ e $n_2$, respectivamente.
+        Sob H$_0$, sabe-se que
+        $$
+        \begin{gathered}
+        F = \frac{S_1^2}{S_2^2} \sim F(n_1 - 1, n_2 - 1);\quad
+        \text{em que }\\[0.1cm]
+        S_j^2 = \frac{\sum_{i=1}^n X_{ji}^2 -
+          (\sum_{i=1}^n X_{ji})^2/n}{n-1}, \quad j=1,2.
+        \end{gathered}
+        $$
+        Na prática, considera-se o cálculo da estatística $F$ de tal
+        forma que $F = S_1^2 / S_2^2 > 1$, ou seja, utiliza-se como
+        numerador a maior variância amostral observada.
+      \item Compara-se a estatística do teste
+        $$F_{calc} = \frac{s_1^2}{s_2^2},$$ com a região critíca (RC)
+        construída de tal forma que $P(F \in \text{RC}) = \alpha$.
+      \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Exemplo}
+
+  \textbf{Exemplo 5:} Um grupo de pesquisadores tem interesse em comparar
+  se a proliferação de fungos em plantas tem relação com determinados
+  tipos de solo. Para isso, os pesquisadores mensuraram as áreas atacadas
+  por fungos em 21 árvores com tipo de solo A e 9 árvores com tipo de
+  solo B. Os resultados obtidos foram
+  \begin{table}
+    \centering
+    \begin{tabular}{cc}
+      \hline
+      \textbf{Tipo de solo A} & \textbf{Tipo de solo B} \\
+      \hline \\[-0.4cm]
+      $\sum_{i=1}^{21}x_{1i} = 100$ & $\sum_{i=1}^{9}x_{2i} = 45$\\[0.2cm]
+      $\sum_{i=1}^{21}x_{1i}^2 = 496$ & $\sum_{i=1}^{9}x_{2i}^2 = 273$\\
+      \hline
+    \end{tabular}
+  \end{table}
+  Pode-se considerar que as àreas atacadas por fungos possuem a mesma
+  variabilidade?
+\end{frame}
+
+%-------------------------------------------
+\section{Teste para comparação de médias}
+
+\begin{frame}{Conceitos iniciais}
+  \begin{block}{}
+    \centering
+    Dados pareados \quad \textit{vs} \quad dados não pareados
+  \end{block}
+  \begin{itemize}
+  \item \textbf{Dados pareados (dependentes)}: São casos em que é
+    razoável supor que há correlação entre as observações das diferentes
+    populações. Nesse curso, apresenta-se testes apenas para quando essa
+    dependência se dá em pares. Exemplos:\\
+      \begin{itemize}
+        \item Experimentos do tipo antes e depois;
+        \item Diferentes mensurações em uma mesma unidade amostral.
+      \end{itemize}
+      \vspace{0.3cm}
+    \item \textbf{Dados não pareados (independentes)}: São casos em que
+      é razoável supor a independência entre as observações das
+      diferentes populações.
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste (dados pareados)}
+  \small
+  \begin{itemize}
+    \item População: Nesse caso, como a amostra se dá por pares $(X_1,
+      X_2)$, considera-se as diferenças $D = X_2 - X_1$,
+      $$
+      D = X_2 - X_1 \sim N(\mu_D,\, \sigma_D^2).
+      $$
+      Retornando a um problema de uma única população, conforme visto
+      anteriormente.
+      \item Hipóteses:
+        \vspace{-0.05cm}
+        $$
+         \begin{cases}
+           \text{H}_0\text{:}\; \mu_D = \mu_2 - \mu_1 = 0 &
+           \text{(hipótese nula)}\\
+           \text{H}_a\text{:}\; \mu_D = \mu_2 - \mu_1
+           \overset{<}{\underset{>}{\neq}} 0 &
+           \text{(hipótese alternativa)}\\
+         \end{cases}
+        $$
+      \item Com base em uma amostra pareada de tamanho $n$,
+        sob H$_0$, sabe-se que
+        $$
+        \begin{gathered}
+        \bar{D} = \bar{X}_2 - \bar{X}_1 \sim N(0, \sigma_D^2/n);
+        \text{e como }\, \sigma_D^2\, \text{ é desconhecido}, \\
+        T = \frac{\bar{X}_2 - \bar{X}_1}{\sqrt{S_D^2/n}}
+        \sim t_{(n-1)}, \quad
+        S_D^2 = \frac{\sum_{i=1}^n (D_i)^2 - (\sum_{i=1}^n D_i)^2/n}{n-1}
+        \end{gathered}
+        $$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Exemplo}
+  \small
+
+  \textbf{Exemplo 6:} Um pesquisador deseja verificar se a altura de uma
+  árvore em pé, medida usando-se o método trigonométrico (aproximado),
+  não difere da altura da árvore medida no chão. Com esse objetivo,
+  mediu as alturas das árvores pelo método trigonométrico, derrubou-as e
+  mediou novamente suas alturas.
+  \vspace{-0.2cm}
+  \begin{table}
+    \scriptsize
+    \begin{tabular}{cccc} \hline
+      n$^o$ & Árvore em pé (A) & Árvore no chão (B) & Diferença (D=B-A) \\ \hline
+      1 & 20,4 & 21,7 & 1,3 \\
+      2 & 25,4 & 26,3 & 0,9 \\
+      3 & 25,6 & 26,8 & 1,2 \\
+      4 & 26,6 & 26,2 & -0,4 \\
+      5 & 28,6 & 27,3 & -1,3\\
+      6 & 28,7 & 29,5 & 0,8 \\
+      7 & 29,0 & 32,0 & 3,0 \\
+      8 & 29,8 & 30,9 & 1,1 \\
+      9 & 30,5 & 32,3 & 1,8 \\
+      10& 30,9 & 32,3 & 1,4 \\
+      11& 31,1 & 31,7 & 0,6 \\
+      12& 25,6 & 28,1 & 2,5 \\ \hline
+    \end{tabular}
+  \end{table}
+  \vspace{-0.3cm}
+  Pode-se considerar que a altura obtida pelo método aproximado
+  equivale-se a altura real (obtida derrubando-se a árvore)?\\ \pause
+  {\footnotesize $\sum D_i = 12,9$ e $\sum D_i^2 = 28,45$.}
+\end{frame}
+
+
+\end{document}
