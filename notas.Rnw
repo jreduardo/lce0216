@@ -12,7 +12,7 @@
 \usepackage{makecell}
 \usepackage{multicol}
 \usepackage[table]{xcolor}
-\newcolumntype{C}{>{\centering\arraybackslash}p{1in}}
+\newcolumntype{C}{>{\centering\arraybackslash}p{0.9in}}
 \newcolumntype{W}{>{\centering\arraybackslash}p{0.3in}}
 \newcolumntype{L}{>{\arraybackslash}p{1in}}
 
@@ -99,6 +99,11 @@ trellis.par.set(ps)
   Professora responsável: Clarice Garcia Borges Demétrio
 \end{center}
 
+\noindent
+% \textbf{\textcolor{red}{Revisão das notas das avaliações 3 e
+%     substitutivas das 9h00 às 10h30 nesta terça (10/07) na sala da
+%     pós-graduação de Estatística (ao lado da 311) com Eduardo Jr.}}
+
 \begin{table}[ht]
 \centering
 \rowcolors{2}{gray!25}{white}
@@ -108,16 +113,41 @@ trellis.par.set(ps)
 
 <<results="asis">>=
 
+substituir <- function(x) {
+    imin <- which.min(x)
+    vmin <- min(x)
+    vsub <- x[4]
+    if (vmin < vsub) {
+        x[imin] <- vsub
+    }
+    return(x)
+}
+
+arrendondar <- function(x, digits = 1) {
+    intx <- as.integer(x)
+    difx <- x - intx
+    intx + ceiling(difx * 10^digits) / 10^digits
+}
+
 da <- readxl::read_xlsx("notas/notas.xlsx",
                         skip = 2,
                         col_types = c("text", "text",
-                                      rep("numeric", 3)))
-da$med <- apply(da[, 3:5], 1, mean, na.rm = TRUE)
-gmeds <- apply(da[, 3:6], 2, mean, na.rm = TRUE)
+                                      rep("numeric", 4)))
+
+da$media <- apply(da[, -(1:2)], 1, function(x) {
+    notas <- substituir(x)
+    media <- sum(notas[1:3] * c(2, 3, 3))/8
+    arrendondar(media)
+})
+
+gmeds <- apply(da[, -(1:2)], 2, function(x) {
+    mean(x[x > 0])
+})
 
 tab <- da
 colnames(tab) <- c("Nome", "Nº USP",
                    paste(c("1ª", "2ª", "3ª"), "Avaliação"),
+                   "Substitutiva",
                    "Nota Média")
 print.xtable(xtable(tab[, -1]),
              only.contents = TRUE)
@@ -125,50 +155,46 @@ print.xtable(xtable(tab[, -1]),
 
 @
 
-& Média & \Sexpr{gmeds[1]} & & & \Sexpr{gmeds[4]} \\
+& Média & \Sexpr{gmeds[1]} & \Sexpr{gmeds[2]} &
+\Sexpr{gmeds[3]} & \Sexpr{gmeds[4]} & \Sexpr{gmeds[5]} \\
 \bottomrule
 \end{tabular}
 \end{table}
 \vspace{0.5cm}
 
-<<fig.height=4, out.width="0.8\\textwidth">>=
+<<fig.height=3, fig.width=8, out.width="1\\textwidth">>=
 
-xy1 <- histogram(~med,
-                 data = da,
-                 ylim = c(-0.05, 0.32),
-                 xlim = c(2.4, 10.5),
+xy1 <- histogram(~media,
                  col = "gray90",
                  border = "white",
                  type = "density",
                  ylab = "Densidade",
-                 xlab = "",
-                 par.settings = list(
-                     layout.heights = list(
-                         bottom.padding = 13)
-                 ),
+                 xlab = "Notas médias",
                  panel = function(x, ...) {
                      panel.histogram(x, ...)
                      panel.lines(density(x[!is.na(x)]))
                      panel.rug(x, col = 1)
-                 })
-# xy1
+                 },
+                 data = da)
 
-xy2 <- bwplot(~med,
+library(tidyr)
+library(dplyr)
+aux <- da %>% gather("type", "nota", prova1:media)
+xy2 <- bwplot(nota ~ type,
               fill = "gray90",
-              xlim = c(2.4, 10.5),
-              do.out = FALSE,
-              data = da,
-              xlab = "Notas médias",
-              box.width = 0.3,
-              scales = list(x = list(draw = FALSE)),
-              par.settings = list(
-                  axis.line = list(col = "transparent"),
-                  clip = list(panel = "off")
-              ))
-# xy2
+              # xlim = c(2.4, 10.5),
+              # do.out = FALSE,
+              ylab = "Notas",
+              # box.width = 0.3,
+              # scales = list(x = list(draw = FALSE)),
+              # par.settings = list(
+              #  axis.line = list(col = "transparent"),
+              #     clip = list(panel = "off")
+              # ),
+              data = aux)
 
-print(xy1, position = c(0, 0, 1, 1), more = TRUE)
-print(xy2, position = c(0.047, 0, 0.995, 0.4), more = FALSE)
+print(xy1, position = c(0, 0, 0.5, 1), more = TRUE)
+print(xy2, position = c(0.5, 0, 1, 1), more = FALSE)
 
 @
 

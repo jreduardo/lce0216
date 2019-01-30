@@ -1,0 +1,283 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\pagenumbering{gobble}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multicol}
+
+\usepackage{float}
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\definecolor{mycol}{rgb}{0.0, 0.0, 0.5}
+\urlstyle{tt}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  colorlinks=true,
+  linkcolor=mycol,
+  citecolor=mycol,
+  filecolor=mycol,
+  urlcolor=mycol,
+  bookmarksdepth=4
+}
+\makeatother
+
+%-------------------------------------------
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.3mm}}
+\def\cabecalho{
+  \thispagestyle{empty}
+  \HRule\\[-0.4cm]
+
+  \noindent
+  \begin{minipage}[c]{0.75\textwidth}
+    \baselineskip 8pt
+    \vspace{0.1cm}
+    LCE0216 - Introdução à Bioestatística Florestal\\
+    Profª Clarice Garcia Borges Demétrio\\
+    Exercício prático 8 - Testes de hipóteses\\
+    12 de junho de 2018\\
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.25\textwidth}
+    \begin{flushright}
+      \vspace*{-0.15cm}
+      \includegraphics[height=1.8cm]{logo-esalq}
+    \end{flushright}
+  \end{minipage}\\[-0.1cm]
+  \HRule \hspace{0.5cm}
+}
+
+\usepackage{mathpazo}
+
+\begin{document}
+
+<<setup, cache=FALSE, echo=FALSE, warning=FALSE, message=FALSE>>=
+
+# Settings for general options
+library(xtable)
+options(digits = 3,
+        OutDec = ",",
+        xtable.caption.placement = "top",
+        xtable.sanitize.text.function = identity)
+
+# Settings for knitr chunks
+library(knitr)
+opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    echo = FALSE,
+    results = "hide",
+    fig.width = 7,
+    fig.height = 5,
+    # fig.align = "center",
+    fig.pos = "H",
+    out.width = ".85\\textwidth",
+    dev.args = list(family = "Palatino"))
+
+library(lattice)
+library(latticeExtra)
+theme <- canonical.theme(color = FALSE)
+theme$strip.background <- list(col = "gray90")
+theme$reference.line <- list(col = "gray95")
+theme$plot.polygon <- list(col = "gray75")
+trellis.par.set(theme)
+
+@
+
+\cabecalho{}
+
+\noindent
+\textbf{1.} Sabe-se que a proporção de sementes de soja com danos
+mecânicos provocados pelo beneficiamento é $\pi=0,18$. Suspeita-se que a
+máquina em uso está desregulada, provocando um aumento na proporção de
+sementes de soja com danos mecânicos. Foram feitas 40 observações
+durante um dia de trabalho e se constatou que $\hat{\pi} =
+0,20$. Verificar se a máquina de beneficiamento precisa ser regulada, ao
+nível de significância de 5\%.
+\vspace{0.5cm}
+
+\textbf{2.} Com base nas informações a seguir, teste a hipótese de que
+não há diferença significativa entre as produções médias de duas
+variedades de soja, ao nível de significância de 1\%.\\
+Variedade A: média = 3,8 t/ha com variância = 0,36 (t/ha)$^2$; variedade
+B: média = 4,6 t/ha com variância = 0,04 (t/ha)$^2$. As informações
+obtidas, para as variedades A e B, foram baseadas em amostras de tamanho
+30 e 35, respectivamente.
+\vspace{0.5cm}
+
+\textbf{3.} Em um experimento envolvendo o cruzamento de dois tipos de
+milho, Lindstrom encontrou quatro tipos distintos: verde (T1), dourado
+(T2), listras verdes (T3) e lisas verdes e douradas (T4). De acordo com
+a hereditariedade mendeliana, as probabilidades de obter esses quatro
+tipos são: 9/16, 3/16, 3/16 e 1/16, respectivamente. Em 1301 indivíduos
+da segunda geração, Lindstrom encontrou as seguintes frequências:
+\begin{center}
+  \begin{tabular}{c|c}\hline
+    T1 & 773\\
+    T2 & 231\\
+    T3 & 238\\
+    T4 & 59\\ \hline
+    Total & 1301 \\ \hline
+  \end{tabular}
+\end{center}
+Teste a hipótese com 5\% de significância de que a distribuição segue as
+leis da hereditariedade mendeliana, contra a hipótese alternativa de que
+a distribuição não segue essas leis.
+\vspace{0.5cm}
+
+\textbf{4.} A área foliar média da espécie {\it Laguncularia rancemosa}
+do maguezal do bairro Santa Mônica (não poluído) é de 50,76
+cm$^2$. Espera-se que a área foliar do manguezal do bairro Itacorrubi
+seja maior devido à poluição do ambiente. Para verificar se essa
+afirmação é verdadeira, coletou-se uma amostra de tamanho $n=20$ folhas,
+do manguezal do Itacorubi, cujos resultados foram:
+\begin{center}
+  \begin{tabular}{cccccccccc} \hline
+    39,4 & 39,6 & 39,9 & 45,6 & 45,6 & 46,1 & 46,1 & 50,2 & 50,2 & 51,0\\
+    51,2 & 54,6 & 54,8 & 54,6 & 55,1 & 55,1 & 55,5 & 56,2 & 66,3 & 66,5\\
+    \hline
+  \end{tabular}
+\end{center}
+Esses resultados trazem evidências estatísticas de que houve aumento da
+área foliar? Use o nível de significância de 5\%.
+\vspace{0.5cm}
+
+\textbf{5.} Fez-se um estudo com o objetivo de conhecer melhor a
+biologia e a distribuição de fêmeas de {\it Macro\-brachium potiuna} na
+Ilha de Santa Catarina, comparando-se dois locais em condições
+ambientais diferentes. Para isso, coletaram-se duas amostras, uma no
+córrego do Chico em Ratones (A) e outra no poção do Córrego Grande
+(B). Os resultados de comprimento total, em mm, de fêmeas ovígenas,
+foram:
+\begin{center}
+  \begin{tabular}{cccc}\hline
+    Local & Amostra & Média & Desvio Padrão \\ \hline
+    Córrego do Chico & 30 & 32,25 & 3,26 \\
+    Poção do Córrego & 30 & 20,32 & 4,02 \\ \hline
+  \end{tabular}
+\end{center}
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Você diria que a diferença de comprimentos nos dois locais é
+  estatisticamente significante? Use $\alpha = 5\%$.
+\item Determinar o intervalo de confiança de 99\% para a verdadeira
+  média de comprimento total para cada um dos locais. Interpretar.
+\end{enumerate}
+\vspace{0.5cm}
+
+
+\textbf{6.} Foi conduzido um experimento com o objetivo de avaliar o
+poder germinativo de duas cultivares de cebola: a) Bola Precoce-Empasc
+352 e b) Norte 14. Foram utlizadas para o teste de germinação, quatro
+repetições de 100 sementes, totalizando 400 sementes para cada
+cultivar. A variável de estudo é o número de sementes que germinaram. Os
+resultados estão apresentados a seguir:
+\begin{center}
+  \begin{tabular}{cccc}\hline
+    Cultivares & \multicolumn{2}{c}{Germinação} & Total\\
+               & Germinaram & Não Germinaram    & \\ \hline
+    Bola precoce & 392 & 8 & 400 \\
+    Norte 14 & 381 & 19 & 400 \\ \hline
+    Total & 773 & 27 & 800 \\ \hline
+  \end{tabular}
+\end{center}
+Teste a hipótese de que não há diferença entre as duas cultivares quanto
+à germinação, ao nível de 5\%.
+\vspace{0.5cm}
+
+\textbf{7.} Deseja-se testar a hipótese de a possibiidade da quantidade
+de proteínas totais no plasma, depois de determinada operação em
+portadores de esquistossomose mansônica, ser diferente da quantidade de
+antes da operação. Foi utilizada uma amostra de 17 pacientes, cujos
+resultados foram:
+\begin{center}
+  \begin{tabular}{ccc|ccc} \hline
+    Paciente & Antes & Depois & Paciente & Antes & Depois\\ \hline
+    1 & 6,9 & 6,9 & 10 & 8,6 & 7,8 \\
+    2 & 7,8 & 8,6 & 11 & 7,7 & 7,6 \\
+    3 & 6,6 & 8,7 & 12 & 7,9 & 7,8 \\
+    4 & 5,9 & 7,3 & 13 & 8,7 & 8,1 \\
+    5 & 7,8 & 7,8 & 14 & 5,8 & 6,8 \\
+    6 & 6,4 & 8,2 & 15 & 9,2 & 8,3 \\
+    7 & 8,8 & 9,3 & 16 & 9,3 & 10,2 \\
+    8 & 7,3 & 7,3 & 17 & 8,9 & 9,1 \\
+    9 & 8,0 & 7,6 \\ \hline
+  \end{tabular}
+\end{center}
+Faça o teste de hipótese e conclua com 5\% de significância.
+\vspace{0.5cm}
+
+
+\textbf{8.} Foi desenvolvido um estudo para verificar a qualidade dos
+vinhos em um estado brasileiro. Uma propriedade física avaliada nesse
+estudo foi a estabilidade dos vinhos, dada em quatro categorias:
+péssima, problemática, regular e aceitável. Numa amostra de 188 garrafas
+de vinho, foram encontrados os seguintes resultados:
+\begin{center}
+  \begin{tabular}{cccccc}\hline
+    Tipo de & \multicolumn{4}{c}{Estabilidade} & Total \\
+    Vinho & Péssima & Problemática & Regular & Aceitável & \\ \hline
+    Branco & 8 & 29 & 28 & 7 & 72 \\
+    Rosado & 10 & 22 & 10 & 3 & 45 \\
+    Tinto & 29 & 21 & 13 & 8 & 71 \\ \hline
+    Total & 47 & 72 & 51 & 18 & 188 \\ \hline
+  \end{tabular}
+\end{center}
+
+\begin{enumerate}[label=\alph*), labelindent=5mm]
+\item Teste a hipótese de que há relação (dependência) entre tipo de
+  vinho e estabilidade com 5\% de significância.
+\item Teste a hipótese de que os vinhos tinto e branco são independentes
+  da estabilidade, utilizando somente os dados relativos aos vinhos
+  brancos e tintos com 5\% de significância..
+\item Qual dos dois vinhos você acha que seria pior quanto à
+  estabilidade?
+\end{enumerate}
+
+\vspace{10cm}
+\section*{Respostas}
+\begin{enumerate}[{\bf 1.}]
+\item Como $z_{cal}=0,3292$, conclui-se que a máquina não precisa
+  ser regulada.
+
+\item $gl = 34,52 \approx 35$, $t_{tab} = 2,724$, $|t_{calc}| = 6,98$,
+  rejeita-se $H_0$. A variedade B é superior.
+
+\item $\chi_{calc}^2 = 9,27$, $\chi^2_{0,05;3} = 7,815$, portanto, a
+  distribuição não segue as leis da hereditariedade.
+
+\item Como $\bar{x} = 51,18$ é menor do que $\bar{x}_{calc}$ não se
+  rejeita a hipótese nula.
+
+\item
+  \begin{enumerate}[(a)]
+  \item $t=12,623$, rejeita-se $H_0$.
+  \item $30,6097 < \mu_A < 33,8904$ e $18,2972 < \mu_B < 22,3427$. Como
+    os intervalos não se sobrepõem, há evidências de que os tratamentos
+    são diferentes com um nível de confiança de 1\%
+  \end{enumerate}
+
+\item $\chi_{cal}^2 = 4,638$. Rejeita-se a hipótese nula. As duas
+  variedades são diferentes quanto à germinação de sementes.
+
+\item $t_{cal}=-1,6$, não se rejeita a hipótese nula, a quantidade de
+  proteínas no plasma é a mesma.
+
+\item
+  \begin{enumerate}[(a)]
+  \item $\chi_{cal}^2 = 22,352$, com seis graus de liberdade, existe
+    diferença entre os tipos de vinho quanto à estabilidade.
+  \item $\chi_{cal}^2 = 18,755$, com três graus de liberdade, existe
+    diferença entre os dois tipos de vinho quanto à estabilidade.
+  \item O vinho tinto é pior que o branco.
+  \end{enumerate}
+\end{enumerate}
+\end{document}

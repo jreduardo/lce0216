@@ -339,7 +339,7 @@ polygon(x = c(x[ind], rev(x[ind])),
         \item dados pareados (dependentes);
         \item dados não-pareados (independentes);
       \end{itemize}
-    \item Testes para tabelas de contigência.
+    \item Testes em tabelas de contigência.
   \end{itemize}
 \end{frame}
 
@@ -548,7 +548,6 @@ polygon(x = c(x[ind], rev(x[ind])),
     \end{center}
   \end{frame}
 
-
 %-------------------------------------------
 \begin{frame}{Conceitos iniciais}
   \begin{block}{Interesse}
@@ -651,7 +650,7 @@ curve(dnorm(x, sd = 1.5), lwd = 1.5, add = TRUE)
         $$
   \end{itemize}
 
-  <<fig.width=8, fig.height=3, echo=FALSE>>=
+<<fig.width=8, fig.height=3, echo=FALSE>>=
 
 par(mfrow = c(1, 2), mar = c(2, 1, 2, 0))
 x <- seq(0, 4, length.out = 500)
@@ -691,7 +690,7 @@ plot(fx ~ x,
      main = "Bilateral")
 axis(side = 1,
      at = c(qa, qb),
-     labels = expression(F[1~tab], F[2~tab]))
+     labels = expression(F[tab]^-1, F[tab]))
 axis(side = 1,
      at = c(-0.5, 4.5),
      labels = rep("", 2))
@@ -731,8 +730,11 @@ polygon(x = c(x[ind], rev(x[ind])),
         forma que $F = S_1^2 / S_2^2 > 1$, ou seja, utiliza-se como
         numerador a maior variância amostral observada.
       \item Compara-se a estatística do teste
-        $$F_{calc} = \frac{s_1^2}{s_2^2},$$ com a região critíca (RC)
+        \vspace{-0.2cm}$$F_{calc} = s_1^2 / s_2^2,$$\\[-0.1cm]
+        com a região critíca (RC)
         construída de tal forma que $P(F \in \text{RC}) = \alpha$.
+        Para hipóteses bilaterais, a RC é dada por $(0, F_{tab}^{-1})
+        \cup (F_{tab}, \infty)$, em que $P(F > F_{tab}) = \alpha/2$.
       \end{itemize}
 \end{frame}
 
@@ -742,7 +744,7 @@ polygon(x = c(x[ind], rev(x[ind])),
   \textbf{Exemplo 5:} Um grupo de pesquisadores tem interesse em comparar
   se a proliferação de fungos em plantas tem relação com determinados
   tipos de solo. Para isso, os pesquisadores mensuraram as áreas atacadas
-  por fungos em 21 árvores com tipo de solo A e 9 árvores com tipo de
+  por fungos em 13 árvores com tipo de solo A e 9 árvores com tipo de
   solo B. Os resultados obtidos foram
   \begin{table}
     \centering
@@ -750,13 +752,13 @@ polygon(x = c(x[ind], rev(x[ind])),
       \hline
       \textbf{Tipo de solo A} & \textbf{Tipo de solo B} \\
       \hline \\[-0.4cm]
-      $\sum_{i=1}^{21}x_{1i} = 100$ & $\sum_{i=1}^{9}x_{2i} = 45$\\[0.2cm]
-      $\sum_{i=1}^{21}x_{1i}^2 = 496$ & $\sum_{i=1}^{9}x_{2i}^2 = 273$\\
+      $\sum_{i=1}^{13}x_{1i} = 104$cm$^2$ & $\sum_{i=1}^{9}x_{2i} = 63$cm$^2$\\[0.2cm]
+      $\sum_{i=1}^{13}x_{1i}^2 = 997$cm$^4$ & $\sum_{i=1}^{9}x_{2i}^2 = 497$cm$^4$\\
       \hline
     \end{tabular}
   \end{table}
-  Pode-se considerar que as àreas atacadas por fungos possuem a mesma
-  variabilidade?
+  Pode-se considerar que as àreas atacadas por fungos nos diferentes
+  tipos de solo possuem a mesma variabilidade?
 \end{frame}
 
 %-------------------------------------------
@@ -852,6 +854,473 @@ polygon(x = c(x[ind], rev(x[ind])),
   equivale-se a altura real (obtida derrubando-se a árvore)?\\ \pause
   {\footnotesize $\sum D_i = 12,9$ e $\sum D_i^2 = 28,45$.}
 \end{frame}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste (dados não pareados)}
+  \framesubtitle{\bf Variâncias iguais}
+  \small
+  \begin{itemize}
+  \item Populações:
+    $$
+    X_1 \sim N(\mu_1, \sigma^2)\quad \text{e} \quad
+    X_2 \sim N(\mu_2, \sigma^2);
+    $$
+    % \vspace{0.3cm}
+  \item Hipóteses:
+    \vspace{-0.1cm}
+    $$
+    \begin{cases}
+      \text{H}_0\text{:}\; \mu_1 = \mu_2
+      \: \Rightarrow \: \mu_d = \mu_2-\mu_1 = 0 &
+      \text{(hipótese nula)}\\
+      \text{H}_a\text{:}\; \mu_1 \overset{<}{\underset{>}{\neq}}
+      \mu_2 \: \Rightarrow \: \mu_d = \mu_2 - \mu_1
+      \overset{<}{\underset{>}{\neq}} 1
+      & \text{(hipótese alternativa)}\\
+    \end{cases}
+    $$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Construção do teste (dados não pareados)}
+  \framesubtitle{\bf Variâncias iguais}
+  \small
+  \begin{itemize}
+      \item Considerando amostras aleatórias de $X_1$ e $X_2$
+        independentes, de tamanho $n_1$ e $n_2$, respectivamente, e os
+        estimadores
+        $$
+        \bar{X}_j = \frac{\sum_{i=1}^n X_{ji}}{n_j};\quad
+        S_j^2 = \frac{\sum_{i=1}^n X_{ji}^2 -
+          (\sum_{i=1}^n X_{ji})^2/n}{n-1}, \quad j=1,2.
+        $$
+        Sob H$_0$ e como $\sigma^2$ é desconhecido, sabe-se que
+        $$
+        \begin{gathered}
+        \bar{X}_d = \bar{X}_2 - \bar{X}_1
+          \sim N\left (0, \sigma^2\left (\frac{1}{n_2} +
+              \frac{1}{n_1}\right)\right);\\[0.2cm]
+        T = \frac{\bar{X}_d - \mu_d}{\hat{\sigma}_{\bar{X}_d}} =
+          \frac{\bar{X}_2 - \bar{X}_1}{\sqrt{S^2/(\frac{1}{n_2} +
+              \frac{1}{n_1})}}
+        \sim t_{(n_2+n_1-2)}\\[0.2cm]
+        \text{em que }\quad
+        S^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_2+n_1-2}
+        \end{gathered}
+        $$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste (dados não pareados)}
+  \framesubtitle{\bf Variâncias iguais}
+  \begin{itemize}
+    \item Portanto, considera-se como estatística do teste
+      $$
+      t_{calc} =
+      \frac{\bar{x}_2 - \bar{x}_1}{\sqrt{s^2/(\frac{1}{n_2} +
+          \frac{1}{n_1})}},\quad \text{em que}\quad
+      s^2 = \frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_2+n_1-2}.
+      $$\\[0.4cm]
+    \item Para um nível de significância $\alpha$, a região crítica (RC)
+      é construída de tal forma que
+      $P(t_{(n_1 + n_2 - 2)} \in \text{RC}) = \alpha$.
+      \begin{itemize}
+        \item Para hipóteses uniterais:\\
+          $P(t_{(n_1 + n_2 - 2)} >  t_{tab}) = \alpha$;\\[0.3cm]
+        \item Para hipóteses bilaterais:\\
+          $P(-t_{tab} < t_{(n_1 + n_2 - 2)} < t_{tab}) = 1-\alpha$.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Exemplos}
+
+  \textbf{Exemplo 5 (revisitado):} Um grupo de pesquisadores tem
+  interesse em comparar se a proliferação de fungos em plantas tem
+  relação com determinados tipos de solo. Para isso, os pesquisadores
+  mensuraram as áreas atacadas por fungos em 13 árvores com tipo de solo
+  A e 9 árvores com tipo de solo B. Os resultados obtidos foram
+  \begin{table}
+    \centering
+    \begin{tabular}{cc}
+      \hline
+      \textbf{Tipo de solo A} & \textbf{Tipo de solo B} \\
+      \hline \\[-0.4cm]
+      $\sum_{i=1}^{13}x_{1i} = 104$cm$^2$ & $\sum_{i=1}^{9}x_{2i} = 63$cm$^2$\\[0.2cm]
+      $\sum_{i=1}^{13}x_{1i}^2 = 997$cm$^4$ & $\sum_{i=1}^{9}x_{2i}^2 = 497$cm$^4$\\
+      \hline
+    \end{tabular}
+  \end{table}
+  Pode-se considerar que a área média obtida com o tipo de solo A é
+  maior que a obtido com o tipo de solo B?
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste (dados não pareados)}
+  \framesubtitle{\bf Variâncias desiguais}
+  \small
+  \begin{itemize}
+  \item Populações:
+    $$
+    X_1 \sim N(\mu_1, \sigma_1^2)\quad \text{e} \quad
+    X_2 \sim N(\mu_2, \sigma_2^2);
+    $$
+    % \vspace{0.3cm}
+  \item Hipóteses:
+    \vspace{-0.1cm}
+    $$
+    \begin{cases}
+      \text{H}_0\text{:}\; \mu_1 = \mu_2
+      \: \Rightarrow \: \mu_d = \mu_2-\mu_1 = 0 &
+      \text{(hipótese nula)}\\
+      \text{H}_a\text{:}\; \mu_1 \overset{<}{\underset{>}{\neq}}
+      \mu_2 \: \Rightarrow \: \mu_d = \mu_2 - \mu_1
+      \overset{<}{\underset{>}{\neq}} 1
+      & \text{(hipótese alternativa)}\\
+    \end{cases}
+    $$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste (dados não pareados)}
+  \framesubtitle{\bf Variâncias desiguais}
+  \small
+  \begin{itemize}
+      \item Considerando amostras aleatórias de $X_1$ e $X_2$
+        independentes, de tamanho $n_1$ e $n_2$, respectivamente, e os
+        estimadores
+        $$
+        \bar{X}_j = \frac{\sum_{i=1}^n X_{ji}}{n_j};\quad
+        S_j^2 = \frac{\sum_{i=1}^n X_{ji}^2 -
+          (\sum_{i=1}^n X_{ji})^2/n}{n-1}, \quad j=1,2.
+        $$
+        Sob H$_0$ e como $\sigma^2$ é desconhecido, sabe-se que
+        $$
+        \begin{gathered}
+        \bar{X}_d = \bar{X}_2 - \bar{X}_1
+          \sim N\left (0, \left (\frac{\sigma_1^2}{n_1} +
+              \frac{\sigma_2^2}{n_2}\right)\right);\\[0.2cm]
+        T = \frac{\bar{X}_d - \mu_d}{\hat{\sigma}_{\bar{X}_d}} =
+          \frac{\bar{X}_2 - \bar{X}_1}{\sqrt{(S_1^2/n_1 +
+              S_2^2/n_2)}}
+        \overset{\text{\fontsize{4}{4}\selectfont aprox}}{\sim}
+        t_{(v)}\\[0.2cm]
+        \text{em que }\quad
+        v = \frac{(S_1^2/n_1 + S_2^2/n_2)^2}{
+          (S_1^2/n_1)^2/(n_1-1) +
+          (S_2^2/n_2)^2/(n_2-1)
+          }
+        \end{gathered}
+        $$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Construção do teste (dados não pareados)}
+  \framesubtitle{\bf Variâncias desiguais}
+  \begin{itemize}
+    \item Portanto, considera-se como estatística do teste
+      $$
+      t_{calc} =
+      \frac{\bar{x}_d - \mu_d}{\hat{\sigma}_{\bar{X}_d}} =
+      \frac{\bar{x}_2 - \bar{x}_1}{\sqrt{(s_1^2/n_1 +
+          s_2^2/n_2)}}
+      $$\\[0.1cm]
+    \item Para um nível de significância $\alpha$, a região crítica (RC)
+      é construída de tal forma que
+      $P(t_{v} \in \text{RC}) = \alpha$.
+      \begin{itemize}
+        \item Para hipóteses uniterais:\\
+          $P(t_{(v)} >  t_{tab}) = \alpha$;\\[0.3cm]
+        \item Para hipóteses bilaterais:\\
+          $P(-t_{tab} < t_{(v)} < t_{tab}) = 1-\alpha$.
+      \end{itemize}
+      \small\vspace{0.5cm}
+      Sendo os graus de liberdade $v$, o inteiro mais próximo de
+      $$
+      \frac{(s_1^2/n_1 + s_2^2/n_2)^2}{
+        (s_1^2/n_1)^2/(n_1-1) +
+        (s_2^2/n_2)^2/(n_2-1)}
+      $$
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------
+\begin{frame}{Exemplos}
+
+  \textbf{Exemplo 6:} Um grupo de pesquisadores tem interesse em em
+  verificar qual espécie de árvore produz vigas de madeira com maior
+  resistência. Tomando-se 15 vigas de madeira de uma espécie A e 20 de
+  uma espécie B, obtêm-se os resultados
+  \begin{table}
+    \centering
+    \begin{tabular}{lll}
+      \hline
+      & \textbf{Espécie A} & \textbf{Espécie B} \\
+      \hline \\[-0.4cm]
+      \textbf{Média} & $70,5$Mpa & $84,3$Mpa\\
+      \textbf{Variância} & $81,6$Mpa$^2$ & $210,8$Mpa$^2$\\
+      \hline
+    \end{tabular}
+  \end{table}
+  Qual espécie de árvores produz vigas de madeira com maior resistência?
+  Utilize um nível de significância de 10\%.
+\end{frame}
+
+%-------------------------------------------
+\section{Testes em tabelas de contigência}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{itemize}
+  \item Tabelas de contingência:
+    \begin{itemize}
+    \item Contagem de sobrevivência de enxertos de ameixeiras $\Rightarrow$ comparar duas épocas de plantio
+      \begin{center}
+        Distribuição conjunta das frequências das variáveis época de plantio e sobrevivência de enxertos de ameixeiras
+        \begin{tabular}{cccc} \hline
+          Época & \multicolumn{2}{c}{Raízes} & Total \\
+                & Sobreviventes & Mortas & \\ \hline
+          Fora da primavera & 263 & 217 & {\bf 480}\\
+          Na primavera & 115 & 365 & {\bf 480}\\ \hline
+          Total & 378 & 582 & {\bf 960} \\ \hline
+        \end{tabular}
+      \end{center}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{itemize}
+  \item Tabelas de contingência:
+    \begin{itemize}
+    \item
+      \begin{center}
+        Contagem de plantas segregando para dois caracteres: ciclo e virescência (formação de cloroplastos nas pétalas, originando plantas verdes), numa progênie da espécie X
+        \begin{tabular}{cccc} \hline
+          Ciclo & \multicolumn{2}{c}{Virescência} & Total \\
+                & Normal & Virescente & \\ \hline
+          Tardio & 3470 & 910 & 4380\\
+          Precoce & 1030 & 290 & 1320\\ \hline
+          Total & 4500 & 1200 & {\bf 5700} \\ \hline
+        \end{tabular}
+      \end{center}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{itemize}
+  \item Tabelas de contingência:
+
+    \begin{center}
+      \begin{tabular}{cccc} \hline
+        A & \multicolumn{2}{c}{B} & Total \\
+          & B$_1$ & B$_2$ & \\ \hline
+        A$_1$ & $\pi_{11}$ & $\pi_{12}$ & $\pi_{1\cdot}$\\
+        A$_2$ & $\pi_{21}$ & $\pi_{22}$ & $\pi_{2\cdot}$ \\ \hline
+        Total & $\pi_{\cdot1}$ & $\pi_{\cdot2}$ & $\pi_{\cdot\cdot}$ \\ \hline
+      \end{tabular}
+    \end{center}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{itemize}
+  \item Hipótese de homogeneidade das duas distribuições binomiais
+    \begin{itemize}
+    \item Contagem de sobrevivência de enxertos de ameixeiras $\Rightarrow$ comparar duas épocas de plantio
+      \begin{center}
+        Distribuição conjunta das frequências das variáveis época de plantio e sobrevivência de enxertos de ameixeiras
+        \begin{tabular}{cccc} \hline
+          Época & \multicolumn{2}{c}{Raízes} & Total \\
+                & Sobreviventes & Mortas & \\ \hline
+          Fora da primavera & {\bf \textcolor[rgb]{1.00,0.00,0.00}{263}} & 217 & {\bf 480}\\
+          Na primavera & {\bf \textcolor[rgb]{1.00,0.00,0.00}{115}} & 365 & {\bf 480}\\ \hline
+          Total & 378 & 582 & {\bf 960} \\ \hline
+        \end{tabular}
+        $$H_0: \pi_{1j} = \pi_{2j}$$
+        $$H_a: \pi_{1j} \neq \pi_{2j}$$
+      \end{center}
+      $H_0$: a proporção de sobreviventes na primavera é igual a proporção de sobreviventes fora dela
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{itemize}
+  \item Hipótese de independência entre as variáveis
+    \begin{itemize}
+    \item
+      \begin{center}
+        Contagem de plantas segregando para dois caracteres: ciclo e virescência (formação de cloroplastos nas pétalas, originando plantas verdes), numa progênie da espécie X
+        \begin{tabular}{cccc} \hline
+          Ciclo & \multicolumn{2}{c}{Virescência} & Total \\
+                & Normal & Virescente & \\ \hline
+          Tardio & {\bf \textcolor[rgb]{1.00,0.00,0.00}{3470}} & 910 & {\bf \textcolor[rgb]{1.00,0.00,0.00}{4380}}\\
+          Precoce & 1030 & 290 & 1320\\ \hline
+          Total & {\bf \textcolor[rgb]{1.00,0.00,0.00}{4500}} & 1200 & {\bf 5700} \\ \hline
+        \end{tabular}
+        $$H_0: \pi_{ij} = \pi_{i\cdot}\pi_{\cdot j}$$
+        $$H_a: \pi_{ij} \neq \pi_{i\cdot}\pi_{\cdot j}$$
+      \end{center}
+      $H_0$: a proporção de elementos classificados na categoria $i$ da variável A e categoria $j$ da variável B é igual ao produto das marginais dessa categoria
+
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{block}{\bf Estatística do teste}
+    $$\chi^2_{cal} = \sum_{i=1}^s\sum_{j=1}^r \frac{(n_{ij} - e_{ij})^2}{e_{ij}},$$
+    em que\\
+    $n_{ij}$ é a frequência observada de elementos na categoria $i$ da variável A e categoria $j$ da variável B,\\
+    $e_{ij}$ é a frequência esperada de elementos nessa categoria, dada por:
+    $$e_{ij}=\frac{n_{i\cdot}n_{\cdot j}}{n_{\cdot\cdot}},$$
+    $n_{i\cdot}$, $n_{\cdot j}$ e $n_{\cdot\cdot}$ representam as frequências marginais e o total da tabela de contingência a ser analisada.
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+  \begin{block}{\bf Distribuição associada}
+
+    $$\chi^2 \sim \chi^2_{(s-1)\times(r-1)}$$
+    \begin{center}
+      \begin{figure}[H]
+        % \includegraphics[scale=.45 , angle=0 ]{Figuras/dist_qq.pdf} %
+      \end{figure}
+    \end{center}
+  \end{block}
+
+  Rejeita-se $H_0$ se $\chi^2_{cal} > \chi^2_{tab}$
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{itemize}
+  \item Hipótese de homogeneidade das duas distribuições binomiais
+    \begin{itemize}
+    \item Contagem de sobrevivência de enxertos de ameixeiras $\Rightarrow$ comparar duas épocas de plantio
+      \begin{center}
+        Distribuição conjunta das frequências das variáveis época de plantio e sobrevivência de enxertos de ameixeiras
+        \begin{tabular}{cccc} \hline
+          Época & \multicolumn{2}{c}{Raízes} & Total \\
+                & Sobreviventes & Mortas & \\ \hline
+          Fora da primavera & {\bf \textcolor[rgb]{1.00,0.00,0.00}{263}} & 217 & {\bf 480}\\
+          Na primavera & {\bf \textcolor[rgb]{1.00,0.00,0.00}{115}} & 365 & {\bf 480}\\ \hline
+          Total & 378 & 582 & {\bf 960} \\ \hline
+        \end{tabular}
+        $$H_0: \pi_{1j} = \pi_{2j}$$
+        $$H_a: \pi_{1j} \neq \pi_{2j}$$
+      \end{center}
+      $H_0$: a proporção de sobreviventes na primavera é igual a proporção de sobreviventes fora dela
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado para duas ou mais proporções}}
+
+  \begin{itemize}
+  \item Hipótese de independência entre as variáveis
+    \begin{itemize}
+    \item
+      \begin{center}
+        Contagem de plantas segregando para dois caracteres: ciclo e virescência (formação de cloroplastos nas pétalas, originando plantas verdes), numa progênie da espécie X
+        \begin{tabular}{cccc} \hline
+          Ciclo & \multicolumn{2}{c}{Virescência} & Total \\
+                & Normal & Virescente & \\ \hline
+          Tardio & {\bf \textcolor[rgb]{1.00,0.00,0.00}{3470}} & 910 & {\bf \textcolor[rgb]{1.00,0.00,0.00}{4380}}\\
+          Precoce & 1030 & 290 & 1320\\ \hline
+          Total & {\bf \textcolor[rgb]{1.00,0.00,0.00}{4500}} & 1200 & {\bf 5700} \\ \hline
+        \end{tabular}
+        $$H_0: \pi_{ij} = \pi_{i\cdot}\pi_{\cdot j}$$
+        $$H_a: \pi_{ij} \neq \pi_{i\cdot}\pi_{\cdot j}$$
+      \end{center}
+      $H_0$: a proporção de elementos classificados na categoria $i$ da variável A e categoria $j$ da variável B é igual ao produto das marginais dessa categoria
+
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\bf Teste de qui-quadrado de aderência}}
+
+  \begin{itemize}
+  \item Aplicação à teoria Mendeliana
+
+    $$ \small \left.
+      \begin{array}{r}
+        \mbox{ervilhas com sementes amarelas lisas}\\
+        \mbox{ervilhas com sementes verdes rugosas}
+      \end{array}
+    \right\} \Rightarrow \mbox{ervilhas amarelas lisas (F$_1$)}$$
+    \begin{center}
+      Autofecundação $\Rightarrow$ F$_2$ $\left\{ \begin{array}{l}
+                                                    \mbox{amarelas lisas} \; (9/16)\\
+                                                    \mbox{verdes lisas}\; (3/16)\\
+                                                    \mbox{amarelas rugosas} \; (3/16)\\
+                                                    \mbox{verdes rugosas} \; (1/16) \\
+                                                  \end{array}\right.$
+                                              \end{center}
+                                            \end{itemize}
+                                          \end{frame}
+
+                                          \begin{frame}
+                                            \frametitle{{\bf Teste de qui-quadrado de aderência}}
+                                            Frequências observadas das quatro classes fenotópicas geradas por autofecundação de plantas dihíbridas da F$_1$
+                                            \begin{center}
+                                              \begin{tabular}{ccc} \hline
+                                                Tipos de & Frequências & Frequências \\
+                                                ervilhas & observadas & esperadas sob $H_0$ \\ \hline
+                                                Amarelas lisas & 315 & 312,75 = 556 $\times$ (9/16) \\
+                                                Verdes lisas & 108  & 104,25 = 556 $\times$ (3/16) \\
+                                                Amarelas rugosas & 101 & 104,25 = 556 $\times$ (3/16) \\
+                                                Verdes rugosas & 32 & 34,75 = 556 $\times$ (1/16)\\ \hline
+                                                Total & 556 & 556 \\ \hline
+                                              \end{tabular}
+                                            \end{center}
+
+                                            Avaliar se o padrão de segregação dos caracteres envolvidos segue aquele proposto pela segunda lei de Mendel.
+
+                                            \begin{itemize}
+                                            \item[] \textcolor[rgb]{1.00,0.00,0.00}{$H_0$: $\pi_1 = 9/16$, \; $\pi_2 = 3/16$; $\pi_3 = 3/16$, \; $\pi_4 = 1/16$}
+                                            \item[] \textcolor[rgb]{1.00,0.00,0.00}{$H_a$: pelo menos uma das igualdades é falsa}
+                                            \end{itemize}
+                                          \end{frame}
+
+                                          \begin{frame}
+                                            \frametitle{{\bf Teste de qui-quadrado de aderência}}
+
+                                            \begin{block}{\bf Estatística do teste}
+
+                                              $$\chi^2_{cal} = \sum_{i=1}^m \frac{(n_{i} - e_{i})^2}{e_{i}},$$
+                                              em que\\
+                                              $m$ é o número de categorias da variável qualitativa
+                                              $n_{i}$ é a frequência observada \\
+                                              $e_{i}$ é a frequência esperada , supondo a hipótese nula verdadeira\\
+                                            \end{block}
+                                            Rejeita-se $H_0$ se $\chi^2_{cal} > \chi^2_{tab}$
+                                          \end{frame}
 
 
 \end{document}
